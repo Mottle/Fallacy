@@ -1,0 +1,44 @@
+{
+	"render_type": "minecraft:cutout",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "fallacy:block/nature/miu_berry_bush_stage0",
+		"particle": "fallacy:block/nature/miu_berry_bush_stage0"
+	},
+	"elements": [
+		{
+			"from": [3.5, -0.5, 1],
+			"to": [19.5, 10.5, 1],
+			"rotation": {"angle": -45, "axis": "y", "origin": [0, 0, 0]},
+			"faces": {
+				"north": {"uv": [2.5, 8, 13.5, 16], "texture": "#0"},
+				"east": {"uv": [0, 0, 0, 3], "texture": "#missing"},
+				"south": {"uv": [2.5, 8, 13.5, 16], "texture": "#0"},
+				"west": {"uv": [0, 0, 0, 3], "texture": "#missing"},
+				"up": {"uv": [0, 0, 4.5, 0], "texture": "#missing"},
+				"down": {"uv": [0, 0, 4.5, 0], "texture": "#missing"}
+			}
+		},
+		{
+			"from": [11, -0.5, -7.5],
+			"to": [11, 10.5, 8.5],
+			"rotation": {"angle": -45, "axis": "y", "origin": [0, 0, 0]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 3], "texture": "#missing"},
+				"east": {"uv": [2.5, 8, 13.5, 16], "texture": "#0"},
+				"south": {"uv": [0, 0, 0, 3], "texture": "#missing"},
+				"west": {"uv": [2.5, 8, 13.5, 16], "texture": "#0"},
+				"up": {"uv": [0, 0, 4.5, 0], "rotation": 270, "texture": "#missing"},
+				"down": {"uv": [0, 0, 4.5, 0], "rotation": 90, "texture": "#missing"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "leave",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [0, 1]
+		}
+	]
+}

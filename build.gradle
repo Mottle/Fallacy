@@ -6,8 +6,8 @@ plugins {
     id 'net.neoforged.gradle.userdev' version '7.0.157'
 
     //kotlin
-    id 'org.jetbrains.kotlin.jvm' version '2.0.0'
-//    id 'org.jetbrains.kotlin.plugin.serialization' version '2.0.0'
+    id 'org.jetbrains.kotlin.jvm' version '2.0.10'
+//    id 'org.jetbrains.kotlin.plugin.serialization' version '2.0.10'
 }
 
 version = mod_version
@@ -24,6 +24,13 @@ repositories {
         name = 'Kotlin for Forge'
         url = 'https://thedarkcolour.github.io/KotlinForForge/'
     }
+
+    //Registrate
+    maven {
+        name = "ithundxr's Maven Snapshots"
+        url = uri("https://maven.ithundxr.dev/snapshots")
+    }
+
 }
 
 base {
@@ -117,9 +124,10 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
-    implementation (group: 'thedarkcolour', name: 'kotlinforforge-neoforge', version: '5.4.0')
+    implementation (group: 'thedarkcolour', name: 'kotlinforforge-neoforge', version: '5.5.0')
     jarJar(group: 'thedarkcolour', name: 'kotlinforforge-neoforge', version: '[5.0, 6.0)')
 
+    implementation (group: 'com.tterrag.registrate', name: 'Registrate', version: 'MC1.21-1.3.0+49')
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
