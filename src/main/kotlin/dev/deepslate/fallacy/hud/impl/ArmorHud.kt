@@ -1,12 +1,11 @@
 package dev.deepslate.fallacy.hud.impl
 
-import dev.deepslate.fallacy.hud.HudLayer
 import dev.deepslate.fallacy.util.RGB
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Player
 
-class ArmorHud: HudLayerImpl("armor") {
+class ArmorHud : HudLayerImpl("armor") {
 
     companion object {
         val ICON = ResourceLocation.withDefaultNamespace("hud/armor_full")
@@ -20,7 +19,8 @@ class ArmorHud: HudLayerImpl("armor") {
         screenWidth: Int,
         screenHeight: Int,
         vOffset: Int
-    ) {}
+    ) {
+    }
 
     override fun renderText(
         graphic: GuiGraphics,

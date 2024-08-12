@@ -1,0 +1,11 @@
+// 1.21	2024-08-01T10:00:07.1877398	Registrate Provider for fallacy [Registries, Data Maps, Recipes, Advancements, Loot Tables, Tags (blocks), Tags (items), Tags (fluids), Tags (entity_types), generic_server_provider, Blockstates, Item models, Lang (en_us/en_ud), generic_client_provider]
+d3c692abb03dc1b38a31490b18f96e0ec2350d85 assets/fallacy/blockstates/miu_berry_bush.json
+a2609cb9793442a7ec77238564028251c2ecfc75 assets/fallacy/lang/en_ud.json
+aaafcc2ef494f293a9a2abc6427d47b0d612147c assets/fallacy/lang/en_us.json
+65351bb98e18cddf97d9c0009fe96f0397f2672d assets/fallacy/models/item/miu_berry.json
+118b5cdc0d6f80b751604a55eefd3ebdce2f7a88 assets/fallacy/models/item/miu_berry_bush_seeds.json
+ff3ace073badb9e8f625d38460b99c44722bc10c data/fallacy/loot_table/blocks/miu_berry_bush.json
+533f6a4c4eb04b79f31442ce23eda3c8321dd3fb data/minecraft/tags/block/bee_growables.json
+533f6a4c4eb04b79f31442ce23eda3c8321dd3fb data/minecraft/tags/block/fall_damage_resetting.json
+533f6a4c4eb04b79f31442ce23eda3c8321dd3fb data/minecraft/tags/block/mineable/axe.json
+533f6a4c4eb04b79f31442ce23eda3c8321dd3fb data/minecraft/tags/block/sword_efficient.json

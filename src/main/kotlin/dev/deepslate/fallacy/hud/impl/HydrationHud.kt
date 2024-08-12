@@ -3,10 +3,8 @@ package dev.deepslate.fallacy.hud.impl
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.capability.FallacyCapabilities
 import dev.deepslate.fallacy.util.RGB
-import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Player
-import kotlin.math.ceil
 
 class HydrationHud: SimpleHud("hydration") {
     override val icon: ResourceLocation = Fallacy.id("thirst")

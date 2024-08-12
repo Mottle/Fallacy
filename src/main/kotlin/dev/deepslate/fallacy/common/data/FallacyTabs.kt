@@ -11,7 +11,7 @@ import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredRegister
 
 
-object CreativeModeTabs {
+object FallacyTabs {
     private val CREATIVE_MODE_TABS: DeferredRegister<CreativeModeTab> =
         DeferredRegister.create(BuiltInRegistries.CREATIVE_MODE_TAB, Fallacy.MOD_ID)
 

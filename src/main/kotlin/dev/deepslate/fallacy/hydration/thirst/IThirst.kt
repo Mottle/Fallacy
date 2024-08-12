@@ -5,4 +5,6 @@ interface IThirst {
     val max: Float
 
     fun drink(value: Float)
+
+    fun tick()
 }
