@@ -35,7 +35,7 @@ abstract class HudLayerImpl(override val name: String) : HudLayer {
         renderIcon(graphic, player, screenWidth, screenHeight, vOffset)
 
         with(Minecraft.getInstance().gui) {
-            if(isRightHandSide) {
+            if (isRightHandSide) {
                 rightHeight += 10
             } else {
                 leftHeight += 10
@@ -65,17 +65,17 @@ abstract class HudLayerImpl(override val name: String) : HudLayer {
     )
 
     val hOffset: Int
-        get() = if(isRightHandSide) 10 else -91
+        get() = if (isRightHandSide) 10 else -91
 
     val iconOffset: Int
-        get() = if(isRightHandSide) 92 else -101
+        get() = if (isRightHandSide) 92 else -101
 
     fun renderBarBackground(graphic: GuiGraphics, player: Player, screenWidth: Int, screenHeight: Int, vOffset: Int) {
         val barWidth = getBarWidth(player)
         var xStart = screenWidth / 2 + hOffset
         val yStart = screenHeight - vOffset
-        if(isFitted && isRightHandSide) xStart += WIDTH - barWidth.toInt()
-        if(isFitted) drawScaledBarBackground(graphic, barWidth, xStart, yStart + 1)
+        if (isFitted && isRightHandSide) xStart += WIDTH - barWidth.toInt()
+        if (isFitted) drawScaledBarBackground(graphic, barWidth, xStart, yStart + 1)
         else renderFullBackground(graphic, xStart, yStart)
     }
 
@@ -91,11 +91,11 @@ abstract class HudLayerImpl(override val name: String) : HudLayer {
         graphic.blit(ICON_BAR, x + barWidth.toInt() + 2, y - 1, WIDTH + 2, 0, 2, 9)
     }
 
-    fun <T: Number> drawValue(graphic: GuiGraphics, xStart: Int, yStart: Int, stat: T, color: Int) {
+    fun <T : Number> drawValue(graphic: GuiGraphics, xStart: Int, yStart: Int, stat: T, color: Int) {
         val value = floor(stat.toFloat()).toInt().toString()
         val font = Minecraft.getInstance().font
 
-        if(isRightHandSide) {
+        if (isRightHandSide) {
             graphic.drawString(font, value, xStart + 9 + 2, yStart - 1 + 2, color)
         } else {
             val len = font.width(value)

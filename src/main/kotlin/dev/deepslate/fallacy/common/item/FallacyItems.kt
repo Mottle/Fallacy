@@ -1,7 +1,8 @@
-package dev.deepslate.fallacy.common.data
+package dev.deepslate.fallacy.common.item
 
 import com.tterrag.registrate.util.entry.ItemEntry
-import dev.deepslate.fallacy.common.data.FallacyBlocks.MIU_BERRY_BUSH
+import dev.deepslate.fallacy.common.FallacyTabs
+import dev.deepslate.fallacy.common.block.FallacyBlocks.MIU_BERRY_BUSH
 import dev.deepslate.fallacy.common.registrate.REG
 import dev.deepslate.fallacy.common.registrate.defaultModelWithTexture
 import net.minecraft.world.food.FoodProperties

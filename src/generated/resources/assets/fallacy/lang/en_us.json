@@ -1,8 +1,8 @@
 {
-  "block.fallacy.miu_berry_bush": "Miu Berry Bush",
-  "item.fallacy.miu_berry": "miu berry",
-  "item.fallacy.miu_berry_bush_seeds": "miu berry bush seeds",
-  "itemGroup.fallacy.nature": "Fallacy: Nature",
-  "itemGroup.fallacy.other": "Fallacy: Other",
-  "itemGroup.fallacy.tool": "Fallacy: Tool"
+    "block.fallacy.miu_berry_bush": "Miu Berry Bush",
+    "item.fallacy.miu_berry": "miu berry",
+    "item.fallacy.miu_berry_bush_seeds": "miu berry bush seeds",
+    "itemGroup.fallacy.nature": "Fallacy: Nature",
+    "itemGroup.fallacy.other": "Fallacy: Other",
+    "itemGroup.fallacy.tool": "Fallacy: Tool"
 }

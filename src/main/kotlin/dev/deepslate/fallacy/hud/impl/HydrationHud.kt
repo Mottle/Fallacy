@@ -6,14 +6,14 @@ import dev.deepslate.fallacy.util.RGB
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Player
 
-class HydrationHud: SimpleHud("hydration") {
+class HydrationHud : SimpleHud("hydration") {
     override val icon: ResourceLocation = Fallacy.id("thirst")
 
     override val barColor: RGB = RGB.fromHex("#0A3AE8")
 
     override fun getValue(player: Player): Float {
         val cap = player.getCapability(FallacyCapabilities.THIRST)!!
-        return cap.thirst
+        return cap.value
     }
 
     override fun getMax(player: Player): Float {

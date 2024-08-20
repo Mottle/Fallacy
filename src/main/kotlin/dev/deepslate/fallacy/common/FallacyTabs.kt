@@ -1,6 +1,7 @@
-package dev.deepslate.fallacy.common.data
+package dev.deepslate.fallacy.common
 
 import dev.deepslate.fallacy.Fallacy
+import dev.deepslate.fallacy.common.item.FallacyItems
 import dev.deepslate.fallacy.common.registrate.REG
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceKey
@@ -39,6 +40,7 @@ object FallacyTabs {
     }
 
     val NATURE = simpleRegister("nature") { builder ->
-        builder.title(REG.addLang("itemGroup", Fallacy.id("nature"), "Fallacy: Nature")).icon { FallacyItems.MIU_BERRIES.asStack() }.build()
+        builder.title(REG.addLang("itemGroup", Fallacy.id("nature"), "Fallacy: Nature"))
+            .icon { FallacyItems.MIU_BERRIES.asStack() }.build()
     }
 }

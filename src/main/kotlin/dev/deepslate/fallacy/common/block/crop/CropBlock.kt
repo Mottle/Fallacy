@@ -33,5 +33,5 @@ abstract class CropBlock(properties: Properties) : VanillaCropBlock(properties) 
     override fun getShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape =
         SHAPE_BY_AGE[state.getValue(AGE)]
 
-    
+
 }

@@ -34,7 +34,7 @@ class AirHud : HudLayerImpl("air") {
         val barFrom = xStart + if (isRightHandSide) WIDTH - barWidth else 0
         val color = getPrimaryBarColor(0, player)
 
-        color.color2GL()
+        color.pushGL()
         renderPartialBar(graphic, barFrom + 2, yStart + 2, barWidth)
         RGB.reset()
     }

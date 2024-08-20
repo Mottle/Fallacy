@@ -1,6 +1,6 @@
 package dev.deepslate.fallacy.common.block
 
-import dev.deepslate.fallacy.common.data.FallacyItems
+import dev.deepslate.fallacy.common.item.FallacyItems
 import net.minecraft.core.BlockPos
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
@@ -38,8 +38,8 @@ class MiuBerryBushBlock(properties: Properties) : SweetBerryBushBlock(properties
         hitResult: BlockHitResult
     ): InteractionResult {
         val age = state.getValue(AGE)
-        if(age < 1) return InteractionResult.PASS
-        val dropAmount = 1 + level.random.nextInt(3) + if(age == 3) 1 else 0
+        if (age < 1) return InteractionResult.PASS
+        val dropAmount = 1 + level.random.nextInt(3) + if (age == 3) 1 else 0
         popResource(level, pos, ItemStack(FallacyItems.MIU_BERRIES.asItem(), dropAmount))
         level.playSound(
             null,

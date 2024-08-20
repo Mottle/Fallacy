@@ -1,46 +1,188 @@
 {
-	"render_type": "minecraft:cutout",
-	"texture_size": [32, 32],
-	"textures": {
-		"0": "fallacy:block/nature/miu_berry_bush_stage1",
-		"particle": "fallacy:block/nature/miu_berry_bush_stage1"
-	},
-	"elements": [
-		{
-			"name": "1",
-			"from": [-3, 0, 0],
-			"to": [24, 29, 0],
-			"rotation": {"angle": -45, "axis": "y", "origin": [0, 1, 1]},
-			"faces": {
-				"north": {"uv": [0, 0, 16, 16], "texture": "#0"},
-				"east": {"uv": [0, 0, 16, 16], "texture": "#missing"},
-				"south": {"uv": [0, 0, 16, 16], "texture": "#0"},
-				"west": {"uv": [0, 0, 16, 16], "texture": "#missing"},
-				"up": {"uv": [0, 0, 16, 16], "rotation": 270, "texture": "#missing"},
-				"down": {"uv": [0, 0, 16, 16], "rotation": 90, "texture": "#missing"}
-			}
-		},
-		{
-			"name": "2",
-			"from": [-12, 0, 12],
-			"to": [13, 29, 12],
-			"rotation": {"angle": 45, "axis": "y", "origin": [0, 1, 1]},
-			"faces": {
-				"north": {"uv": [0, 0, 16, 16], "texture": "#0"},
-				"east": {"uv": [0, 0, 16, 16], "texture": "#missing"},
-				"south": {"uv": [0, 0, 16, 16], "texture": "#0"},
-				"west": {"uv": [0, 0, 16, 16], "texture": "#missing"},
-				"up": {"uv": [0, 0, 16, 16], "rotation": 270, "texture": "#missing"},
-				"down": {"uv": [0, 0, 16, 16], "rotation": 90, "texture": "#missing"}
-			}
-		}
-	],
-	"groups": [
-		{
-			"name": "leave",
-			"origin": [8, 8, 8],
-			"color": 0,
-			"children": [0, 1]
-		}
-	]
+    "render_type": "minecraft:cutout",
+    "texture_size": [
+        32,
+        32
+    ],
+    "textures": {
+        "0": "fallacy:block/nature/miu_berry_bush_stage1",
+        "particle": "fallacy:block/nature/miu_berry_bush_stage1"
+    },
+    "elements": [
+        {
+            "name": "1",
+            "from": [
+                -3,
+                0,
+                0
+            ],
+            "to": [
+                24,
+                29,
+                0
+            ],
+            "rotation": {
+                "angle": -45,
+                "axis": "y",
+                "origin": [
+                    0,
+                    1,
+                    1
+                ]
+            },
+            "faces": {
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#missing"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#missing"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "rotation": 270,
+                    "texture": "#missing"
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "rotation": 90,
+                    "texture": "#missing"
+                }
+            }
+        },
+        {
+            "name": "2",
+            "from": [
+                -12,
+                0,
+                12
+            ],
+            "to": [
+                13,
+                29,
+                12
+            ],
+            "rotation": {
+                "angle": 45,
+                "axis": "y",
+                "origin": [
+                    0,
+                    1,
+                    1
+                ]
+            },
+            "faces": {
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#missing"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#missing"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "rotation": 270,
+                    "texture": "#missing"
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "rotation": 90,
+                    "texture": "#missing"
+                }
+            }
+        }
+    ],
+    "groups": [
+        {
+            "name": "leave",
+            "origin": [
+                8,
+                8,
+                8
+            ],
+            "color": 0,
+            "children": [
+                0,
+                1
+            ]
+        }
+    ]
 }

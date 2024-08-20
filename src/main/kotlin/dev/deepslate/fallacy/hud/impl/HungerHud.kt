@@ -58,11 +58,11 @@ class HungerHud : HudLayerImpl("hunger") {
         val hungerColor = getSecondaryBarColor(0, player)
         val saturationColor = getPrimaryBarColor(0, player)
 
-        hungerColor.color2GL()
+        hungerColor.pushGL()
         renderPartialBar(graphic, barFrom + 2, yStart + 2, barWidthH)
 
         if (saturation > 0) {
-            saturationColor.color2GL()
+            saturationColor.pushGL()
             val barFrom = xStart + if (isRightHandSide) WIDTH - barWidthS else 0
             renderPartialBar(graphic, barFrom + 2, yStart + 2, barWidthS)
         }
@@ -81,7 +81,7 @@ class HungerHud : HudLayerImpl("hunger") {
                 val width = WIDTH * ((hungerWidth + hunger).toFloat() / maxHunger.toFloat())
                 val barFrom = xStart + if (isRightHandSide) WIDTH - width else 0f
 
-                hungerColor.color2GLa(alpha)
+                hungerColor.pushGLWithAlpha(alpha)
                 renderPartialBar(graphic, barFrom.toInt() + 2, yStart + 2, width.toInt())
             }
 
@@ -101,7 +101,7 @@ class HungerHud : HudLayerImpl("hunger") {
             val width = (WIDTH * finalSat / maxSaturation).toInt()
             val barFrom = xStart + if (isRightHandSide) WIDTH - width else 0
 
-            saturationColor.color2GLa(alpha)
+            saturationColor.pushGLWithAlpha(alpha)
             renderPartialBar(graphic, barFrom + 2, yStart + 2, width)
 
             RenderSystem.disableBlend()

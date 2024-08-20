@@ -28,18 +28,18 @@ data class RGB(val red: Int, val green: Int, val blue: Int) {
         val r = floor(this.red * (1 - rate) + other.red * rate).toInt()
         val g = floor(this.green * (1 - rate) + other.green * rate).toInt()
         val b = floor(this.blue * (1 - rate) + other.blue * rate).toInt()
-        return RGB.from(r, g, b);
+        return from(r, g, b);
     }
 
     val value: Int
         get() = (red shl 16) + (green shl 8) + blue
 
-    fun color2GLa(alpha: Float) {
+    fun pushGLWithAlpha(alpha: Float) {
         val r = red / 255.0f
         val g = green / 255.0f
         val b = blue / 255.0f
         RenderSystem.setShaderColor(r, g, b, alpha)
     }
 
-    fun color2GL() = color2GLa(1f)
+    fun pushGL() = pushGLWithAlpha(1f)
 }

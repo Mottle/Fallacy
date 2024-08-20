@@ -1,16 +1,16 @@
-package dev.deepslate.fallacy.common.data
+package dev.deepslate.fallacy.common.block
 
 import com.tterrag.registrate.util.entry.BlockEntry
-import dev.deepslate.fallacy.common.block.MiuBerryBushBlock
 import dev.deepslate.fallacy.common.registrate.REG
 import net.minecraft.tags.BlockTags
+import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel
 
 object FallacyBlocks {
     val MIU_BERRY_BUSH: BlockEntry<MiuBerryBushBlock> = REG
         .block<MiuBerryBushBlock>("miu_berry_bush", ::MiuBerryBushBlock).properties {
-            Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.SWEET_BERRY_BUSH)
+            Properties.ofFullCopy(Blocks.SWEET_BERRY_BUSH)
         }
         .blockstate { ctx, prov ->
             prov.getVariantBuilder(ctx.entry).forAllStates { state ->

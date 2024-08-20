@@ -37,7 +37,7 @@ abstract class SimpleHud(name: String) : HudLayerImpl(name) {
         renderFullBackground(graphic, xStart, yStart)
 
         val barFrom = xStart + if (isRightHandSide) WIDTH - barWidth else 0
-        getPrimaryBarColor(0, player).color2GL()
+        getPrimaryBarColor(0, player).pushGL()
 
         renderPartialBar(graphic, barFrom + 2, yStart + 2, barWidth)
         RGB.reset()

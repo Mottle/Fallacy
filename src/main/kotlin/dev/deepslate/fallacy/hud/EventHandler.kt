@@ -15,11 +15,11 @@ object EventHandler {
     )
 
     //移除原版bar
-    @SubscribeEvent(receiveCanceled = true)
+    @SubscribeEvent
     fun disableVanillaOverlay(event: RenderGuiLayerEvent.Pre) {
         val name = event.name
-        if(vanillaOverlays.contains(name)) event.isCanceled = true
+        if (vanillaOverlays.contains(name)) event.isCanceled = true
     }
 
-    
+
 }

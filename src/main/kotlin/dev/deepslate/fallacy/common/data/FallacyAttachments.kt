@@ -1,4 +1,4 @@
-package dev.deepslate.fallacy.common.capability
+package dev.deepslate.fallacy.common.data
 
 import com.mojang.serialization.Codec
 import dev.deepslate.fallacy.Fallacy
@@ -14,9 +14,10 @@ object FallacyAttachments {
         AttachmentType.builder { _ -> 20f }.serialize(Codec.FLOAT).build()
     }
 
-//    val THIRST_TICKS = ATTACHMENTS.register("thirst_ticks") { _ ->
-//        AttachmentType.builder { _ -> 0 }.build()
-//    }
+    //客户端和服务端各自维护一个LAST_DRINK_TICK，不进行同步
+    internal val LAST_DRINK_TICK = ATTACHMENTS.register("last_drink_tick") { _ ->
+        AttachmentType.builder { _ -> -1 }.build()
+    }
 
     fun register(bus: IEventBus) {
         ATTACHMENTS.register(bus)

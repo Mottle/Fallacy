@@ -112,7 +112,7 @@ class HealthHud : HudLayerImpl("health") {
         }
 
         val primaryColor = getPrimaryBarColor(0, player)
-        primaryColor.color2GL()
+        primaryColor.pushGL()
         renderPartialBar(graphic, barFromPos.toInt() + 2, yStart + 2, barWith)
 
         if (getHealthEffect(player) == HealthEffect.POISON) {

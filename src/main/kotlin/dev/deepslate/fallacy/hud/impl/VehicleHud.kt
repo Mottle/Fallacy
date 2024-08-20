@@ -9,7 +9,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import kotlin.math.ceil
 
-class VehicleHud: HudLayerImpl("vehicle") {
+class VehicleHud : HudLayerImpl("vehicle") {
 
     companion object {
         private val ICON = ResourceLocation.withDefaultNamespace("hud/heart/vehicle_full")
@@ -35,28 +35,28 @@ class VehicleHud: HudLayerImpl("vehicle") {
         val updateCount = Minecraft.getInstance().gui.guiTicks
         val vehicle = player.vehicle as LivingEntity
 
-        if(!vehicle.isAlive) return
+        if (!vehicle.isAlive) return
 
         val health = vehicle.health
         val maxHealth = vehicle.maxHealth
         val barWidth = getBarWidth(player)
         val isHighlight = healthUpdateCounter > updateCount && (healthUpdateCounter - updateCount) / 3L % 2L == 1L
 
-        if(health < mountHealth && player.invulnerableTime > 0) {
+        if (health < mountHealth && player.invulnerableTime > 0) {
             healthUpdateCounter = updateCount + 20L
-        } else if(health > mountHealth && player.invulnerableTime > 0) {
+        } else if (health > mountHealth && player.invulnerableTime > 0) {
             healthUpdateCounter = updateCount + 10L
         }
 
         mountHealth = health.toInt()
         val xStart = screenWidth / 2 + hOffset
         val yStart = screenHeight - vOffset
-        val relateY = if(isHighlight) 18 else 0
+        val relateY = if (isHighlight) 18 else 0
 
         graphic.blit(ICON_BAR, xStart, yStart, 0, relateY, 81, 9)
-        HealthHud.calculateScaledColor(health, maxHealth, HealthEffect.NONE).color2GL()
+        HealthHud.calculateScaledColor(health, maxHealth, HealthEffect.NONE).pushGL()
 
-        val barFrom = xStart + if(isRightHandSide) WIDTH - barWidth else 0
+        val barFrom = xStart + if (isRightHandSide) WIDTH - barWidth else 0
 
         renderPartialBar(graphic, barFrom + 2, yStart + 2, barWidth)
     }

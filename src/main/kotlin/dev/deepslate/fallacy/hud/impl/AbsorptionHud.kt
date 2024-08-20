@@ -78,7 +78,7 @@ class AbsorptionHud : HudLayerImpl("absorption") {
         val barWidth = getBarWidth(player)
         val maxHealth = player.maxHealth
 
-        val xStart = screenWidth / 2 + hOffset + if(isRightHandSide) WIDTH - barWidth else 0
+        val xStart = screenWidth / 2 + hOffset + if (isRightHandSide) WIDTH - barWidth else 0
         val yStart = screenHeight - vOffset
 
         val index = min(ceil(absorption / maxHealth).toInt(), COLORS.size) - 1
@@ -87,15 +87,15 @@ class AbsorptionHud : HudLayerImpl("absorption") {
         RGB.reset()
         renderBarBackground(graphic, player, screenWidth, screenHeight, vOffset)
 
-        if(index == 0) {
-            color.color2GL()
+        if (index == 0) {
+            color.pushGL()
             renderPartialBar(graphic, xStart + 2, yStart + 2, barWidth)
         } else {
             val secondaryColor = getSecondaryBarColor(index, player)
-            secondaryColor.color2GL()
+            secondaryColor.pushGL()
             renderFullBar(graphic, xStart + 2, yStart + 2)
-            if(absorption.toInt() % maxHealth.toInt() != 0 && index <= COLORS.size - 1) {
-                color.color2GL()
+            if (absorption.toInt() % maxHealth.toInt() != 0 && index <= COLORS.size - 1) {
+                color.pushGL()
                 val width = ((absorption.toInt() % maxHealth.toInt()).toFloat() / maxHealth) * WIDTH
                 renderPartialBar(graphic, xStart + 2, yStart + 2, width.toInt())
             }
@@ -134,7 +134,7 @@ class AbsorptionHud : HudLayerImpl("absorption") {
         val yStart = screenHeight - vOffset
 
         val isHardcore = player.level().levelData.isHardcore
-        val icon = if(isHardcore) HARDCORE_ICON else ICON
+        val icon = if (isHardcore) HARDCORE_ICON else ICON
 
         RGB.reset()
         graphic.blitSprite(CONTAINER, xStart, yStart, 9, 9)

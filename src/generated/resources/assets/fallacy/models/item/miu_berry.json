@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "fallacy:item/nature/miu_berries"
-  }
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "fallacy:item/nature/miu_berries"
+    }
 }

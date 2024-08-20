@@ -1,10 +1,10 @@
 package dev.deepslate.fallacy.common.capability
 
 import dev.deepslate.fallacy.Fallacy
-import dev.deepslate.fallacy.hydration.hydration.HydrationProvider
-import dev.deepslate.fallacy.hydration.hydration.IHydration
-import dev.deepslate.fallacy.hydration.thirst.IThirst
-import dev.deepslate.fallacy.hydration.thirst.ThirstProvider
+import dev.deepslate.fallacy.common.capability.hydration.HydrationProvider
+import dev.deepslate.fallacy.common.capability.hydration.IHydration
+import dev.deepslate.fallacy.common.capability.thirst.IThirst
+import dev.deepslate.fallacy.common.capability.thirst.ThirstProvider
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.entity.EntityType

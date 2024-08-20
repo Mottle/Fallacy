@@ -1,7 +1,7 @@
-package dev.deepslate.fallacy.hydration.thirst
+package dev.deepslate.fallacy.common.capability.thirst
 
 interface IThirst {
-    var thirst: Float
+    var value: Float
     val max: Float
 
     fun drink(value: Float)

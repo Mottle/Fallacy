@@ -1,9 +1,9 @@
 package dev.deepslate.fallacy
 
-import dev.deepslate.fallacy.common.capability.FallacyAttachments
-import dev.deepslate.fallacy.common.data.FallacyBlocks
-import dev.deepslate.fallacy.common.data.FallacyItems
-import dev.deepslate.fallacy.common.data.FallacyTabs
+import dev.deepslate.fallacy.common.FallacyTabs
+import dev.deepslate.fallacy.common.block.FallacyBlocks
+import dev.deepslate.fallacy.common.data.FallacyAttachments
+import dev.deepslate.fallacy.common.item.FallacyItems
 import dev.deepslate.fallacy.common.registrate.Registration
 import net.minecraft.resources.ResourceLocation
 import net.neoforged.bus.api.IEventBus
@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger
 //import dev.deepslate.fallacy.player.ethnicity.RegisterHandler as EthnicityRegisterHandler
 
 @Mod(Fallacy.MOD_ID)
-class Fallacy(modBus: IEventBus) {
+class Fallacy(val modBus: IEventBus) {
     companion object {
         const val MOD_ID = "fallacy"
 
@@ -36,5 +36,6 @@ class Fallacy(modBus: IEventBus) {
     }
 
     @SubscribeEvent
-    fun commonSetup(event: FMLCommonSetupEvent) {}
+    fun commonSetup(event: FMLCommonSetupEvent) {
+    }
 }

@@ -1,4 +1,4 @@
-package dev.deepslate.fallacy.hydration.hydration
+package dev.deepslate.fallacy.hydration
 
 interface ItemHydration {
     val hydration: Float
