@@ -1,8 +1,10 @@
 package dev.deepslate.fallacy.common.capability.thirst
 
+import dev.deepslate.fallacy.common.capability.FallacyDamageTypes
 import dev.deepslate.fallacy.common.data.FallacyAttachments
 import dev.deepslate.fallacy.common.network.packet.ThirstSyncPacket
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.player.Player
 import net.neoforged.neoforge.network.PacketDistributor
 import java.lang.Math.clamp
@@ -11,7 +13,7 @@ import kotlin.math.min
 class PlayerThirst(val player: Player) : IThirst {
 
     companion object {
-        private const val UPDATE_RATE = 20 * 30
+        private const val UPDATE_INTERVAL_TICKS = 20 * 60 * 2
     }
 
     override var value: Float
@@ -34,12 +36,18 @@ class PlayerThirst(val player: Player) : IThirst {
         if (player.isInvulnerable) return
 
 //        val ticks = player.getData(FallacyAttachments.THIRST_TICKS)
-        if (player.tickCount % UPDATE_RATE == 0) {
+        if (player.tickCount % UPDATE_INTERVAL_TICKS == 0) {
             value = clamp(value - loss(), 0f, max)
         }
 
-        if (value <= 0f) player.kill()
+        if (player.tickCount % 20 == 0 && value <= 0f) {
+            val damage = damage(player)
+            player.hurt(damage, 1f)
+        }
 
 //        player.setData(FallacyAttachments.THIRST_TICKS, ticks + 1)
     }
+
+    private fun damage(player: Player): DamageSource =
+        player.level().damageSources().source(FallacyDamageTypes.DEHYDRATION)
 }
