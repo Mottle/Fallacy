@@ -2,9 +2,11 @@ package dev.deepslate.fallacy.common.capability.thirst
 
 import dev.deepslate.fallacy.common.capability.FallacyDamageTypes
 import dev.deepslate.fallacy.common.data.FallacyAttachments
+import dev.deepslate.fallacy.common.effect.FallacyEffects
 import dev.deepslate.fallacy.common.network.packet.ThirstSyncPacket
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.damagesource.DamageSource
+import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.player.Player
 import net.neoforged.neoforge.network.PacketDistributor
 import java.lang.Math.clamp
@@ -14,6 +16,8 @@ class PlayerThirst(val player: Player) : IThirst {
 
     companion object {
         private const val UPDATE_INTERVAL_TICKS = 20 * 60 * 2
+
+        private val DEFAULT_EFFECT = MobEffectInstance(FallacyEffects.DEHYDRATION, 0x3f3f3f3f)
     }
 
     override var value: Float
@@ -43,6 +47,7 @@ class PlayerThirst(val player: Player) : IThirst {
         if (player.tickCount % 20 == 0 && value <= 0f) {
             val damage = damage(player)
             player.hurt(damage, 1f)
+            if (!player.hasEffect(FallacyEffects.DEHYDRATION)) player.addEffect(DEFAULT_EFFECT)
         }
 
 //        player.setData(FallacyAttachments.THIRST_TICKS, ticks + 1)

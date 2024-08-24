@@ -3,6 +3,7 @@ package dev.deepslate.fallacy
 import dev.deepslate.fallacy.common.FallacyTabs
 import dev.deepslate.fallacy.common.block.FallacyBlocks
 import dev.deepslate.fallacy.common.data.FallacyAttachments
+import dev.deepslate.fallacy.common.effect.FallacyEffects
 import dev.deepslate.fallacy.common.item.FallacyItems
 import dev.deepslate.fallacy.common.registrate.Registration
 import net.minecraft.resources.ResourceLocation
@@ -31,6 +32,7 @@ class Fallacy(val modBus: IEventBus) {
         FallacyAttachments.register(modBus)
 
         FallacyTabs.init(modBus)
+        FallacyEffects.init(modBus)
         FallacyItems
         FallacyBlocks
     }
