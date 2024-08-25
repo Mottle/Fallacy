@@ -17,7 +17,7 @@ class PlayerThirst(val player: Player) : IThirst {
     companion object {
         private const val UPDATE_INTERVAL_TICKS = 20 * 60 * 2
 
-        private val DEFAULT_EFFECT = MobEffectInstance(FallacyEffects.DEHYDRATION, 0x3f3f3f3f)
+        private val DEFAULT_EFFECT = MobEffectInstance(FallacyEffects.DEHYDRATION, -1)
     }
 
     override var value: Float
@@ -46,7 +46,7 @@ class PlayerThirst(val player: Player) : IThirst {
 
         if (player.tickCount % 20 == 0 && value <= 0f) {
             val damage = damage(player)
-            player.hurt(damage, 1f)
+            player.hurt(damage, 2f)
             if (!player.hasEffect(FallacyEffects.DEHYDRATION)) player.addEffect(DEFAULT_EFFECT)
         }
 
