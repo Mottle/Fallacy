@@ -33,6 +33,7 @@ class Fallacy(val modBus: IEventBus) {
 
         FallacyTabs.init(modBus)
         FallacyEffects.init(modBus)
+
         FallacyItems
         FallacyBlocks
     }
