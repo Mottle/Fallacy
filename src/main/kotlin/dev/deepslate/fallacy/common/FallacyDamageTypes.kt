@@ -1,4 +1,4 @@
-package dev.deepslate.fallacy.common.capability
+package dev.deepslate.fallacy.common
 
 import dev.deepslate.fallacy.Fallacy
 import net.minecraft.core.registries.Registries

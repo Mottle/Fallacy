@@ -2,11 +2,13 @@ package dev.deepslate.fallacy.common.network
 
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.network.packet.DrinkInWorldPacket
+import dev.deepslate.fallacy.common.network.packet.RaceIdSyncPacket
 import dev.deepslate.fallacy.common.network.packet.ThirstSyncPacket
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent
 import dev.deepslate.fallacy.hydration.Handler as HydrationHandler
+import dev.deepslate.fallacy.race.Handler as RaceHandler
 
 @EventBusSubscriber(modid = Fallacy.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 object FallacyNetwork {
@@ -27,6 +29,12 @@ object FallacyNetwork {
             DrinkInWorldPacket.TYPE,
             DrinkInWorldPacket.STREAM_CODEC,
             HydrationHandler::handleDrinkInWorldPacket
+        )
+
+        registrar.playToClient(
+            RaceIdSyncPacket.TYPE,
+            RaceIdSyncPacket.STREAM_CODEC,
+            RaceHandler::handleRaceIdSyncPacket
         )
     }
 }

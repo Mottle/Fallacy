@@ -14,8 +14,6 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 
-//import dev.deepslate.fallacy.player.ethnicity.RegisterHandler as EthnicityRegisterHandler
-
 @Mod(Fallacy.MOD_ID)
 class Fallacy(val modBus: IEventBus) {
     companion object {

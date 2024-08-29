@@ -19,6 +19,10 @@ object FallacyAttachments {
         AttachmentType.builder { _ -> -1 }.build()
     }
 
+    val RACE_ID = ATTACHMENTS.register("race_id") { _ ->
+        AttachmentType.builder { _ -> "Unknown" }.serialize(Codec.STRING).copyOnDeath().build()
+    }
+
     fun register(bus: IEventBus) {
         ATTACHMENTS.register(bus)
     }
