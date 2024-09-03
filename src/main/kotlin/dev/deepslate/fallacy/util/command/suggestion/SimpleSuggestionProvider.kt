@@ -5,6 +5,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider
 import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import net.minecraft.commands.CommandSourceStack
+import net.minecraft.commands.SharedSuggestionProvider
 import java.util.concurrent.CompletableFuture
 
 class SimpleSuggestionProvider(val factory: (CommandContext<CommandSourceStack>) -> List<String>) :
@@ -14,9 +15,8 @@ class SimpleSuggestionProvider(val factory: (CommandContext<CommandSourceStack>)
         builder: SuggestionsBuilder
     ): CompletableFuture<Suggestions> {
         val list = factory(context)
-
         list
-            .filter { it.endsWith(builder.remaining) }
+            .filter { SharedSuggestionProvider.matchesSubStr(builder.remaining, it) }
             .forEach(builder::suggest)
 
         return builder.buildFuture()
