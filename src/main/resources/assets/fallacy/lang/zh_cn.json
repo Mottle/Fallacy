@@ -2,8 +2,6 @@
     "item.fallacy.miu_berry": "缪浆果",
     "itemGroup.fallacy.other": "缪: 杂项",
     "itemGroup.fallacy.tool": "缪: 工具",
-
     "effect.fallacy.dehydration": "脱水",
-
     "death.attack.fallacy.dehydration": "%1$s 死于脱水"
 }

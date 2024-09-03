@@ -7,7 +7,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider
 import dev.deepslate.fallacy.common.data.FallacyAttachments
 import dev.deepslate.fallacy.util.command.GameCommand
 import dev.deepslate.fallacy.util.command.announce.AutoloadCommand
-import dev.deepslate.fallacy.util.command.suggestion.ServerPlayerNameSuggestion
+import dev.deepslate.fallacy.util.command.suggestion.SimpleSuggestionProvider
 import net.minecraft.commands.CommandSourceStack
 
 @AutoloadCommand
@@ -17,7 +17,7 @@ class RaceSet : GameCommand {
     override val permissionRequired: String? = null
 
     override val suggestions: Map<String, SuggestionProvider<CommandSourceStack>> = mapOf(
-        "player name" to ServerPlayerNameSuggestion()
+        "player name" to SimpleSuggestionProvider.SERVER_PLAYER_NAME
     )
 
     override fun execute(context: CommandContext<CommandSourceStack>): Int {

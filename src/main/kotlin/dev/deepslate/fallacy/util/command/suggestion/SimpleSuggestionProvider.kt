@@ -7,19 +7,22 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import net.minecraft.commands.CommandSourceStack
 import java.util.concurrent.CompletableFuture
 
-class ServerPlayerNameSuggestion : SuggestionProvider<CommandSourceStack> {
+class SimpleSuggestionProvider(val factory: (CommandContext<CommandSourceStack>) -> List<String>) :
+    SuggestionProvider<CommandSourceStack> {
     override fun getSuggestions(
         context: CommandContext<CommandSourceStack>,
         builder: SuggestionsBuilder
     ): CompletableFuture<Suggestions> {
-        val server = context.source.server
-        val onlinePlayerNames = server.playerNames.toList()
-//        if(onlinePlayerNames.contains(input)) return Suggestions.empty()
+        val list = factory(context)
 
-        onlinePlayerNames
+        list
             .filter { it.endsWith(builder.remaining) }
             .forEach(builder::suggest)
 
         return builder.buildFuture()
+    }
+
+    companion object {
+        val SERVER_PLAYER_NAME = SimpleSuggestionProvider { it.source.server.playerNames.toList() }
     }
 }
