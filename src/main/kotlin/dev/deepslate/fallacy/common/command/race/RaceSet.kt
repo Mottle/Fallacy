@@ -2,26 +2,30 @@ package dev.deepslate.fallacy.common.command.race
 
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.arguments.StringArgumentType
-import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
-import dev.deepslate.fallacy.common.command.FallacyCommand
+import com.mojang.brigadier.suggestion.SuggestionProvider
+import dev.deepslate.fallacy.common.data.FallacyAttachments
+import dev.deepslate.fallacy.util.command.GameCommand
+import dev.deepslate.fallacy.util.command.announce.AutoloadCommand
+import dev.deepslate.fallacy.util.command.suggestion.ServerPlayerNameSuggestion
 import net.minecraft.commands.CommandSourceStack
-import net.minecraft.commands.Commands
-import net.minecraft.network.chat.Component
 
-class RaceSet : FallacyCommand {
-    override val command: LiteralArgumentBuilder<CommandSourceStack> =
-        Commands.literal("race")
-            .then(
-                Commands.literal("set")
-                    .then(Commands.argument("race id", StringArgumentType.word()).executes(::execute))
-            )
+@AutoloadCommand
+class RaceSet : GameCommand {
+    override val source: String = "fallacy race set %s<player name> %s<race id>"
 
     override val permissionRequired: String? = null
 
+    override val suggestions: Map<String, SuggestionProvider<CommandSourceStack>> = mapOf(
+        "player name" to ServerPlayerNameSuggestion()
+    )
+
     override fun execute(context: CommandContext<CommandSourceStack>): Int {
+        val playerName = StringArgumentType.getString(context, "player name")
         val raceId = StringArgumentType.getString(context, "race id")
-        context.source.player?.sendSystemMessage(Component.literal(raceId))
+        val player = context.getSource().server.playerList.getPlayerByName(playerName) ?: return 0
+
+        player.setData(FallacyAttachments.RACE_ID, raceId)
         return Command.SINGLE_SUCCESS
     }
 }

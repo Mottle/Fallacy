@@ -1,20 +1,16 @@
 package dev.deepslate.fallacy.common.command
 
-import dev.deepslate.fallacy.Fallacy
-import net.minecraft.commands.Commands
+import dev.deepslate.fallacy.util.command.GameCommand
 
 object FallacyCommands {
-    private val COMMAND_PREFIX = Fallacy.MOD_ID.lowercase()
 
-    private val subcommands: ArrayList<FallacyCommand> = arrayListOf()
+    private val subcommands: ArrayList<GameCommand> = arrayListOf()
 
-    val commands: List<FallacyCommand> get() = subcommands.toList()
+    val commands: List<GameCommand> get() = subcommands.toList()
 
-    fun add(command: FallacyCommand) {
+    internal fun add(command: GameCommand) {
         subcommands.add(command)
     }
-
-    internal fun getPrefix() = Commands.literal(COMMAND_PREFIX)
 
     init {
         Loader().loadAllCommands()
