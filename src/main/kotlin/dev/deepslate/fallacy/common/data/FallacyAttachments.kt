@@ -2,6 +2,8 @@ package dev.deepslate.fallacy.common.data
 
 import com.mojang.serialization.Codec
 import dev.deepslate.fallacy.Fallacy
+import dev.deepslate.fallacy.race.impl.Unknown
+import net.minecraft.resources.ResourceLocation
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.neoforge.attachment.AttachmentType
 import net.neoforged.neoforge.registries.DeferredRegister
@@ -20,7 +22,7 @@ object FallacyAttachments {
     }
 
     val RACE_ID = ATTACHMENTS.register("race_id") { _ ->
-        AttachmentType.builder { _ -> "Unknown" }.serialize(Codec.STRING).copyOnDeath().build()
+        AttachmentType.builder { _ -> Unknown.ID }.serialize(ResourceLocation.CODEC).copyOnDeath().build()
     }
 
     fun register(bus: IEventBus) {
