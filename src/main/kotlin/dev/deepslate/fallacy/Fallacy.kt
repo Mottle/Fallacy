@@ -6,6 +6,7 @@ import dev.deepslate.fallacy.common.data.FallacyAttachments
 import dev.deepslate.fallacy.common.effect.FallacyEffects
 import dev.deepslate.fallacy.common.item.FallacyItems
 import dev.deepslate.fallacy.common.registrate.Registration
+import dev.deepslate.fallacy.race.FallacyRaces
 import net.minecraft.resources.ResourceLocation
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.bus.api.SubscribeEvent
@@ -31,6 +32,7 @@ class Fallacy(val modBus: IEventBus) {
 
         FallacyTabs.init(modBus)
         FallacyEffects.init(modBus)
+        FallacyRaces.init(modBus)
 
         FallacyItems
         FallacyBlocks

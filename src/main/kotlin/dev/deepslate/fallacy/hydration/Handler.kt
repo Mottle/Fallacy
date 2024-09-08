@@ -5,6 +5,7 @@ import dev.deepslate.fallacy.common.capability.FallacyCapabilities
 import dev.deepslate.fallacy.common.data.FallacyAttachments
 import dev.deepslate.fallacy.common.network.packet.DrinkInWorldPacket
 import dev.deepslate.fallacy.common.network.packet.ThirstSyncPacket
+import dev.deepslate.fallacy.util.TickHelper
 import net.minecraft.advancements.CriteriaTriggers
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
@@ -23,8 +24,12 @@ import net.neoforged.neoforge.network.handling.IPayloadContext
 
 @EventBusSubscriber(modid = Fallacy.MOD_ID)
 object Handler {
+    private const val BAST_TICK_RATE = 20
+
     @SubscribeEvent
     fun onPlayerTick(event: PlayerTickEvent.Post) {
+        if (!TickHelper.checkServerTickRate(BAST_TICK_RATE)) return
+
         val player = event.entity as? ServerPlayer ?: return
         val thirst = player.getCapability(FallacyCapabilities.THIRST)!!
 

@@ -12,7 +12,10 @@ import net.minecraft.server.level.ServerPlayer
 class Unknown : Race {
 
     companion object {
-        val ID = Fallacy.id("Unknown")
+        val ID = Fallacy.id("unknown")
+
+        //用于缺省，未知种族
+        val INSTANCE = Unknown()
     }
 
     override val namespacedId: ResourceLocation = ID

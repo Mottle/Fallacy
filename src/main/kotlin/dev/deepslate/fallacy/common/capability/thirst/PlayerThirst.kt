@@ -28,6 +28,7 @@ class PlayerThirst(val player: Player) : IThirst {
                 PacketDistributor.sendToPlayer(player, ThirstSyncPacket(this@PlayerThirst.value))
             }
         }
+
     override val max: Float = 20f
 
     override fun drink(value: Float) {

@@ -9,7 +9,12 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 
 class Humankind : Race {
-    override val namespacedId: ResourceLocation = Fallacy.id("Humankind")
+
+    companion object {
+        val ID = Fallacy.id("humankind")
+    }
+
+    override val namespacedId: ResourceLocation = ID
 
     override val attribute: PlayerAttribute = PlayerAttribute()
 

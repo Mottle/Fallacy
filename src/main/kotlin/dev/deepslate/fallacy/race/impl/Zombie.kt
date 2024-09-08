@@ -7,10 +7,14 @@ import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.tags.EntityTypeTags
 
 class Zombie : Race {
-    override val namespacedId: ResourceLocation = Fallacy.id("Zombie")
+
+    companion object {
+        val FALLACY = Fallacy.id("zombie")
+    }
+
+    override val namespacedId: ResourceLocation = FALLACY
 
     override val attribute: PlayerAttribute = PlayerAttribute(health = 40f, attackDamage = 4f)
 
@@ -22,6 +26,5 @@ class Zombie : Race {
     }
 
     override fun set(player: ServerPlayer) {
-        player.addTag(EntityTypeTags.UNDEAD.location.path)
     }
 }
