@@ -33,6 +33,7 @@ class Zombie : Race {
         position: BlockPos
     ) {
         if (player.isInvulnerable) return
+        if (!level.isDay) return
         if (!level.canSeeSky(position)) return
         with(player) {
             if (isInWaterRainOrBubble) return
