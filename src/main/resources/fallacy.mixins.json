@@ -5,7 +5,8 @@
     "compatibilityLevel": "JAVA_8",
     "refmap": "Fallacy.refmap.json",
     "mixins": [
-        "LivingEntityMixin"
+        "LivingEntityMixin",
+        "RangedAttributeMixin"
     ],
     "client": [
     ],

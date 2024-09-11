@@ -4,8 +4,8 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.ai.attributes.Attributes
 
 data class PlayerAttribute(
-    val armor: Double = 0.0,//护甲值[0, 30]
-    val toughness: Double = 0.0,//韧性[0, 20]
+    val armor: Double = 0.0,//护甲值[0, 30] -> [0. 1024]
+    val toughness: Double = 0.0,//韧性[0, 20] -> [0, 256]
     val attackDamage: Double = 1.0,//攻击伤害[0, 2048]
     val attachKnockBack: Double = 0.0,//击退[0, 5]
     val attackSpeed: Double = 4.0,//攻击速度[0, 1024]
@@ -16,7 +16,7 @@ data class PlayerAttribute(
     val jumpStrength: Double = 0.42,//跳跃力度[0, 32]
     val knockBackResistance: Double = 0.0,//击退抗性[0, 1]
     val luck: Double = 0.0,//幸运[-1024, 1024]
-    val health: Double = 20.0,//生命值[1, 1024]
+    val health: Double = 20.0,//生命值[1, 1024] -> [1, 32768]
     val moveEfficiency: Double = 0.0,//移动效率[0, 1] (影响生物在方块（灵魂沙、蜂蜜块等）上移动的属性)
     val moveSpeed: Double = 0.1,//移动速度[0, 1024]
     val oxygenBonus: Double = 0.0,//额外氧气[0, 1024] (游戏尝试降低氧气值一定成功；而此属性计算值e不为0时，游戏尝试降低氧气值只有1⁄e+1的概率成功)
