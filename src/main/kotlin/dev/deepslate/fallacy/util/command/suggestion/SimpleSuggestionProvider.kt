@@ -4,6 +4,7 @@ import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.suggestion.SuggestionProvider
 import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
+import dev.deepslate.fallacy.race.FallacyRaces
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.SharedSuggestionProvider
 import java.util.concurrent.CompletableFuture
@@ -24,5 +25,9 @@ class SimpleSuggestionProvider(val factory: (CommandContext<CommandSourceStack>)
 
     companion object {
         val SERVER_PLAYER_NAME = SimpleSuggestionProvider { it.source.server.playerNames.toList() }
+
+        val RACE_ID = SimpleSuggestionProvider { _ ->
+            FallacyRaces.REGISTRY.keySet().map { it.toString().replace(':', '.') }
+        }
     }
 }

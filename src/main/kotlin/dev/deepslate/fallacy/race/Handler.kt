@@ -27,11 +27,10 @@ object Handler {
         Race.sync(player)
     }
 
-    private const val TICK_RATE = 40
-
     @SubscribeEvent
     fun onServerPlayerTick(event: PlayerTickEvent.Post) {
-        if (!TickHelper.checkServerTickRate(TICK_RATE)) return
+        if (event.entity.level().isClientSide) return
+        if (!TickHelper.checkServerTickRate(Race.RACE_TICK_RATE)) return
 
         val player = event.entity as? ServerPlayer ?: return
 

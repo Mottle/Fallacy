@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.entity.player.Player
 import net.neoforged.neoforge.network.PacketDistributor
 
 interface Race {
@@ -21,6 +22,8 @@ interface Race {
     fun set(player: ServerPlayer)
 
     companion object {
+        const val RACE_TICK_RATE = 2 * 20
+
         fun sync(player: ServerPlayer) {
             val raceId = player.getData(FallacyAttachments.RACE_ID)
             val packet = RaceIdSyncPacket(raceId)
@@ -29,9 +32,9 @@ interface Race {
             Fallacy.LOGGER.info("Syncing race id: $raceId to player [${player.name}, ${player.uuid}].")
         }
 
-        fun getRaceId(player: ServerPlayer) = player.getData(FallacyAttachments.RACE_ID)
+        fun getRaceId(player: Player) = player.getData(FallacyAttachments.RACE_ID)
 
-        fun get(player: ServerPlayer): Race {
+        fun get(player: Player): Race {
             val raceId = getRaceId(player)
             val race = FallacyRaces.REGISTRY.get(raceId) ?: Unknown.INSTANCE
             return race

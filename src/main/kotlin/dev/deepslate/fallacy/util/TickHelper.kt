@@ -18,7 +18,7 @@ object TickHelper {
         get() = clientTickCounter
 
     val currentServerTick
-        get() = ServerHelper.dedicatedServer?.tickCount ?: -1
+        get() = ServerHelper.server?.tickCount ?: -1
 
     fun checkServerTickRate(rate: Int) = currentServerTick % rate == 0
 }

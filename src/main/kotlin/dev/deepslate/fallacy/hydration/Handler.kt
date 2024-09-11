@@ -24,7 +24,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext
 
 @EventBusSubscriber(modid = Fallacy.MOD_ID)
 object Handler {
-    private const val BAST_TICK_RATE = 20
+    const val BAST_TICK_RATE = 20
 
     @SubscribeEvent
     fun onPlayerTick(event: PlayerTickEvent.Post) {

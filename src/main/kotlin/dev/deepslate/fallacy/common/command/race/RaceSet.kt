@@ -5,7 +5,6 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.suggestion.SuggestionProvider
 import dev.deepslate.fallacy.common.data.FallacyAttachments
-import dev.deepslate.fallacy.race.FallacyRaces
 import dev.deepslate.fallacy.race.Race
 import dev.deepslate.fallacy.race.impl.Unknown
 import dev.deepslate.fallacy.util.command.GameCommand
@@ -18,19 +17,13 @@ import net.minecraft.resources.ResourceLocation
 @AutoloadCommand
 class RaceSet : GameCommand {
 
-    companion object {
-        private val RACE_ID_SUGGESTION = SimpleSuggestionProvider { _ ->
-            FallacyRaces.REGISTRY.keySet().map { it.toString().replace(':', '.') }
-        }
-    }
-
     override val source: String = "fallacy race set %s<player name> %s<race id>"
 
     override val permissionRequired: String? = null
 
     override val suggestions: Map<String, SuggestionProvider<CommandSourceStack>> = mapOf(
         "player name" to SimpleSuggestionProvider.SERVER_PLAYER_NAME,
-        "race id" to RACE_ID_SUGGESTION
+        "race id" to SimpleSuggestionProvider.RACE_ID
     )
 
     override fun execute(context: CommandContext<CommandSourceStack>): Int {
