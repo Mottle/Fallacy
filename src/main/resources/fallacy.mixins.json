@@ -5,6 +5,7 @@
     "compatibilityLevel": "JAVA_8",
     "refmap": "Fallacy.refmap.json",
     "mixins": [
+        "CombatRulesMixin",
         "LivingEntityMixin",
         "RangedAttributeMixin"
     ],
