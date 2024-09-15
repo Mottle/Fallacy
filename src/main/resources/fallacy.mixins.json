@@ -6,6 +6,7 @@
     "refmap": "Fallacy.refmap.json",
     "mixins": [
         "CombatRulesMixin",
+        "EnchantmentMixin",
         "LivingEntityMixin",
         "RangedAttributeMixin"
     ],

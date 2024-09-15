@@ -1,5 +1,6 @@
 package dev.deepslate.fallacy.common.capability.thirst
 
+import dev.deepslate.fallacy.common.FallacyAttributes
 import dev.deepslate.fallacy.common.FallacyDamageTypes
 import dev.deepslate.fallacy.common.data.FallacyAttachments
 import dev.deepslate.fallacy.common.effect.FallacyEffects
@@ -29,7 +30,7 @@ class PlayerThirst(val player: Player) : IThirst {
             }
         }
 
-    override val max: Float = 20f
+    override val max: Float = player.getAttributeValue(FallacyAttributes.MAX_THIRST).toFloat()
 
     override fun drink(value: Float) {
         this@PlayerThirst.value = min(max, this@PlayerThirst.value + value)

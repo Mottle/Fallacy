@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
-public class LivingEntityMixin {
+public abstract class LivingEntityMixin {
 
     @Inject(method = "isInvertedHealAndHarm", at = @At("HEAD"), cancellable = true)
     void injectIsInvertedHealAndHarm(CallbackInfoReturnable<Boolean> cir) {

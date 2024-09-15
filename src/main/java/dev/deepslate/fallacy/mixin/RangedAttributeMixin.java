@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Objects;
 
 @Mixin(RangedAttribute.class)
-public class RangedAttributeMixin {
+public abstract class RangedAttributeMixin {
     @Mutable
     @Shadow @Final private double maxValue;
 

@@ -1,6 +1,9 @@
 package dev.deepslate.fallacy.common.data.player
 
+import dev.deepslate.fallacy.Fallacy
+import net.minecraft.core.Holder
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.entity.ai.attributes.Attribute
 import net.minecraft.world.entity.ai.attributes.Attributes
 
 data class PlayerAttribute(
@@ -13,12 +16,12 @@ data class PlayerAttribute(
     val explosionKnockBackResistance: Double = 0.0,//爆炸击退抗性[0, 1]
     val fallDamageMultiplier: Double = 1.0,//摔落伤害系数[0, 100]
     val gravity: Double = 0.08,//重力[-1, 1]
-    val jumpStrength: Double = 0.42,//跳跃力度[0, 32]
+    val jumpStrength: Double = 0.41999998688697815,//跳跃力度[0, 32]
     val knockBackResistance: Double = 0.0,//击退抗性[0, 1]
     val luck: Double = 0.0,//幸运[-1024, 1024]
     val health: Double = 20.0,//生命值[1, 1024] -> [1, 32768]
     val moveEfficiency: Double = 0.0,//移动效率[0, 1] (影响生物在方块（灵魂沙、蜂蜜块等）上移动的属性)
-    val moveSpeed: Double = 0.1,//移动速度[0, 1024]
+    val moveSpeed: Double = 0.10000000149011612,//移动速度[0, 1024]
     val oxygenBonus: Double = 0.0,//额外氧气[0, 1024] (游戏尝试降低氧气值一定成功；而此属性计算值e不为0时，游戏尝试降低氧气值只有1⁄e+1的概率成功)
     val safeFallDistance: Double = 3.0,//安全摔落高度[-1024, 1024]
     val scale: Double = 1.0,//尺寸[0.0625, 16]
@@ -30,37 +33,44 @@ data class PlayerAttribute(
     val miningEfficiency: Double = 0.0,//挖掘效率[0, 1024]
     val sneakingSpeed: Double = 0.3,//潜行速度[0, 1]
     val submergedMiningSpeed: Double = 0.2,//水下挖掘速度[0, 20]
-    val sweepingDamageRatio: Double = 0.0,//横扫伤害系数[0, 1] (横扫攻击伤害的最终值为1+rd，其中r为横扫伤害比率，d为原近战攻击伤害)
+    val sweepingDamageRatio: Double = 0.0,//横扫伤害系数[0, 1] (横扫攻击伤害的最终值为1 + r * d，其中r为横扫伤害比率，d为原近战攻击伤害)
 ) {
     fun set(player: ServerPlayer) {
-        with(player.attributes) {
-            getInstance(Attributes.ARMOR)!!.baseValue = armor
-            getInstance(Attributes.ARMOR_TOUGHNESS)!!.baseValue = toughness
-            getInstance(Attributes.ATTACK_DAMAGE)!!.baseValue = attackDamage
-            getInstance(Attributes.ATTACK_KNOCKBACK)!!.baseValue = attachKnockBack
-            getInstance(Attributes.ATTACK_SPEED)!!.baseValue = attackSpeed
-            getInstance(Attributes.BURNING_TIME)!!.baseValue = burningTime
-            getInstance(Attributes.EXPLOSION_KNOCKBACK_RESISTANCE)!!.baseValue = explosionKnockBackResistance
-            getInstance(Attributes.FALL_DAMAGE_MULTIPLIER)!!.baseValue = fallDamageMultiplier
-            getInstance(Attributes.GRAVITY)!!.baseValue = gravity
-            getInstance(Attributes.JUMP_STRENGTH)!!.baseValue = jumpStrength
-            getInstance(Attributes.KNOCKBACK_RESISTANCE)!!.baseValue = knockBackResistance
-            getInstance(Attributes.LUCK)!!.baseValue = luck
-            getInstance(Attributes.MAX_HEALTH)!!.baseValue = health
-            getInstance(Attributes.MOVEMENT_EFFICIENCY)!!.baseValue = moveEfficiency
-            getInstance(Attributes.MOVEMENT_SPEED)!!.baseValue = moveSpeed
-            getInstance(Attributes.OXYGEN_BONUS)!!.baseValue = oxygenBonus
-            getInstance(Attributes.SAFE_FALL_DISTANCE)!!.baseValue = safeFallDistance
-            getInstance(Attributes.SCALE)!!.baseValue = scale
-            getInstance(Attributes.STEP_HEIGHT)!!.baseValue = stepHeight
-            getInstance(Attributes.WATER_MOVEMENT_EFFICIENCY)!!.baseValue = waterMoveEfficiency
-            getInstance(Attributes.BLOCK_BREAK_SPEED)!!.baseValue = blockBreakSpeed
-            getInstance(Attributes.BLOCK_INTERACTION_RANGE)!!.baseValue = blockInteractionRange
-            getInstance(Attributes.ENTITY_INTERACTION_RANGE)!!.baseValue = entityInteractionRange
-            getInstance(Attributes.MINING_EFFICIENCY)!!.baseValue = miningEfficiency
-            getInstance(Attributes.SNEAKING_SPEED)!!.baseValue = sneakingSpeed
-            getInstance(Attributes.SUBMERGED_MINING_SPEED)!!.baseValue = submergedMiningSpeed
-            getInstance(Attributes.SWEEPING_DAMAGE_RATIO)!!.baseValue = sweepingDamageRatio
+        set(player, Attributes.ARMOR, armor)
+        set(player, Attributes.ARMOR_TOUGHNESS, toughness)
+        set(player, Attributes.ATTACK_DAMAGE, attackDamage)
+        set(player, Attributes.ATTACK_SPEED, attackSpeed)
+        set(player, Attributes.BURNING_TIME, burningTime)
+        set(player, Attributes.EXPLOSION_KNOCKBACK_RESISTANCE, explosionKnockBackResistance)
+        set(player, Attributes.FALL_DAMAGE_MULTIPLIER, fallDamageMultiplier)
+        set(player, Attributes.GRAVITY, gravity)
+        set(player, Attributes.JUMP_STRENGTH, jumpStrength)
+        set(player, Attributes.KNOCKBACK_RESISTANCE, knockBackResistance)
+        set(player, Attributes.LUCK, luck)
+        set(player, Attributes.MAX_HEALTH, health)
+        set(player, Attributes.MOVEMENT_EFFICIENCY, moveEfficiency)
+        set(player, Attributes.MOVEMENT_SPEED, moveSpeed)
+        set(player, Attributes.OXYGEN_BONUS, oxygenBonus)
+        set(player, Attributes.SAFE_FALL_DISTANCE, safeFallDistance)
+        set(player, Attributes.SCALE, scale)
+        set(player, Attributes.STEP_HEIGHT, stepHeight)
+        set(player, Attributes.WATER_MOVEMENT_EFFICIENCY, waterMoveEfficiency)
+        set(player, Attributes.BLOCK_BREAK_SPEED, blockBreakSpeed)
+        set(player, Attributes.BLOCK_INTERACTION_RANGE, blockInteractionRange)
+        set(player, Attributes.ENTITY_INTERACTION_RANGE, entityInteractionRange)
+        set(player, Attributes.MINING_EFFICIENCY, miningEfficiency)
+        set(player, Attributes.SNEAKING_SPEED, sneakingSpeed)
+        set(player, Attributes.SUBMERGED_MINING_SPEED, submergedMiningSpeed)
+        set(player, Attributes.SWEEPING_DAMAGE_RATIO, sweepingDamageRatio)
+    }
+
+    private fun set(player: ServerPlayer, holder: Holder<Attribute>, value: Double) {
+        val instance = player.getAttribute(holder)
+        if (instance == null) {
+            Fallacy.LOGGER.warn("Attribute ${holder.value().descriptionId} is not found on player ${player.name}.")
+            return
         }
+
+        instance.baseValue = value
     }
 }

@@ -29,7 +29,7 @@ interface Race {
             val packet = RaceIdSyncPacket(raceId)
 
             PacketDistributor.sendToPlayer(player, packet)
-            Fallacy.LOGGER.info("Syncing race id: $raceId to player [${player.name}, ${player.uuid}].")
+            Fallacy.LOGGER.info("Syncing race id: $raceId to player [${player.name.string}, ${player.uuid}].")
         }
 
         fun getRaceId(player: Player) = player.getData(FallacyAttachments.RACE_ID)
@@ -45,5 +45,7 @@ interface Race {
         fun get(raceId: ResourceLocation) = FallacyRaces.REGISTRY.get(raceId)
 
         fun getOrUnknown(raceId: ResourceLocation) = get(raceId) ?: Unknown.INSTANCE
+
+        fun isUndead(player: Player) = Race.get(player) is Undead
     }
 }

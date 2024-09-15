@@ -3,6 +3,7 @@ package dev.deepslate.fallacy.race.impl
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.data.player.PlayerAttribute
 import dev.deepslate.fallacy.race.Race
+import dev.deepslate.fallacy.race.Undead
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
@@ -13,7 +14,7 @@ import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.item.ItemStack
 import kotlin.math.max
 
-class Zombie : Race {
+class Zombie : Race, Undead {
 
     companion object {
         val ID = Fallacy.id("zombie")
