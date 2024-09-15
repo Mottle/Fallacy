@@ -7,14 +7,14 @@ import com.mojang.brigadier.suggestion.SuggestionProvider
 import dev.deepslate.fallacy.common.data.FallacyAttachments
 import dev.deepslate.fallacy.race.Race
 import dev.deepslate.fallacy.race.impl.Unknown
+import dev.deepslate.fallacy.util.announce.Autoload
 import dev.deepslate.fallacy.util.command.GameCommand
-import dev.deepslate.fallacy.util.command.announce.AutoloadCommand
 import dev.deepslate.fallacy.util.command.suggestion.SimpleSuggestionProvider
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
-@AutoloadCommand
+@Autoload
 class RaceSet : GameCommand {
 
     override val source: String = "fallacy race set %s<player name> %s<race id>"

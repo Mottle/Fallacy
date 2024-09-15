@@ -1,10 +1,9 @@
 package dev.deepslate.fallacy.rule
 
-import dev.deepslate.fallacy.race.Race
-import dev.deepslate.fallacy.race.Undead
+import dev.deepslate.fallacy.common.data.BehaviorTags
 import net.minecraft.core.Holder
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.item.enchantment.Enchantments
 import org.apache.commons.lang3.mutable.MutableFloat
@@ -21,9 +20,10 @@ object EnchantmentRule {
         fun modify(amount: MutableFloat, holder: Holder<Enchantment>, enchantmentLevel: Int, target: Entity)
     }
 
-    private val smite_modifier = object : DamageModifier {
+    private val smiteModifier = object : DamageModifier {
         override fun check(holder: Holder<Enchantment>, enchantmentLevel: Int, target: Entity): Boolean {
-            return holder.key == Enchantments.SMITE && target is Player && Race.get(target) is Undead
+            if (target !is ServerPlayer) return false
+            return holder.key == Enchantments.SMITE && BehaviorTags.has(target, BehaviorTags.UNDEAD)
         }
 
         override fun modify(amount: MutableFloat, holder: Holder<Enchantment>, enchantmentLevel: Int, target: Entity) {
@@ -31,5 +31,5 @@ object EnchantmentRule {
         }
     }
 
-    private val modifierMap: Set<DamageModifier> = setOf(smite_modifier)
+    private val modifierMap: Set<DamageModifier> = setOf(smiteModifier)
 }

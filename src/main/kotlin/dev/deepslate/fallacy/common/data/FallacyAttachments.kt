@@ -25,6 +25,11 @@ object FallacyAttachments {
         AttachmentType.builder { _ -> Unknown.ID }.serialize(ResourceLocation.CODEC).copyOnDeath().build()
     }
 
+    val BEHAVIOR_TAGS = ATTACHMENTS.register("behavior_tags") { _ ->
+        AttachmentType.builder { _ -> emptyList<ResourceLocation>() }.serialize(ResourceLocation.CODEC.listOf())
+            .copyOnDeath().build()
+    }
+
     fun register(bus: IEventBus) {
         ATTACHMENTS.register(bus)
     }

@@ -5,13 +5,13 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.suggestion.SuggestionProvider
 import dev.deepslate.fallacy.common.data.FallacyAttachments
+import dev.deepslate.fallacy.util.announce.Autoload
 import dev.deepslate.fallacy.util.command.GameCommand
-import dev.deepslate.fallacy.util.command.announce.AutoloadCommand
 import dev.deepslate.fallacy.util.command.suggestion.SimpleSuggestionProvider
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.network.chat.Component
 
-@AutoloadCommand
+@Autoload
 class RaceGet : GameCommand {
     override val source: String = "fallacy race get %s<player name>"
 
