@@ -18,7 +18,12 @@ object BehaviorTags {
     fun has(player: ServerPlayer, behaviorTag: ResourceLocation) = behaviorTag in get(player)
 
     fun set(player: ServerPlayer, vararg behaviorTags: ResourceLocation) {
-        val new = get(player) + behaviorTags
-        player.setData(FallacyAttachments.BEHAVIOR_TAGS, new)
+        val new = get(player).toSet() + behaviorTags
+        player.setData(FallacyAttachments.BEHAVIOR_TAGS, new.toList())
+    }
+
+    fun remove(player: ServerPlayer, vararg behaviorTags: ResourceLocation) {
+        val new = get(player).toSet() - behaviorTags
+        player.setData(FallacyAttachments.BEHAVIOR_TAGS, new.toList())
     }
 }

@@ -41,4 +41,15 @@ object Handler {
 
         race.tick(level, player, player.blockPosition())
     }
+
+    @SubscribeEvent
+    fun onServerPlayerRespawn(event: PlayerEvent.PlayerRespawnEvent) {
+        if (event.isEndConquered) return
+        if (event.entity.level().isClientSide) return
+
+        val player = event.entity as ServerPlayer
+        val race = Race.get(player)
+        if (race !is Respawnable) return
+        race.onRespawn(player)
+    }
 }

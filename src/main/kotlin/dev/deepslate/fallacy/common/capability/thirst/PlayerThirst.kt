@@ -1,8 +1,8 @@
 package dev.deepslate.fallacy.common.capability.thirst
 
-import dev.deepslate.fallacy.common.FallacyAttributes
 import dev.deepslate.fallacy.common.FallacyDamageTypes
 import dev.deepslate.fallacy.common.data.FallacyAttachments
+import dev.deepslate.fallacy.common.data.FallacyAttributes
 import dev.deepslate.fallacy.common.effect.FallacyEffects
 import dev.deepslate.fallacy.common.network.packet.ThirstSyncPacket
 import net.minecraft.server.level.ServerPlayer

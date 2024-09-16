@@ -21,6 +21,8 @@ interface Race {
 
     fun set(player: ServerPlayer)
 
+    fun remove(player: ServerPlayer)
+
     companion object {
         const val RACE_TICK_RATE = 2 * 20
 
@@ -46,6 +48,13 @@ interface Race {
 
         fun getOrUnknown(raceId: ResourceLocation) = get(raceId) ?: Unknown.INSTANCE
 
-        fun isUndead(player: Player) = Race.get(player) is Undead
+        fun setNewRace(player: ServerPlayer, race: Race) {
+            val oldRace = get(player)
+
+            oldRace.remove(player)
+            player.setData(FallacyAttachments.RACE_ID, race.namespacedId)
+            race.set(player)
+            sync(player)
+        }
     }
 }

@@ -1,6 +1,7 @@
 package dev.deepslate.fallacy.race
 
 import dev.deepslate.fallacy.Fallacy
+import dev.deepslate.fallacy.race.impl.Gynou
 import dev.deepslate.fallacy.race.impl.Humankind
 import dev.deepslate.fallacy.race.impl.Unknown
 import dev.deepslate.fallacy.race.impl.Zombie
@@ -33,5 +34,7 @@ object FallacyRaces {
 
     val HUMANKIND = RACE.register(Humankind.ID.path) { _ -> Humankind() }
 
-    val ZOMBIE = RACE.register("zombie") { _ -> Zombie() }
+    val ZOMBIE = RACE.register(Zombie.ID.path) { _ -> Zombie() }
+
+    val GYNOU = RACE.register(Gynou.ID.path) { _ -> Gynou() }
 }

@@ -4,16 +4,19 @@ import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.data.BehaviorTags
 import dev.deepslate.fallacy.common.data.player.PlayerAttribute
 import dev.deepslate.fallacy.race.Race
-import dev.deepslate.fallacy.race.Undead
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 
-class Zombie : Race, Undead {
+class Zombie : Race {
 
     companion object {
         val ID = Fallacy.id("zombie")
+        val TAGS = arrayOf(
+            BehaviorTags.UNDEAD, BehaviorTags.WEAKNESS2_IN_SUNLIGHT, BehaviorTags.WEAKNESS_IN_DAY,
+            BehaviorTags.BURNING_IN_SUNLIGHT
+        )
     }
 
     override val namespacedId: ResourceLocation = ID
@@ -29,9 +32,10 @@ class Zombie : Race, Undead {
 
     override fun set(player: ServerPlayer) {
         attribute.set(player)
-        BehaviorTags.set(
-            player, BehaviorTags.UNDEAD, BehaviorTags.WEAKNESS2_IN_SUNLIGHT, BehaviorTags.WEAKNESS_IN_DAY,
-            BehaviorTags.BURNING_IN_SUNLIGHT
-        )
+        BehaviorTags.set(player, *TAGS)
+    }
+
+    override fun remove(player: ServerPlayer) {
+        BehaviorTags.remove(player, *TAGS)
     }
 }

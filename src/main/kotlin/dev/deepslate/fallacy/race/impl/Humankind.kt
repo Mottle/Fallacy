@@ -28,4 +28,6 @@ class Humankind : Race {
     override fun set(player: ServerPlayer) {
         attribute.set(player)
     }
+
+    override fun remove(player: ServerPlayer) {}
 }

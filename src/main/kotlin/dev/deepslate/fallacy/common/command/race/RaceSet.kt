@@ -4,7 +4,6 @@ import com.mojang.brigadier.Command
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.suggestion.SuggestionProvider
-import dev.deepslate.fallacy.common.data.FallacyAttachments
 import dev.deepslate.fallacy.race.Race
 import dev.deepslate.fallacy.race.impl.Unknown
 import dev.deepslate.fallacy.util.announce.Autoload
@@ -37,10 +36,13 @@ class RaceSet : GameCommand {
             return 0
         }
 
-        player.setData(FallacyAttachments.RACE_ID, raceId)
-        val race = Race.get(player)
-        race.set(player)
-        Race.sync(player)
+        val newRace = Race.getOrUnknown(raceId)
+        Race.setNewRace(player, newRace)
+
+//        player.setData(FallacyAttachments.RACE_ID, raceId)
+//        val race = Race.get(player)
+//        race.set(player)
+//        Race.sync(player)
 
         return Command.SINGLE_SUCCESS
     }

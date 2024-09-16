@@ -1,6 +1,7 @@
 package dev.deepslate.fallacy.common.data.player
 
 import dev.deepslate.fallacy.Fallacy
+import dev.deepslate.fallacy.common.data.FallacyAttributes
 import net.minecraft.core.Holder
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.ai.attributes.Attribute
@@ -34,6 +35,11 @@ data class PlayerAttribute(
     val sneakingSpeed: Double = 0.3,//潜行速度[0, 1]
     val submergedMiningSpeed: Double = 0.2,//水下挖掘速度[0, 20]
     val sweepingDamageRatio: Double = 0.0,//横扫伤害系数[0, 1] (横扫攻击伤害的最终值为1 + r * d，其中r为横扫伤害比率，d为原近战攻击伤害)
+
+    val hunger: Double = 20.0,
+    val thirst: Double = 20.0,
+    val strength: Double = 1.0,
+    val magicResistance: Double = 0.0,
 ) {
     fun set(player: ServerPlayer) {
         set(player, Attributes.ARMOR, armor)
@@ -63,6 +69,11 @@ data class PlayerAttribute(
         set(player, Attributes.SNEAKING_SPEED, sneakingSpeed)
         set(player, Attributes.SUBMERGED_MINING_SPEED, submergedMiningSpeed)
         set(player, Attributes.SWEEPING_DAMAGE_RATIO, sweepingDamageRatio)
+        //fallacy
+        set(player, FallacyAttributes.MAX_HUNGER, hunger)
+        set(player, FallacyAttributes.MAX_THIRST, thirst)
+        set(player, FallacyAttributes.STRENGTH, strength)
+        set(player, FallacyAttributes.MAGIC_RESISTANCE, magicResistance)
     }
 
     private fun set(player: ServerPlayer, holder: Holder<Attribute>, value: Double) {

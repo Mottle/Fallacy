@@ -1,4 +1,4 @@
-package dev.deepslate.fallacy.common
+package dev.deepslate.fallacy.common.data
 
 import dev.deepslate.fallacy.Fallacy
 import net.minecraft.core.registries.BuiltInRegistries
@@ -25,6 +25,10 @@ object FallacyAttributes {
         RangedAttribute("fallacy.attribute.name.player.strength", 1.0, 0.0, 128.0).setSyncable(true)
     }
 
+    val MAGIC_RESISTANCE = ATTRIBUTES.register("fallacy.magic_resistance") { _ ->
+        RangedAttribute("fallacy.attribute.name.player.magic_resistance", 0.0, 0.0, 1024.0).setSyncable(true)
+    }
+
     fun init(bus: IEventBus) {
         ATTRIBUTES.register(bus)
     }
@@ -36,6 +40,8 @@ object FallacyAttributes {
             event.add(EntityType.PLAYER, MAX_HUNGER)
             event.add(EntityType.PLAYER, MAX_THIRST)
             event.add(EntityType.PLAYER, STRENGTH)
+            event.add(EntityType.PLAYER, MAGIC_RESISTANCE)
+
         }
     }
 }

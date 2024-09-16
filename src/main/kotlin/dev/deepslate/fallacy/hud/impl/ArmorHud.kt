@@ -11,7 +11,7 @@ class ArmorHud : HudLayerImpl("armor") {
         val ICON = ResourceLocation.withDefaultNamespace("hud/armor_full")
     }
 
-    override fun shouldRender(player: Player): Boolean = player.armorValue >= 1
+    override fun shouldRender(player: Player): Boolean = true
 
     override fun renderBar(
         graphic: GuiGraphics,

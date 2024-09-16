@@ -1,9 +1,10 @@
 package dev.deepslate.fallacy
 
-import dev.deepslate.fallacy.common.FallacyAttributes
 import dev.deepslate.fallacy.common.FallacyTabs
 import dev.deepslate.fallacy.common.block.FallacyBlocks
 import dev.deepslate.fallacy.common.data.FallacyAttachments
+import dev.deepslate.fallacy.common.data.FallacyAttributes
+import dev.deepslate.fallacy.common.data.FallacyDataComponents
 import dev.deepslate.fallacy.common.effect.FallacyEffects
 import dev.deepslate.fallacy.common.item.FallacyItems
 import dev.deepslate.fallacy.common.registrate.Registration
@@ -35,6 +36,7 @@ class Fallacy(val modBus: IEventBus) {
         FallacyAttributes.init(modBus)
         FallacyEffects.init(modBus)
         FallacyRaces.init(modBus)
+        FallacyDataComponents.init(modBus)
 
         FallacyItems
         FallacyBlocks
