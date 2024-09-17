@@ -16,7 +16,7 @@ class Humankind : Race {
 
     override val namespacedId: ResourceLocation = ID
 
-    override val attribute: PlayerAttribute = PlayerAttribute()
+    override val attribute: PlayerAttribute = PlayerAttribute(strength = 1.25)
 
     override fun tick(
         level: ServerLevel,

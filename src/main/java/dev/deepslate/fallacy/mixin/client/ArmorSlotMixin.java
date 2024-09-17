@@ -1,4 +1,4 @@
-package dev.deepslate.fallacy.mixin;
+package dev.deepslate.fallacy.mixin.client;
 
 import dev.deepslate.fallacy.rule.item.ForceBindItemRule;
 import net.minecraft.world.entity.EquipmentSlot;

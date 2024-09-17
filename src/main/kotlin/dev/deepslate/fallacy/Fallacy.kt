@@ -7,6 +7,7 @@ import dev.deepslate.fallacy.common.data.FallacyAttributes
 import dev.deepslate.fallacy.common.data.FallacyDataComponents
 import dev.deepslate.fallacy.common.effect.FallacyEffects
 import dev.deepslate.fallacy.common.item.FallacyItems
+import dev.deepslate.fallacy.common.item.armor.FallacyArmorMaterials
 import dev.deepslate.fallacy.common.registrate.Registration
 import dev.deepslate.fallacy.race.FallacyRaces
 import net.minecraft.resources.ResourceLocation
@@ -37,6 +38,7 @@ class Fallacy(val modBus: IEventBus) {
         FallacyEffects.init(modBus)
         FallacyRaces.init(modBus)
         FallacyDataComponents.init(modBus)
+        FallacyArmorMaterials.init(modBus)
 
         FallacyItems
         FallacyBlocks

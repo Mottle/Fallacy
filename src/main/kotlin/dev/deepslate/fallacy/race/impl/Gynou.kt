@@ -13,6 +13,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.util.Unit
 import net.minecraft.world.damagesource.DamageTypes
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.item.ItemStack
@@ -37,8 +38,8 @@ class Gynou : Race, Respawnable {
             item.enchant(bindingCurse, 1)
             item.enchant(vanishCurse, 1)
             item.set(DataComponents.UNBREAKABLE, Unbreakable(true))
-            item.set(FallacyDataComponents.IS_GYNOU_WINGS, true)
-            item.set(FallacyDataComponents.FORCE_BINDING, true)
+            item.set(FallacyDataComponents.GYNOU_WINGS, Unit.INSTANCE)
+            item.set(FallacyDataComponents.FORCE_BINDING, Unit.INSTANCE)
             item.set(DataComponents.ITEM_NAME, Component.translatable("item.fallacy.gynou_wings"))
             return item
         }
@@ -80,7 +81,7 @@ class Gynou : Race, Respawnable {
     private fun setWings(player: ServerPlayer) {
         val chest = player.getItemBySlot(EquipmentSlot.CHEST)
 
-        if (!chest.has(FallacyDataComponents.IS_GYNOU_WINGS)) {
+        if (!chest.has(FallacyDataComponents.GYNOU_WINGS)) {
             player.setItemSlot(EquipmentSlot.CHEST, ItemStack.EMPTY)
             player.drop(chest, true)
         }

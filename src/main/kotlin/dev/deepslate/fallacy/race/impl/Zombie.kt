@@ -21,7 +21,7 @@ class Zombie : Race {
 
     override val namespacedId: ResourceLocation = ID
 
-    override val attribute: PlayerAttribute = PlayerAttribute(health = 40.0, attackDamage = 4.0)
+    override val attribute: PlayerAttribute = PlayerAttribute(health = 40.0, attackDamage = 4.0, strength = 2.0)
 
     override fun tick(
         level: ServerLevel,

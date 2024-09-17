@@ -41,7 +41,7 @@ data class PlayerAttribute(
     val strength: Double = 1.0,
     val magicResistance: Double = 0.0,
 ) {
-    fun set(player: ServerPlayer) {
+    fun set(player: ServerPlayer, refresh: Boolean = true) {
         set(player, Attributes.ARMOR, armor)
         set(player, Attributes.ARMOR_TOUGHNESS, toughness)
         set(player, Attributes.ATTACK_DAMAGE, attackDamage)
@@ -74,6 +74,11 @@ data class PlayerAttribute(
         set(player, FallacyAttributes.MAX_THIRST, thirst)
         set(player, FallacyAttributes.STRENGTH, strength)
         set(player, FallacyAttributes.MAGIC_RESISTANCE, magicResistance)
+
+        if (refresh) {
+            player.foodData.foodLevel = hunger.toInt()
+            player.health = health.toFloat()
+        }
     }
 
     private fun set(player: ServerPlayer, holder: Holder<Attribute>, value: Double) {
