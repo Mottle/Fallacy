@@ -1,0 +1,11 @@
+{
+    "values": [
+        "minecraft:iron_ingot",
+        "minecraft:gold_ingot",
+        "minecraft:diamond",
+        "minecraft:emerald",
+        "minecraft:quartz",
+        "minecraft:coal",
+        "minecraft:obsidian"
+    ]
+}

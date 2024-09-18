@@ -19,6 +19,7 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.FormattedText
+import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
@@ -31,17 +32,21 @@ import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.inventory.ArmorSlot
 import net.minecraft.world.inventory.tooltip.TooltipComponent
 import net.minecraft.world.item.ArmorItem
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.ItemAttributeModifiers
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.item.enchantment.Enchantments
+import net.minecraft.world.item.enchantment.ItemEnchantments
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.client.event.RenderTooltipEvent
 import net.neoforged.neoforge.client.event.ScreenEvent
 import net.neoforged.neoforge.network.PacketDistributor
 import net.neoforged.neoforge.network.handling.IPayloadContext
+import kotlin.collections.component1
+import kotlin.collections.component2
 import kotlin.jvm.optionals.getOrNull
 
 class Rock : Race, Respawnable {
@@ -50,13 +55,43 @@ class Rock : Race, Respawnable {
         val ID = Fallacy.id("rock")
 
         const val CLADDING_LIMIT = 8
+
+        private val claddingMap: Map<ResourceLocation, List<CladdingContext>> = mapOf(
+            getKey(Items.IRON_INGOT) to listOf(CladdingAttributeModifier(Attributes.ARMOR, 0.2)),
+            getKey(Items.GOLD_INGOT) to listOf(
+                CladdingAttributeModifier(Attributes.MOVEMENT_SPEED, 0.000625 * 2),
+                CladdingAttributeModifier(Attributes.ARMOR, -0.3125)
+            ),
+            getKey(Items.DIAMOND) to listOf(
+                CladdingAttributeModifier(Attributes.ARMOR, 0.8),
+            ),
+            getKey(Items.OBSIDIAN) to listOf(
+                CladdingEnchantmentAdder(Enchantments.FIRE_PROTECTION, 1),
+                CladdingEnchantmentAdder(Enchantments.BLAST_PROTECTION, 1),
+                CladdingAttributeModifier(Attributes.ARMOR, 0.4),
+                CladdingAttributeModifier(Attributes.MAX_HEALTH, -1.0)
+            )
+        )
+
+        private fun getMaxCladdingCount(id: ResourceLocation) = when (id) {
+            getKey(Items.OBSIDIAN) -> 5
+            else -> 0x3f3f3f3f
+        }
+
+        private fun getKey(item: Item): ResourceLocation = BuiltInRegistries.ITEM.getKey(item)
     }
+
+    sealed interface CladdingContext
+
+    data class CladdingAttributeModifier(val attribute: Holder<Attribute>, val value: Double) : CladdingContext
+
+    data class CladdingEnchantmentAdder(val enchantment: ResourceKey<Enchantment>, val level: Int) : CladdingContext
 
     override val namespacedId: ResourceLocation = ID
 
     override val attribute: PlayerAttribute = PlayerAttribute(
         armor = -20.0,
-        health = 80.0,
+        health = 60.0,
         attackDamage = 8.0,
         attackSpeed = 1.0,
         attackKnockBack = 1.0,
@@ -90,7 +125,6 @@ class Rock : Race, Respawnable {
         stack.enchant(bindingCurse, 1)
         stack.enchant(vanishCurse, 1)
         stack.set(FallacyDataComponents.FORCE_BINDING, Unit.INSTANCE)
-//        stack.set(FallacyDataComponents.CLADDINGABLE, Unit.INSTANCE)
         stack.set(FallacyDataComponents.CLADDINGS, emptyList())
 
         val enc = stack.get(DataComponents.ENCHANTMENTS)!!.withTooltip(false)
@@ -107,7 +141,6 @@ class Rock : Race, Respawnable {
             player.setItemSlot(slot, ItemStack.EMPTY)
             player.drop(default, true)
         }
-
 
         player.setItemSlot(slot, stack)
     }
@@ -148,10 +181,30 @@ class Rock : Race, Respawnable {
     }
 
     private object Helper {
+        fun getNameForCladdingDisplay(stack: ItemStack?): Component? {
+            if (stack == null) return null
+
+            val defaultName = stack.displayName
+            val defaultStyle = defaultName.style
+            val rawName = defaultName.string
+            val name = if (rawName.startsWith("[") && rawName.endsWith("]")) rawName.substring(
+                1,
+                rawName.length - 1
+            ) else rawName
+            return Component.literal(name).withStyle(defaultStyle)
+        }
+
         fun checkCladding(armor: ItemStack, carried: ItemStack): Boolean {
             if (!armor.has(FallacyDataComponents.CLADDINGS)) return false
             if (carried.tags.noneMatch { it == FallacyItemTags.CLADDINGABLE }) return false
-            if (armor.get(FallacyDataComponents.CLADDINGS)!!.size >= CLADDING_LIMIT) return false
+
+            val claddings = armor.get(FallacyDataComponents.CLADDINGS)!!
+            val id = BuiltInRegistries.ITEM.getKey(carried.item)
+            val maxCount = getMaxCladdingCount(id)
+
+            if (claddings.size >= CLADDING_LIMIT) return false
+            if (claddings.count { it == id } >= maxCount) return false
+
             return true
         }
 
@@ -162,36 +215,17 @@ class Rock : Race, Respawnable {
             carried.count--
         }
 
-        data class CladdingContext(val value: Double, val attribute: Holder<Attribute>)
-
-        val claddingMap = mapOf(
-            BuiltInRegistries.ITEM.getKey(Items.IRON_INGOT) to listOf(CladdingContext(0.2, Attributes.ARMOR)),
-            BuiltInRegistries.ITEM.getKey(Items.GOLD_INGOT) to listOf(
-                CladdingContext(0.000625 * 2, Attributes.MOVEMENT_SPEED),
-                CladdingContext(-0.3125, Attributes.ARMOR)
-            )
-        )
-
-        fun getCladdingModifiers(
+        private fun getCladdingModifiers(
             list: List<ResourceLocation>,
             slot: EquipmentSlot
         ): Map<Holder<Attribute>, AttributeModifier> {
-            val materialCountMap = mutableMapOf<ResourceLocation, Int>()
-            for (id in list) {
-                if (!claddingMap.contains(id)) continue
-                if (!materialCountMap.contains(id)) materialCountMap[id] = 0
-                materialCountMap[id] = materialCountMap[id]!! + 1
-            }
-            val pairs = materialCountMap.map { (id, count) ->
-                val contexts = claddingMap[id]!!
-                val mods = contexts.map { context ->
+            val materialCountMap = countId(list)
+            val pairs =
+                countEffects<CladdingAttributeModifier, Holder<Attribute>, Double>(materialCountMap) { context, count ->
                     context.attribute to count * context.value
-                }.toMap()
-
-                return@map mods
-            }
-
+                }
             val finalMap = mutableMapOf<Holder<Attribute>, Double>()
+
             pairs.forEach {
                 it.forEach { holder, value ->
                     if (!finalMap.contains(holder)) finalMap[holder] = 0.0
@@ -208,7 +242,57 @@ class Rock : Race, Respawnable {
             }.toMap()
         }
 
-        fun applyModifier(stack: ItemStack, map: Map<Holder<Attribute>, AttributeModifier>, slot: EquipmentSlot) {
+        private fun getCladdingEnchantments(
+            list: List<ResourceLocation>,
+            lookup: HolderLookup.RegistryLookup<Enchantment>
+        ): Map<Holder<Enchantment>, Int> {
+            val materialCountMap = countId(list)
+            val pairs =
+                countEffects<CladdingEnchantmentAdder, ResourceKey<Enchantment>, Int>(materialCountMap) { context, count ->
+                    context.enchantment to count * context.level
+                }
+
+            val enchantmentMap = pairs
+                .map { it.toList() }
+                .flatten()
+                .groupBy { it.first }
+                .mapValues { it.value.map { it.second } }
+                .mapValues { it.value.sum() }
+
+            //默认附魔
+            val bindingCurse = lookup.get(Enchantments.BINDING_CURSE).get()
+            val vanishCurse = lookup.get(Enchantments.VANISHING_CURSE).get()
+            val defaultMap = mapOf(bindingCurse to 1, vanishCurse to 1)
+
+            return enchantmentMap.mapKeys { lookup.get(it.key).get() } + defaultMap
+        }
+
+        private fun countId(list: List<ResourceLocation>): Map<ResourceLocation, Int> {
+            val materialCountMap = mutableMapOf<ResourceLocation, Int>()
+            for (id in list) {
+                if (!claddingMap.contains(id)) continue
+                if (!materialCountMap.contains(id)) materialCountMap[id] = 0
+                materialCountMap[id] = materialCountMap[id]!! + 1
+            }
+            return materialCountMap.toMap()
+        }
+
+        private inline fun <reified T : CladdingContext, reified V, I> countEffects(
+            materialCountMap: Map<ResourceLocation, Int>,
+            contextHandler: (T, Int) -> Pair<V, I>
+        ): List<Map<V, I>> = materialCountMap.map { (id, count) ->
+            val contexts =
+                claddingMap[id]!!.filter { it is T } as List<T>
+            val mods = contexts.map { contextHandler(it, count) }.toMap()
+
+            return@map mods
+        }
+
+        private fun applyModifiers(
+            stack: ItemStack,
+            map: Map<Holder<Attribute>, AttributeModifier>,
+            slot: EquipmentSlot
+        ) {
             val group = EquipmentSlotGroup.bySlot(slot)
             val default = (stack.item as? ArmorItem)?.defaultAttributeModifiers?.modifiers ?: return
             val new = default + map.map { (att, mod) -> ItemAttributeModifiers.Entry(att, mod, group) }
@@ -217,11 +301,25 @@ class Rock : Race, Respawnable {
             stack.set(DataComponents.ATTRIBUTE_MODIFIERS, newModifier)
         }
 
+        fun applyEnchantments(stack: ItemStack, map: Map<Holder<Enchantment>, Int>) {
+            //检查默认附魔
+            if (map.size == 2) return
+            val enc = ItemEnchantments.Mutable(ItemEnchantments.EMPTY)
+            map.forEach { (holder, level) ->
+                enc.set(holder, level)
+            }
+            stack.set(DataComponents.ENCHANTMENTS, enc.toImmutable())
+        }
+
         fun applyCladding(player: ServerPlayer, stack: ItemStack) {
             val slot = player.getEquipmentSlotForItem(stack)
+            val lookup = player.registryAccess().lookup(Registries.ENCHANTMENT).get()
             val claddings = stack.get(FallacyDataComponents.CLADDINGS) ?: return
             val modifiers = getCladdingModifiers(claddings, slot)
-            applyModifier(stack, modifiers, slot)
+            val enchantments = getCladdingEnchantments(claddings, lookup)
+
+            applyModifiers(stack, modifiers, slot)
+            applyEnchantments(stack, enchantments)
         }
 
         fun applyAllArmor(player: ServerPlayer) {
@@ -268,19 +366,6 @@ class Rock : Race, Respawnable {
             PacketDistributor.sendToServer(CladdingPacket(slot.slotIndex))
         }
 
-        private fun getName(stack: ItemStack?): Component? {
-            if (stack == null) return null
-
-            val defaultName = stack.displayName
-            val defaultStyle = defaultName.style
-            val rawName = defaultName.string
-            val name = if (rawName.startsWith("[") && rawName.endsWith("]")) rawName.substring(
-                1,
-                rawName.length - 1
-            ) else rawName
-            return Component.literal(name).withStyle(defaultStyle)
-        }
-
         @SubscribeEvent
         fun onRenderTooltips(event: RenderTooltipEvent.GatherComponents) {
             val stack = event.itemStack
@@ -292,7 +377,7 @@ class Rock : Race, Respawnable {
             val claddings = stack.get(FallacyDataComponents.CLADDINGS) ?: return
             val additionalTooltips = claddings
                 .map { id -> BuiltInRegistries.ITEM.getHolder(id).getOrNull()?.value() }
-                .map { getName(it?.defaultInstance) ?: Component.literal("???") }
+                .map { Helper.getNameForCladdingDisplay(it?.defaultInstance) ?: Component.literal("???") }
                 .map { Either.left<FormattedText, TooltipComponent>(it) } + Either.left<FormattedText, TooltipComponent>(
                 Component.literal("${claddings.size} / $CLADDING_LIMIT")
             )
