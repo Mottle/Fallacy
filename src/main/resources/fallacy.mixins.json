@@ -10,7 +10,8 @@
         "EquipableMixin",
         "LivingEntityMixin",
         "RangedAttributeMixin",
-        "client.ArmorSlotMixin"
+        "client.ArmorSlotMixin",
+        "client.ItemStackMixin"
     ],
     "client": [
     ],
