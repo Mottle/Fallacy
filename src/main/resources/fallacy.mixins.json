@@ -5,12 +5,12 @@
     "compatibilityLevel": "JAVA_8",
     "refmap": "Fallacy.refmap.json",
     "mixins": [
+        "ArmorSlotMixin",
         "CombatRulesMixin",
         "EnchantmentMixin",
         "EquipableMixin",
         "LivingEntityMixin",
         "RangedAttributeMixin",
-        "client.ArmorSlotMixin",
         "client.ItemStackMixin"
     ],
     "client": [

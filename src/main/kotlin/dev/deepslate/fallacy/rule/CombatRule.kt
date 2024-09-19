@@ -16,7 +16,7 @@ object CombatRule {
             return finalDamage
         }
 
-        val rate = armor * 0.05f
+        val rate = armor.absoluteValue * 0.05f
         return damage * (1 + rate)
     }
 }

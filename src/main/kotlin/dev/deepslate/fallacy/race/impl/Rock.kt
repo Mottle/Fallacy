@@ -23,7 +23,9 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.tags.DamageTypeTags
 import net.minecraft.util.Unit
+import net.minecraft.world.damagesource.DamageTypes
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.EquipmentSlotGroup
 import net.minecraft.world.entity.ai.attributes.Attribute
@@ -36,6 +38,7 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.ItemAttributeModifiers
+import net.minecraft.world.item.component.Unbreakable
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.item.enchantment.ItemEnchantments
@@ -43,49 +46,58 @@ import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.client.event.RenderTooltipEvent
 import net.neoforged.neoforge.client.event.ScreenEvent
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent
+import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent
 import net.neoforged.neoforge.network.PacketDistributor
 import net.neoforged.neoforge.network.handling.IPayloadContext
 import kotlin.collections.component1
 import kotlin.collections.component2
+import kotlin.collections.map
 import kotlin.jvm.optionals.getOrNull
+import kotlin.math.pow
 
 class Rock : Race, Respawnable {
+
+    sealed interface CladdingEffect
+
+    data class CladdingAttributeModifier(val attribute: Holder<Attribute>, val value: Double) : CladdingEffect
+
+    data class CladdingEnchantmentAdder(val enchantment: ResourceKey<Enchantment>, val level: Int) : CladdingEffect
+
+    data class CladdingInfo(val duration: Int, val effects: List<CladdingEffect>, val maxCount: Int = Int.MAX_VALUE)
 
     companion object {
         val ID = Fallacy.id("rock")
 
         const val CLADDING_LIMIT = 8
 
-        private val claddingMap: Map<ResourceLocation, List<CladdingContext>> = mapOf(
-            getKey(Items.IRON_INGOT) to listOf(CladdingAttributeModifier(Attributes.ARMOR, 0.2)),
-            getKey(Items.GOLD_INGOT) to listOf(
-                CladdingAttributeModifier(Attributes.MOVEMENT_SPEED, 0.000625 * 2),
-                CladdingAttributeModifier(Attributes.ARMOR, -0.3125)
+        private val claddingEffectMap: Map<ResourceLocation, CladdingInfo> = mapOf(
+            getKey(Items.IRON_INGOT) to CladdingInfo(125, listOf(CladdingAttributeModifier(Attributes.ARMOR, 0.2))),
+            getKey(Items.GOLD_INGOT) to CladdingInfo(
+                40, listOf(
+                    CladdingAttributeModifier(Attributes.MOVEMENT_SPEED, 0.000625 * 2),
+                    CladdingAttributeModifier(Attributes.ARMOR, -0.3125)
+                )
             ),
-            getKey(Items.DIAMOND) to listOf(
-                CladdingAttributeModifier(Attributes.ARMOR, 0.8),
+            getKey(Items.DIAMOND) to CladdingInfo(
+                600, listOf(
+                    CladdingAttributeModifier(Attributes.ARMOR, 0.8),
+                )
             ),
-            getKey(Items.OBSIDIAN) to listOf(
-                CladdingEnchantmentAdder(Enchantments.FIRE_PROTECTION, 1),
-                CladdingEnchantmentAdder(Enchantments.BLAST_PROTECTION, 1),
-                CladdingAttributeModifier(Attributes.ARMOR, 0.4),
-                CladdingAttributeModifier(Attributes.MAX_HEALTH, -1.0)
+            getKey(Items.OBSIDIAN) to CladdingInfo(
+                1200, listOf(
+                    CladdingEnchantmentAdder(Enchantments.FIRE_PROTECTION, 1),
+                    CladdingEnchantmentAdder(Enchantments.BLAST_PROTECTION, 1),
+                    CladdingAttributeModifier(Attributes.ARMOR, 0.4),
+                    CladdingAttributeModifier(Attributes.MAX_HEALTH, -1.0)
+                )
             )
         )
 
-        private fun getMaxCladdingCount(id: ResourceLocation) = when (id) {
-            getKey(Items.OBSIDIAN) -> 5
-            else -> 0x3f3f3f3f
-        }
+        private fun getMaxCladdingCount(id: ResourceLocation) = claddingEffectMap[id]?.maxCount ?: Int.MAX_VALUE
 
         private fun getKey(item: Item): ResourceLocation = BuiltInRegistries.ITEM.getKey(item)
     }
-
-    sealed interface CladdingContext
-
-    data class CladdingAttributeModifier(val attribute: Holder<Attribute>, val value: Double) : CladdingContext
-
-    data class CladdingEnchantmentAdder(val enchantment: ResourceKey<Enchantment>, val level: Int) : CladdingContext
 
     override val namespacedId: ResourceLocation = ID
 
@@ -108,34 +120,13 @@ class Rock : Race, Respawnable {
         player: ServerPlayer,
         position: BlockPos
     ) {
-    }
+        if (player.combatTracker.inCombat) return
 
-    private fun getRockSkinItem(slot: EquipmentSlot, lookup: HolderLookup.RegistryLookup<Enchantment>): ItemStack {
-        val item = when (slot) {
-            EquipmentSlot.HEAD -> FallacyItems.Race.ROCK_HELMET
-            EquipmentSlot.CHEST -> FallacyItems.Race.ROCK_CHESTPLATE
-            EquipmentSlot.LEGS -> FallacyItems.Race.ROCK_LEGGINGS
-            EquipmentSlot.FEET -> FallacyItems.Race.ROCK_BOOTS
-            else -> return ItemStack.EMPTY
-        }
-        val stack = item.get().defaultInstance
-        val bindingCurse = lookup.get(Enchantments.BINDING_CURSE).get()
-        val vanishCurse = lookup.get(Enchantments.VANISHING_CURSE).get()
-
-        stack.enchant(bindingCurse, 1)
-        stack.enchant(vanishCurse, 1)
-        stack.set(FallacyDataComponents.FORCE_BINDING, Unit.INSTANCE)
-        stack.set(FallacyDataComponents.CLADDINGS, emptyList())
-
-        val enc = stack.get(DataComponents.ENCHANTMENTS)!!.withTooltip(false)
-        stack.set(DataComponents.ENCHANTMENTS, enc)
-
-        return stack
     }
 
     private fun setArmor(player: ServerPlayer, slot: EquipmentSlot, lookup: HolderLookup.RegistryLookup<Enchantment>) {
         val default = player.getItemBySlot(slot)
-        val stack = getRockSkinItem(slot, lookup)
+        val stack = Helper.getRockSkinItem(slot, lookup)
 
         if (!default.`is`(stack.item)) {
             player.setItemSlot(slot, ItemStack.EMPTY)
@@ -181,7 +172,50 @@ class Rock : Race, Respawnable {
     }
 
     private object Helper {
-        fun getNameForCladdingDisplay(stack: ItemStack?): Component? {
+        fun getRockSkinItem(slot: EquipmentSlot, lookup: HolderLookup.RegistryLookup<Enchantment>): ItemStack {
+            val item = when (slot) {
+                EquipmentSlot.HEAD -> FallacyItems.Race.ROCK_SKIN_HELMET
+                EquipmentSlot.CHEST -> FallacyItems.Race.ROCK_SKIN_CHESTPLATE
+                EquipmentSlot.LEGS -> FallacyItems.Race.ROCK_SKIN_LEGGINGS
+                EquipmentSlot.FEET -> FallacyItems.Race.ROCK_SKIN_BOOTS
+                else -> return ItemStack.EMPTY
+            }
+            val stack = item.get().defaultInstance
+            val bindingCurse = lookup.get(Enchantments.BINDING_CURSE).get()
+            val vanishCurse = lookup.get(Enchantments.VANISHING_CURSE).get()
+
+            stack.enchant(bindingCurse, 1)
+            stack.enchant(vanishCurse, 1)
+            stack.set(FallacyDataComponents.FORCE_BINDING, Unit.INSTANCE)
+            stack.set(FallacyDataComponents.CLADDINGS, emptyList())
+
+            return stack
+        }
+
+        fun getRockBrokenSkinItem(old: ItemStack, lookup: HolderLookup.RegistryLookup<Enchantment>): ItemStack {
+            val armorItem = old.item as? ArmorItem ?: return ItemStack.EMPTY
+            val base = when (armorItem.equipmentSlot) {
+                EquipmentSlot.HEAD -> FallacyItems.Race.ROCK_SKIN_BROKEN_HELMET
+                EquipmentSlot.CHEST -> FallacyItems.Race.ROCK_SKIN_BROKEN_CHESTPLATE
+                EquipmentSlot.LEGS -> FallacyItems.Race.ROCK_SKIN_BROKEN_LEGGINGS
+                EquipmentSlot.FEET -> FallacyItems.Race.ROCK_SKIN_BROKEN_BOOTS
+                else -> return ItemStack.EMPTY
+            }
+            val new = base.asItem().defaultInstance
+            val oldCladding = old.get(FallacyDataComponents.CLADDINGS) ?: return ItemStack.EMPTY
+            val bindingCurse = lookup.get(Enchantments.BINDING_CURSE).get()
+            val vanishCurse = lookup.get(Enchantments.VANISHING_CURSE).get()
+
+            new.enchant(bindingCurse, 1)
+            new.enchant(vanishCurse, 1)
+            new.set(FallacyDataComponents.FORCE_BINDING, Unit.INSTANCE)
+            new.set(FallacyDataComponents.CLADDINGS, oldCladding)
+            new.set(DataComponents.UNBREAKABLE, Unbreakable(false))
+
+            return new
+        }
+
+        fun getNameForCladdingDisplay(stack: ItemStack?, duration: Int): Component? {
             if (stack == null) return null
 
             val defaultName = stack.displayName
@@ -191,7 +225,14 @@ class Rock : Race, Respawnable {
                 1,
                 rawName.length - 1
             ) else rawName
-            return Component.literal(name).withStyle(defaultStyle)
+            return Component.literal("$name: $duration").withStyle(defaultStyle)
+        }
+
+        fun checkBroken(itemStack: ItemStack): Boolean = with(itemStack) {
+            `is`(FallacyItems.Race.ROCK_SKIN_BROKEN_HELMET)
+                    || `is`(FallacyItems.Race.ROCK_SKIN_BROKEN_CHESTPLATE)
+                    || `is`(FallacyItems.Race.ROCK_SKIN_BROKEN_LEGGINGS)
+                    || `is`(FallacyItems.Race.ROCK_SKIN_BROKEN_BOOTS)
         }
 
         fun checkCladding(armor: ItemStack, carried: ItemStack): Boolean {
@@ -210,8 +251,9 @@ class Rock : Race, Respawnable {
 
         fun doCladding(armor: ItemStack, carried: ItemStack) {
             val id = BuiltInRegistries.ITEM.getKey(carried.item)
+            val duration = claddingEffectMap[id]!!.duration
             val claddings = armor.get(FallacyDataComponents.CLADDINGS)!!
-            armor.set(FallacyDataComponents.CLADDINGS, claddings + id)
+            armor.set(FallacyDataComponents.CLADDINGS, claddings + (id to duration))
             carried.count--
         }
 
@@ -270,19 +312,19 @@ class Rock : Race, Respawnable {
         private fun countId(list: List<ResourceLocation>): Map<ResourceLocation, Int> {
             val materialCountMap = mutableMapOf<ResourceLocation, Int>()
             for (id in list) {
-                if (!claddingMap.contains(id)) continue
+                if (!claddingEffectMap.contains(id)) continue
                 if (!materialCountMap.contains(id)) materialCountMap[id] = 0
                 materialCountMap[id] = materialCountMap[id]!! + 1
             }
             return materialCountMap.toMap()
         }
 
-        private inline fun <reified T : CladdingContext, reified V, I> countEffects(
+        private inline fun <reified T : CladdingEffect, reified V, I> countEffects(
             materialCountMap: Map<ResourceLocation, Int>,
             contextHandler: (T, Int) -> Pair<V, I>
         ): List<Map<V, I>> = materialCountMap.map { (id, count) ->
             val contexts =
-                claddingMap[id]!!.filter { it is T } as List<T>
+                claddingEffectMap[id]!!.effects.filter { it is T } as List<T>
             val mods = contexts.map { contextHandler(it, count) }.toMap()
 
             return@map mods
@@ -312,9 +354,10 @@ class Rock : Race, Respawnable {
         }
 
         fun applyCladding(player: ServerPlayer, stack: ItemStack) {
+            if (checkBroken(stack)) return
             val slot = player.getEquipmentSlotForItem(stack)
             val lookup = player.registryAccess().lookup(Registries.ENCHANTMENT).get()
-            val claddings = stack.get(FallacyDataComponents.CLADDINGS) ?: return
+            val claddings = stack.get(FallacyDataComponents.CLADDINGS)?.map { it.first } ?: return
             val modifiers = getCladdingModifiers(claddings, slot)
             val enchantments = getCladdingEnchantments(claddings, lookup)
 
@@ -322,15 +365,15 @@ class Rock : Race, Respawnable {
             applyEnchantments(stack, enchantments)
         }
 
-        fun applyAllArmor(player: ServerPlayer) {
-            applyCladding(player, player.getItemBySlot(EquipmentSlot.HEAD))
-            applyCladding(player, player.getItemBySlot(EquipmentSlot.CHEST))
-            applyCladding(player, player.getItemBySlot(EquipmentSlot.LEGS))
-            applyCladding(player, player.getItemBySlot(EquipmentSlot.FEET))
-        }
+//        fun applyAllArmor(player: ServerPlayer) {
+//            applyCladding(player, player.getItemBySlot(EquipmentSlot.HEAD))
+//            applyCladding(player, player.getItemBySlot(EquipmentSlot.CHEST))
+//            applyCladding(player, player.getItemBySlot(EquipmentSlot.LEGS))
+//            applyCladding(player, player.getItemBySlot(EquipmentSlot.FEET))
+//        }
     }
 
-    //    @EventBusSubscriber(modid = Fallacy.MOD_ID)
+    @EventBusSubscriber(modid = Fallacy.MOD_ID)
     object Handler {
         fun handleCladdingPacket(data: CladdingPacket, context: IPayloadContext) {
             val armorIndex = data.index
@@ -340,10 +383,77 @@ class Rock : Race, Respawnable {
 
             if (!Helper.checkCladding(stack, carried)) return
             Helper.doCladding(stack, carried)
-//            Helper.applyAllArmor(player)
             Helper.applyCladding(player, stack)
 
             carried.count--
+        }
+
+        private fun damageSkin(player: ServerPlayer, slot: EquipmentSlot, damage: Float) {
+            val skin = player.getItemBySlot(slot)
+
+            if (Helper.checkBroken(skin)) return
+
+            skin.damageValue += damage.toInt()
+
+            if (skin.damageValue >= skin.maxDamage) {
+                player.onEquippedItemBroken(skin.item, slot)
+                player.setItemSlot(slot, ItemStack.EMPTY)
+            } else {
+                damageCladding(player, skin)
+            }
+        }
+
+        private fun damageCladding(player: ServerPlayer, skin: ItemStack) {
+            val oldCladding = skin.get(FallacyDataComponents.CLADDINGS)!!
+            val newCladdings = oldCladding.map { it.first to it.second - 1 }.filter { it.second > 0 }
+            skin.set(FallacyDataComponents.CLADDINGS, newCladdings)
+
+            if (oldCladding.size != newCladdings.size) Helper.applyCladding(player, skin)
+        }
+
+        @SubscribeEvent
+        fun onDamage(event: LivingDamageEvent.Pre) {
+            val damage = event.source
+            val player = event.entity as? ServerPlayer ?: return
+            if (Race.get(player) !is Rock) return
+
+            if (damage.`is`(DamageTypeTags.BYPASSES_ARMOR)) return
+            val lookup = player.registryAccess().lookup(Registries.DAMAGE_TYPE).get()
+
+            val mobAttack = lookup.get(DamageTypes.MOB_ATTACK).get()
+            val playerAttack = lookup.get(DamageTypes.PLAYER_ATTACK).get()
+            val playerExplosion = lookup.get(DamageTypes.PLAYER_EXPLOSION).get()
+            val sonicBoom = lookup.get(DamageTypes.SONIC_BOOM).get()
+            val firework = lookup.get(DamageTypes.FIREWORKS).get()
+            val fireball = lookup.get(DamageTypes.FIREBALL).get()
+            val explosion = lookup.get(DamageTypes.EXPLOSION).get()
+            val arrow = lookup.get(DamageTypes.ARROW).get()
+            val set = setOf(mobAttack, playerAttack, playerExplosion, sonicBoom, firework, fireball, explosion, arrow)
+
+            if (!set.contains(damage.typeHolder())) return
+
+            val amount = event.originalDamage
+            val armorExtraDamage = (amount / 8).pow(2)
+            damageSkin(player, EquipmentSlot.HEAD, armorExtraDamage)
+            damageSkin(player, EquipmentSlot.CHEST, armorExtraDamage)
+            damageSkin(player, EquipmentSlot.LEGS, armorExtraDamage)
+            damageSkin(player, EquipmentSlot.FEET, armorExtraDamage)
+        }
+
+        @SubscribeEvent
+        fun onSkinBroken(event: LivingEquipmentChangeEvent) {
+            val from = event.from
+            val to = event.to
+            val player = event.entity as? ServerPlayer ?: return
+
+            if (from == to) return
+            if (!to.isEmpty) return
+            if (!from.has(FallacyDataComponents.CLADDINGS)) return
+            if (Race.get(player) !is Rock) return
+
+            val lookup = player.registryAccess().lookup(Registries.ENCHANTMENT).get()
+            val brokenSkin = Helper.getRockBrokenSkinItem(from, lookup)
+            player.setItemSlot(event.slot, brokenSkin)
         }
     }
 
@@ -376,8 +486,10 @@ class Rock : Race, Respawnable {
             val tooltips = event.tooltipElements
             val claddings = stack.get(FallacyDataComponents.CLADDINGS) ?: return
             val additionalTooltips = claddings
-                .map { id -> BuiltInRegistries.ITEM.getHolder(id).getOrNull()?.value() }
-                .map { Helper.getNameForCladdingDisplay(it?.defaultInstance) ?: Component.literal("???") }
+                .map { (id, count) -> BuiltInRegistries.ITEM.getHolder(id).getOrNull()?.value() to count }
+                .map { (item, count) ->
+                    (Helper.getNameForCladdingDisplay(item?.defaultInstance, count) ?: Component.literal("???: $count"))
+                }
                 .map { Either.left<FormattedText, TooltipComponent>(it) } + Either.left<FormattedText, TooltipComponent>(
                 Component.literal("${claddings.size} / $CLADDING_LIMIT")
             )

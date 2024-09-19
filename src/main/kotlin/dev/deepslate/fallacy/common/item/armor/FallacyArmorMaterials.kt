@@ -29,4 +29,16 @@ object FallacyArmorMaterials {
             ), 12, SoundEvents.ARMOR_EQUIP_NETHERITE, { Ingredient.of(Items.AIR) }, emptyList(), 0.0f, 0.0f
         )
     }
+
+    val BROKEN_ROCK = REGISTRY.register("broken_rock") { _ ->
+        ArmorMaterial(
+            mapOf(
+                ArmorItem.Type.BOOTS to 0,
+                ArmorItem.Type.LEGGINGS to 0,
+                ArmorItem.Type.CHESTPLATE to 0,
+                ArmorItem.Type.HELMET to 0,
+                ArmorItem.Type.BODY to 0,
+            ), 0, SoundEvents.ARMOR_EQUIP_NETHERITE, { Ingredient.of(Items.AIR) }, emptyList(), 0.0f, 0.0f
+        )
+    }
 }

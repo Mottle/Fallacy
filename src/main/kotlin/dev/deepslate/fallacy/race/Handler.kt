@@ -49,6 +49,7 @@ object Handler {
 
         val player = event.entity as ServerPlayer
         val race = Race.get(player)
+        Race.sync(player)
         if (race !is Respawnable) return
         race.onRespawn(player)
     }

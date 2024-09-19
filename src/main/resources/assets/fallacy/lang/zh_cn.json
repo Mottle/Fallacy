@@ -6,10 +6,14 @@
     "effect.fallacy.dehydration": "脱水",
     "death.attack.fallacy.dehydration": "%1$s 死于脱水",
     "item.fallacy.gynou_wings": "翼",
-    "item.fallacy.rock_boots": "岩石皮肤",
-    "item.fallacy.rock_chestplate": "岩石皮肤",
-    "item.fallacy.rock_helmet": "岩石皮肤",
-    "item.fallacy.rock_leggings": "岩石皮肤",
+    "item.fallacy.rock_skin_boots": "岩石皮肤",
+    "item.fallacy.rock_skin_chestplate": "岩石皮肤",
+    "item.fallacy.rock_skin_helmet": "岩石皮肤",
+    "item.fallacy.rock_skin_leggings": "岩石皮肤",
     "block.fallacy.miu_berry_bush": "缪浆果灌木",
-    "item.fallacy.miu_berry_bush_seeds": "缪浆果灌木种子"
+    "item.fallacy.miu_berry_bush_seeds": "缪浆果灌木种子",
+    "item.fallacy.rock_skin_broken_boots": "破损的岩石皮肤",
+    "item.fallacy.rock_skin_broken_chestplate": "破损的岩石皮肤",
+    "item.fallacy.rock_skin_broken_helmet": "破损的岩石皮肤",
+    "item.fallacy.rock_skin_broken_leggings": "破损的岩石皮肤"
 }
