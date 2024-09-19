@@ -282,7 +282,7 @@ class Rock : Race, Respawnable {
             stack.set(DataComponents.ATTRIBUTE_MODIFIERS, newModifier)
         }
 
-        fun applyEnchantments(stack: ItemStack, map: Map<Holder<Enchantment>, Int>) {
+        private fun applyEnchantments(stack: ItemStack, map: Map<Holder<Enchantment>, Int>) {
             //检查默认附魔
             if (map.size == 2) return
             val enc = ItemEnchantments.Mutable(ItemEnchantments.EMPTY)

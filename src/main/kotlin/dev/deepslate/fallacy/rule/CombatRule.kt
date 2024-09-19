@@ -8,10 +8,12 @@ import kotlin.math.absoluteValue
 object CombatRule {
     const val K = 2.0
 
+    const val T = 20
+
     fun getDamageAfterAbsorb(entity: LivingEntity, damage: Float, source: DamageSource, armor: Float): Float {
         if (armor.absoluteValue <= 0.1f) return damage
         if (armor > 0.1f) {
-            val rate = MathHelper.nigmoid(damage / (K * armor)).toFloat() * damage / (damage + armor)
+            val rate = MathHelper.nigmoid((damage + T) / (K * armor)).toFloat() * damage / (damage + armor)
             val finalDamage = rate * damage
             return finalDamage
         }
