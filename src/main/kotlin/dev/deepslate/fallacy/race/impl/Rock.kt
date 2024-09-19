@@ -10,6 +10,7 @@ import dev.deepslate.fallacy.common.item.data.FallacyDataComponents
 import dev.deepslate.fallacy.common.network.packet.CladdingPacket
 import dev.deepslate.fallacy.race.Race
 import dev.deepslate.fallacy.race.Respawnable
+import dev.deepslate.fallacy.util.TickHelper
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
 import net.minecraft.core.BlockPos
@@ -43,6 +44,7 @@ import net.minecraft.world.item.component.Unbreakable
 import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.item.enchantment.ItemEnchantments
+import net.neoforged.api.distmarker.Dist
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.client.event.RenderTooltipEvent
@@ -72,10 +74,12 @@ class Rock : Race, Respawnable {
 
         const val CLADDING_LIMIT = 8
 
+        val SKIN_REGENERATION_TICKS = TickHelper.second(10)
+
         private val claddingEffectMap: Map<ResourceLocation, CladdingInfo> = mapOf(
             getKey(Items.IRON_INGOT) to CladdingInfo(125, listOf(CladdingAttributeModifier(Attributes.ARMOR, 0.2))),
             getKey(Items.GOLD_INGOT) to CladdingInfo(
-                40, listOf(
+                80, listOf(
                     CladdingAttributeModifier(Attributes.MOVEMENT_SPEED, 0.001875),
                     CladdingAttributeModifier(Attributes.MAX_HEALTH, -1.5)
                 )
@@ -90,7 +94,7 @@ class Rock : Race, Respawnable {
                     CladdingEnchantmentAdder(Enchantments.FIRE_PROTECTION, 1),
                     CladdingEnchantmentAdder(Enchantments.BLAST_PROTECTION, 1),
                     CladdingAttributeModifier(Attributes.ARMOR, 0.4),
-                    CladdingAttributeModifier(Attributes.MOVEMENT_SPEED, 0.02)
+                    CladdingAttributeModifier(Attributes.MOVEMENT_SPEED, -0.002)
                 ),
                 3
             )
@@ -107,7 +111,6 @@ class Rock : Race, Respawnable {
         armor = -20.0,
         health = 60.0,
         attackDamage = 8.0,
-        attackSpeed = 1.0,
         attackKnockBack = 1.0,
         magicResistance = 50.0,
         moveSpeed = 9.0 / 100.0,
@@ -123,7 +126,35 @@ class Rock : Race, Respawnable {
         position: BlockPos
     ) {
         if (player.combatTracker.inCombat) return
+        if (!TickHelper.checkServerTickRate(TickHelper.second(4))) return
+        repair(player, EquipmentSlot.HEAD)
+        repair(player, EquipmentSlot.CHEST)
+        repair(player, EquipmentSlot.LEGS)
+        repair(player, EquipmentSlot.FEET)
+    }
 
+    private fun repair(player: ServerPlayer, slot: EquipmentSlot) {
+        val item = player.getItemBySlot(slot)
+        if (item.isEmpty) return
+        if (!item.has(FallacyDataComponents.CLADDINGS)) return
+        if (Helper.checkBroken(item)) {
+            if (!item.has(FallacyDataComponents.ROCK_SKIN_REGENERATION_REST_TICKS)) return
+            val restTicks = item.get(FallacyDataComponents.ROCK_SKIN_REGENERATION_REST_TICKS)!! - TickHelper.second(4)
+
+            if (restTicks <= 0) regenerate(player, item, slot)
+            else item.set(FallacyDataComponents.ROCK_SKIN_REGENERATION_REST_TICKS, restTicks)
+
+            return
+        }
+        item.damageValue -= 1
+    }
+
+    private fun regenerate(player: ServerPlayer, old: ItemStack, slot: EquipmentSlot) {
+        val lookup = player.registryAccess().lookup(Registries.ENCHANTMENT).get()
+        player.setItemSlot(slot, ItemStack.EMPTY)
+        setArmor(player, slot, lookup)
+        val new = player.getItemBySlot(slot)
+        copyCladding(old, new)
     }
 
     private fun setArmor(player: ServerPlayer, slot: EquipmentSlot, lookup: HolderLookup.RegistryLookup<Enchantment>) {
@@ -160,12 +191,21 @@ class Rock : Race, Respawnable {
         removeArmor(player, EquipmentSlot.FEET)
     }
 
+    // newTotal = total * (1.0 - 0.75)
+    private val attackSpeedModifier = AttributeModifier(
+        Fallacy.id("rock_race_attack_speed_modifier"),
+        -0.75,
+        AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
+    )
+
     override fun set(player: ServerPlayer) {
         attribute.set(player)
         setAllArmor(player)
+        player.getAttribute(Attributes.ATTACK_SPEED)!!.addPermanentModifier(attackSpeedModifier)
     }
 
     override fun remove(player: ServerPlayer) {
+        player.getAttribute(Attributes.ATTACK_SPEED)!!.removeModifier(attackSpeedModifier)
         removeAllArmor(player)
     }
 
@@ -182,7 +222,12 @@ class Rock : Race, Respawnable {
         val stackFrom = from.getItemBySlot(slot)
         val stackTo = to.getItemBySlot(slot)
         if (!stackFrom.has(FallacyDataComponents.CLADDINGS)) return
-        stackTo.set(FallacyDataComponents.CLADDINGS, stackFrom.get(FallacyDataComponents.CLADDINGS))
+        copyCladding(stackFrom, stackTo)
+    }
+
+    private fun copyCladding(from: ItemStack, to: ItemStack) {
+        if (!from.has(FallacyDataComponents.CLADDINGS)) return
+        to.set(FallacyDataComponents.CLADDINGS, from.get(FallacyDataComponents.CLADDINGS))
     }
 
     private object Helper {
@@ -224,6 +269,7 @@ class Rock : Race, Respawnable {
 
             stack.set(DataComponents.UNBREAKABLE, Unbreakable(false))
             stack.set(FallacyDataComponents.CLADDINGS, CladdingData.empty())
+            stack.set(FallacyDataComponents.ROCK_SKIN_REGENERATION_REST_TICKS, SKIN_REGENERATION_TICKS)
             return stack
         }
 
@@ -403,7 +449,8 @@ class Rock : Race, Respawnable {
         }
     }
 
-    @EventBusSubscriber(modid = Fallacy.MOD_ID)
+
+    @EventBusSubscriber(modid = Fallacy.MOD_ID, value = [Dist.CLIENT])
     object ClientHandler {
 
         @SubscribeEvent

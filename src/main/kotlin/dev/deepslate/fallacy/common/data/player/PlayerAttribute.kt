@@ -12,7 +12,7 @@ data class PlayerAttribute(
     val toughness: Double = 0.0,//韧性[0, 20] -> [0, 256]
     val attackDamage: Double = 1.0,//攻击伤害[0, 2048]
     val attackKnockBack: Double = 0.0,//击退[0, 5]
-    val attackSpeed: Double = 4.0,//攻击速度[0, 1024]
+    val attackSpeed: Double = 4.0,//攻击速度[0, 1024] 不要改！！！
     val burningTime: Double = 1.0,//着火时间[0, 1024] (假设生物本应被着火t游戏刻，此属性计算值为r，则生物的剩余着火时间将不会低t * r)
     val explosionKnockBackResistance: Double = 0.0,//爆炸击退抗性[0, 1]
     val fallDamageMultiplier: Double = 1.0,//摔落伤害系数[0, 100]

@@ -21,4 +21,8 @@ object TickHelper {
         get() = ServerHelper.server?.tickCount ?: -1
 
     fun checkServerTickRate(rate: Int) = currentServerTick % rate == 0
+
+    fun second(sec: Int) = sec * 20
+
+    fun minute(min: Int) = second(60 * min)
 }
