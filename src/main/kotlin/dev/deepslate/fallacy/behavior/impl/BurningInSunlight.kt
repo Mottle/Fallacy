@@ -1,7 +1,7 @@
 package dev.deepslate.fallacy.behavior.impl
 
+import dev.deepslate.fallacy.behavior.BehaviorTags
 import dev.deepslate.fallacy.behavior.TickableBehavior
-import dev.deepslate.fallacy.common.data.BehaviorTags
 import dev.deepslate.fallacy.util.announce.Autoload
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation

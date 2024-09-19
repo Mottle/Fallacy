@@ -1,6 +1,6 @@
 package dev.deepslate.fallacy.rule
 
-import dev.deepslate.fallacy.common.data.BehaviorTags
+import dev.deepslate.fallacy.behavior.BehaviorTags
 import net.minecraft.core.Holder
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity

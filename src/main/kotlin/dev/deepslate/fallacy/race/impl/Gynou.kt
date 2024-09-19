@@ -1,8 +1,8 @@
 package dev.deepslate.fallacy.race.impl
 
 import dev.deepslate.fallacy.Fallacy
-import dev.deepslate.fallacy.common.data.FallacyDataComponents
 import dev.deepslate.fallacy.common.data.player.PlayerAttribute
+import dev.deepslate.fallacy.common.item.data.FallacyDataComponents
 import dev.deepslate.fallacy.race.Race
 import dev.deepslate.fallacy.race.Respawnable
 import net.minecraft.core.BlockPos
@@ -70,7 +70,7 @@ class Gynou : Race, Respawnable {
         setWings(player)
     }
 
-    override fun onRespawn(player: ServerPlayer) {
+    override fun onRespawn(player: ServerPlayer, original: ServerPlayer) {
         setWings(player)
     }
 

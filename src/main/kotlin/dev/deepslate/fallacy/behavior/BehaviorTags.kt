@@ -1,6 +1,7 @@
-package dev.deepslate.fallacy.common.data
+package dev.deepslate.fallacy.behavior
 
 import dev.deepslate.fallacy.Fallacy
+import dev.deepslate.fallacy.common.data.FallacyAttachments
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 

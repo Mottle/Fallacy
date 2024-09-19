@@ -1,6 +1,5 @@
 package dev.deepslate.fallacy.behavior
 
-import dev.deepslate.fallacy.common.data.BehaviorTags
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 

@@ -1,6 +1,6 @@
 package dev.deepslate.fallacy.mixin.client;
 
-import dev.deepslate.fallacy.common.data.FallacyDataComponents;
+import dev.deepslate.fallacy.common.item.data.FallacyDataComponents;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentHolder;
 import net.minecraft.core.component.DataComponentType;

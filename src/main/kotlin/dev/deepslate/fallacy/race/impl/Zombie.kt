@@ -1,7 +1,7 @@
 package dev.deepslate.fallacy.race.impl
 
 import dev.deepslate.fallacy.Fallacy
-import dev.deepslate.fallacy.common.data.BehaviorTags
+import dev.deepslate.fallacy.behavior.BehaviorTags
 import dev.deepslate.fallacy.common.data.player.PlayerAttribute
 import dev.deepslate.fallacy.race.Race
 import net.minecraft.core.BlockPos

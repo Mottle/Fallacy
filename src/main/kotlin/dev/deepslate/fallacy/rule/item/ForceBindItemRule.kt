@@ -1,6 +1,6 @@
 package dev.deepslate.fallacy.rule.item
 
-import dev.deepslate.fallacy.common.data.FallacyDataComponents
+import dev.deepslate.fallacy.common.item.data.FallacyDataComponents
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.item.ItemStack
 

@@ -4,10 +4,10 @@ import dev.deepslate.fallacy.common.FallacyTabs
 import dev.deepslate.fallacy.common.block.FallacyBlocks
 import dev.deepslate.fallacy.common.data.FallacyAttachments
 import dev.deepslate.fallacy.common.data.FallacyAttributes
-import dev.deepslate.fallacy.common.data.FallacyDataComponents
 import dev.deepslate.fallacy.common.effect.FallacyEffects
 import dev.deepslate.fallacy.common.item.FallacyItems
 import dev.deepslate.fallacy.common.item.armor.FallacyArmorMaterials
+import dev.deepslate.fallacy.common.item.data.FallacyDataComponents
 import dev.deepslate.fallacy.common.registrate.Registration
 import dev.deepslate.fallacy.race.FallacyRaces
 import net.minecraft.resources.ResourceLocation
