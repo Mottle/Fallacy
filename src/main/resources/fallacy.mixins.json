@@ -10,6 +10,7 @@
         "EnchantmentMixin",
         "EquipableMixin",
         "LivingEntityMixin",
+        "NearestAttackableTargetGoalMixin",
         "RangedAttributeMixin",
         "client.ItemStackMixin"
     ],

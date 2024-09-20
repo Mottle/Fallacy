@@ -342,9 +342,6 @@ class Rock : Race, Respawnable {
             if (checkBroken(stack)) return
             val slot = player.getEquipmentSlotForItem(stack)
             val lookup = player.registryAccess().lookup(Registries.ENCHANTMENT).get()
-//            val claddings = stack.get(FallacyDataComponents.CLADDINGS)?.claddings?.map { it.textureId } ?: return
-//            val modifiers = getCladdingModifiers(claddings, slot)
-//            val enchantments = getCladdingEnchantments(claddings, lookup)
 
             val claddings = stack.get(FallacyDataComponents.CLADDINGS) ?: return
             val modifiers = claddings.getModifiers(claddingEffectMap, slot)
