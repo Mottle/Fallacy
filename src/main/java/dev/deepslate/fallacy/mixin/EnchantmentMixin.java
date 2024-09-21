@@ -1,6 +1,6 @@
 package dev.deepslate.fallacy.mixin;
 
-import dev.deepslate.fallacy.rule.EnchantmentRule;
+import dev.deepslate.fallacy.rule.item.EnchantmentRule;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;

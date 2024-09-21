@@ -1,4 +1,4 @@
-package dev.deepslate.fallacy.rule
+package dev.deepslate.fallacy.rule.item
 
 import dev.deepslate.fallacy.behavior.BehaviorTags
 import net.minecraft.core.Holder
