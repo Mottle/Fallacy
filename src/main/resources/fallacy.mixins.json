@@ -16,6 +16,7 @@
         "client.ItemStackMixin"
     ],
     "client": [
+        "client.PlayerRenderMixin"
     ],
     "injectors": {
         "defaultRequire": 1

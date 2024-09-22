@@ -43,4 +43,6 @@ object FallacyRaces {
     val ROCK = RACE.register(Rock.ID.path) { _ -> Rock() }
 
     val GOD = RACE.register(God.ID.path) { _ -> God() }
+
+    val WOOD = RACE.register("wood") { _ -> Unknown() }
 }
