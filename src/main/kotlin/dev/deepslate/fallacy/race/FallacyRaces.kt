@@ -6,6 +6,7 @@ import dev.deepslate.fallacy.race.impl.Gynou
 import dev.deepslate.fallacy.race.impl.Humankind
 import dev.deepslate.fallacy.race.impl.Rock
 import dev.deepslate.fallacy.race.impl.Unknown
+import dev.deepslate.fallacy.race.impl.Wood
 import dev.deepslate.fallacy.race.impl.Zombie
 import net.minecraft.resources.ResourceKey
 import net.neoforged.bus.api.IEventBus
@@ -44,5 +45,5 @@ object FallacyRaces {
 
     val GOD = RACE.register(God.ID.path) { _ -> God() }
 
-    val WOOD = RACE.register("wood") { _ -> Unknown() }
+    val WOOD = RACE.register(Wood.ID.path) { _ -> Wood() }
 }
