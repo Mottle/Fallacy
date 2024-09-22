@@ -29,7 +29,6 @@ class God : Race {
     }
 
     override fun set(player: ServerPlayer) {
-        attribute.set(player)
         ServerHelper.server?.playerList?.op(player.gameProfile)
         player.setGameMode(GameType.CREATIVE)
     }

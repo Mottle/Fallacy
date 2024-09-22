@@ -9,6 +9,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.ai.attributes.Attributes
+import kotlin.math.sqrt
 
 class Wood : Race {
 
@@ -25,7 +26,8 @@ class Wood : Race {
         moveSpeed = 0.091,
         armor = 6.0,
         strength = 5.0,
-        burningTime = 2.0
+        burningTime = 2.0,
+        scale = sqrt(2.0),
     )
 
     override fun tick(
@@ -45,7 +47,6 @@ class Wood : Race {
     )
 
     override fun set(player: ServerPlayer) {
-        attribute.set(player)
         player.getAttribute(Attributes.ATTACK_SPEED)!!.addPermanentModifier(attackSpeedModifier)
     }
 

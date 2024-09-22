@@ -40,6 +40,7 @@ data class PlayerAttribute(
     val thirst: Double = 20.0,
     val strength: Double = 1.0,
     val magicResistance: Double = 0.0,
+    val magicStrength: Double = 0.0
 ) {
     fun set(player: ServerPlayer, refresh: Boolean = true) {
         set(player, Attributes.ARMOR, armor)
@@ -74,6 +75,7 @@ data class PlayerAttribute(
         set(player, FallacyAttributes.MAX_THIRST, thirst)
         set(player, FallacyAttributes.STRENGTH, strength)
         set(player, FallacyAttributes.MAGIC_RESISTANCE, magicResistance)
+        set(player, FallacyAttributes.MAGIC_STRENGTH, magicStrength)
 
         if (refresh) {
             player.foodData.foodLevel = hunger.toInt()

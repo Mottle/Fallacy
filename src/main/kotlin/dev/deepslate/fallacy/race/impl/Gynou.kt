@@ -66,7 +66,6 @@ class Gynou : Race, Respawnable {
     }
 
     override fun set(player: ServerPlayer) {
-        attribute.set(player)
         setWings(player)
     }
 

@@ -14,19 +14,23 @@ object FallacyAttributes {
     val ATTRIBUTES = DeferredRegister.create(BuiltInRegistries.ATTRIBUTE, Fallacy.MOD_ID)
 
     val MAX_HUNGER = ATTRIBUTES.register("fallacy.max_hunger") { _ ->
-        RangedAttribute("fallacy.attribute.name.player.max_hunger", 20.0, 1.0, 1024.0).setSyncable(true)
+        RangedAttribute("fallacy.attribute.name.player.max_hunger", 20.0, 10.0, 1024.0).setSyncable(true)
     }
 
     val MAX_THIRST = ATTRIBUTES.register("fallacy.max_thirst") { _ ->
-        RangedAttribute("fallacy.attribute.name.player.max_thirst", 20.0, 1.0, 1024.0).setSyncable(true)
+        RangedAttribute("fallacy.attribute.name.player.max_thirst", 20.0, 10.0, 1024.0).setSyncable(true)
     }
 
     val STRENGTH = ATTRIBUTES.register("fallacy.strength") { _ ->
-        RangedAttribute("fallacy.attribute.name.player.strength", 1.0, 0.0, 128.0).setSyncable(true)
+        RangedAttribute("fallacy.attribute.name.player.strength", 1.0, -1024.0, 1024.0).setSyncable(true)
     }
 
     val MAGIC_RESISTANCE = ATTRIBUTES.register("fallacy.magic_resistance") { _ ->
-        RangedAttribute("fallacy.attribute.name.player.magic_resistance", 0.0, 0.0, 1024.0).setSyncable(true)
+        RangedAttribute("fallacy.attribute.name.player.magic_resistance", 0.0, -1024.0, 1024.0).setSyncable(true)
+    }
+
+    val MAGIC_STRENGTH = ATTRIBUTES.register("fallacy.magic_strength") { _ ->
+        RangedAttribute("fallacy.attribute.name.player.magic_strength", 0.0, -1024.0, 1024.0).setSyncable(true)
     }
 
     fun init(bus: IEventBus) {
@@ -41,7 +45,7 @@ object FallacyAttributes {
             event.add(EntityType.PLAYER, MAX_THIRST)
             event.add(EntityType.PLAYER, STRENGTH)
             event.add(EntityType.PLAYER, MAGIC_RESISTANCE)
-
+            event.add(EntityType.PLAYER, MAGIC_STRENGTH)
         }
     }
 }

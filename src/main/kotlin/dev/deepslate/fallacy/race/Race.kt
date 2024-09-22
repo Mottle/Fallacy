@@ -53,6 +53,7 @@ interface Race {
 
             oldRace.remove(player)
             player.setData(FallacyAttachments.RACE_ID, race.namespacedId)
+            race.attribute.set(player)
             race.set(player)
             sync(player)
         }

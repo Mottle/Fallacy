@@ -58,6 +58,7 @@ import kotlin.collections.component2
 import kotlin.collections.map
 import kotlin.jvm.optionals.getOrNull
 import kotlin.math.pow
+import kotlin.math.sqrt
 
 class Rock : Race, Respawnable {
 
@@ -118,6 +119,7 @@ class Rock : Race, Respawnable {
         gravity = 0.08 * 1.5,
         jumpStrength = 0.42 * 1.21,
         fallDamageMultiplier = 1.5,
+        scale = sqrt(2.0),
     )
 
     override fun tick(
@@ -199,7 +201,6 @@ class Rock : Race, Respawnable {
     )
 
     override fun set(player: ServerPlayer) {
-        attribute.set(player)
         setAllArmor(player)
         player.getAttribute(Attributes.ATTACK_SPEED)!!.addPermanentModifier(attackSpeedModifier)
     }

@@ -1,7 +1,6 @@
 package dev.deepslate.fallacy.race.impl
 
 import dev.deepslate.fallacy.Fallacy
-import dev.deepslate.fallacy.behavior.BehaviorTags
 import dev.deepslate.fallacy.common.data.player.PlayerAttribute
 import dev.deepslate.fallacy.race.Race
 import net.minecraft.core.BlockPos
@@ -9,20 +8,14 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 
-class Zombie : Race {
+class Elf : Race {
 
     companion object {
-        val ID = Fallacy.id("zombie")
-        val TAGS = arrayOf(
-            BehaviorTags.UNDEAD, BehaviorTags.WEAKNESS2_IN_SUNLIGHT, BehaviorTags.WEAKNESS_IN_DAY,
-            BehaviorTags.BURNING_IN_SUNLIGHT
-        )
+        val ID = Fallacy.id("elf")
     }
 
     override val namespacedId: ResourceLocation = ID
-
-    override val attribute: PlayerAttribute =
-        PlayerAttribute(health = 40.0, attackDamage = 4.0, strength = 2.0, armor = 4.0)
+    override val attribute: PlayerAttribute = PlayerAttribute(moveSpeed = 0.12, magicResistance = 25.0, strength = 1.0)
 
     override fun tick(
         level: ServerLevel,
@@ -32,10 +25,8 @@ class Zombie : Race {
     }
 
     override fun set(player: ServerPlayer) {
-        BehaviorTags.set(player, *TAGS)
     }
 
     override fun remove(player: ServerPlayer) {
-        BehaviorTags.remove(player, *TAGS)
     }
 }
