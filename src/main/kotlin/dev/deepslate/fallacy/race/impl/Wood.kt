@@ -9,7 +9,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.ai.attributes.Attributes
-import kotlin.math.sqrt
+import kotlin.math.pow
 
 class Wood : Race {
 
@@ -27,7 +27,7 @@ class Wood : Race {
         armor = 6.0,
         strength = 5.0,
         burningTime = 2.0,
-        scale = sqrt(2.0),
+        scale = 2.0.pow(1.0 / 3.0),
     )
 
     override fun tick(

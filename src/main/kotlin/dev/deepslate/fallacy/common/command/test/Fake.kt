@@ -15,6 +15,7 @@ import net.neoforged.neoforge.common.util.FakePlayerFactory
 @Autoload
 class Fake : GameCommand {
     override val source: String = "fallacy test fake"
+
     override val suggestions: Map<String, SuggestionProvider<CommandSourceStack>> = mapOf()
 
     override val permissionRequired: String? = null

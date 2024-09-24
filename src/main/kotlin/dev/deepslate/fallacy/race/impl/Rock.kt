@@ -119,7 +119,7 @@ class Rock : Race, Respawnable {
         gravity = 0.08 * 1.5,
         jumpStrength = 0.42 * 1.21,
         fallDamageMultiplier = 1.5,
-        scale = sqrt(2.0),
+        scale = 2.0.pow(1.0 / 3.0),
     )
 
     override fun tick(

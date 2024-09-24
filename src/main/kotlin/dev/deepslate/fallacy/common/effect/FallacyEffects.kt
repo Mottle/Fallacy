@@ -28,4 +28,6 @@ object FallacyEffects {
             AttributeModifier.Operation.ADD_MULTIPLIED_BASE
         )
     }
+
+    val FULL = MOB_EFFECTS.register("full", ::Full)
 }
