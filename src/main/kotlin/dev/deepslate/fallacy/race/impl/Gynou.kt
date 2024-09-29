@@ -59,7 +59,7 @@ class Gynou : Race, Respawnable {
         fallDamageMultiplier = 0.5
     )
 
-    override val diet: NutritionState = NutritionState()
+    override val nutrition: NutritionState = NutritionState()
 
     override fun tick(
         level: ServerLevel,

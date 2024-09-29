@@ -22,7 +22,7 @@ class God : Race {
     override val attribute: PlayerAttribute =
         PlayerAttribute(health = 200.0, armor = 1000.0, attackSpeed = 50.0, moveSpeed = 0.2)
 
-    override val diet: NutritionState = NutritionState()
+    override val nutrition: NutritionState = NutritionState()
 
     override fun tick(
         level: ServerLevel,

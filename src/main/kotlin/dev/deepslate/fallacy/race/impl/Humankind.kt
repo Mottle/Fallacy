@@ -19,7 +19,7 @@ class Humankind : Race {
 
     override val attribute: PlayerAttribute = PlayerAttribute(strength = 1.25)
 
-    override val diet: NutritionState = NutritionState()
+    override val nutrition: NutritionState = NutritionState()
 
     override fun tick(
         level: ServerLevel,

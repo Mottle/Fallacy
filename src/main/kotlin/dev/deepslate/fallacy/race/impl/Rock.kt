@@ -126,7 +126,7 @@ class Rock : Race, Respawnable {
         hunger = 60.0
     )
 
-    override val diet: NutritionState = NutritionState.noNeed()
+    override val nutrition: NutritionState = NutritionState.noNeed()
 
     override fun tick(
         level: ServerLevel,

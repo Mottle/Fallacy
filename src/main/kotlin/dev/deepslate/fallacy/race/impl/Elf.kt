@@ -19,7 +19,7 @@ class Elf : Race {
 
     override val attribute: PlayerAttribute = PlayerAttribute(moveSpeed = 0.12, magicResistance = 25.0, strength = 1.0)
 
-    override val diet: NutritionState = NutritionState()
+    override val nutrition: NutritionState = NutritionState()
 
     override fun tick(
         level: ServerLevel,

@@ -20,7 +20,7 @@ class Orc : Race {
     override val attribute: PlayerAttribute =
         PlayerAttribute(health = 40.0, attackDamage = 4.0, armor = 6.0, magicResistance = 10.0, strength = 3.0)
 
-    override val diet: NutritionState = NutritionState()
+    override val nutrition: NutritionState = NutritionState()
 
     override fun tick(
         level: ServerLevel,

@@ -39,7 +39,8 @@ class Wood : Race, Respawnable {
         hunger = 80.0
     )
 
-    val nutrition: NutritionState = NutritionState(fat = NutritionState.Nutrition.NoNeed, protein = NutritionState.Nutrition.NoNeed)
+    override val nutrition: NutritionState =
+        NutritionState(fat = NutritionState.Nutrition.NoNeed, protein = NutritionState.Nutrition.NoNeed)
 
     override fun tick(
         level: ServerLevel,

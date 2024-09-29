@@ -25,7 +25,7 @@ class Zombie : Race {
     override val attribute: PlayerAttribute =
         PlayerAttribute(health = 40.0, attackDamage = 4.0, strength = 2.0, armor = 4.0)
 
-    override val diet: NutritionState = NutritionState.noNeed()
+    override val nutrition: NutritionState = NutritionState.noNeed()
 
     override fun tick(
         level: ServerLevel,

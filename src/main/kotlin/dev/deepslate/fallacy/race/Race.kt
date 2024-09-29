@@ -18,7 +18,7 @@ interface Race {
 
     val attribute: PlayerAttribute
 
-    val diet: NutritionState
+    val nutrition: NutritionState
 
     fun tick(level: ServerLevel, player: ServerPlayer, position: BlockPos)
 
@@ -57,7 +57,7 @@ interface Race {
             oldRace.remove(player)
             player.setData(FallacyAttachments.RACE_ID, race.namespacedId)
             race.attribute.set(player)
-            race.diet.set(player)
+            race.nutrition.set(player)
             race.set(player)
             sync(player)
         }

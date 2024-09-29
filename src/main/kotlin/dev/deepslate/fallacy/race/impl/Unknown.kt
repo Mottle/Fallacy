@@ -22,7 +22,7 @@ class Unknown : Race {
 
     override val attribute: PlayerAttribute = PlayerAttribute()
 
-    override val diet: NutritionState = NutritionState()
+    override val nutrition: NutritionState = NutritionState()
 
     override fun tick(
         level: ServerLevel,
