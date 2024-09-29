@@ -7,9 +7,11 @@ import dev.deepslate.fallacy.common.data.FallacyAttributes
 import dev.deepslate.fallacy.common.effect.FallacyEffects
 import dev.deepslate.fallacy.common.item.FallacyItems
 import dev.deepslate.fallacy.common.item.armor.FallacyArmorMaterials
-import dev.deepslate.fallacy.common.item.data.FallacyDataComponents
+import dev.deepslate.fallacy.common.item.component.FallacyDataComponents
 import dev.deepslate.fallacy.common.registrate.Registration
 import dev.deepslate.fallacy.race.FallacyRaces
+import dev.deepslate.fallacy.rule.RangedAttributeRule
+import dev.deepslate.fallacy.rule.item.VanillaFoodRule
 import net.minecraft.resources.ResourceLocation
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.bus.api.SubscribeEvent
@@ -42,9 +44,17 @@ class Fallacy(val modBus: IEventBus) {
 
         FallacyItems
         FallacyBlocks
+
+        playRule()
     }
 
     @SubscribeEvent
     fun commonSetup(event: FMLCommonSetupEvent) {
+    }
+
+    private fun playRule() {
+        VanillaFoodRule.rule()
+        RangedAttributeRule.rule()
+        LOGGER.info("rules load over.")
     }
 }

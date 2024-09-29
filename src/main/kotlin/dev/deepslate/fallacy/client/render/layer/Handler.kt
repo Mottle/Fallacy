@@ -1,19 +1,5 @@
 package dev.deepslate.fallacy.client.render.layer
 
-import dev.deepslate.fallacy.Fallacy
-import net.minecraft.client.model.HumanoidArmorModel
-import net.minecraft.client.model.PlayerModel
-import net.minecraft.client.model.geom.LayerDefinitions.OUTER_ARMOR_DEFORMATION
-import net.minecraft.client.model.geom.ModelLayers
-import net.minecraft.client.model.geom.builders.LayerDefinition
-import net.minecraft.client.renderer.entity.LivingEntityRenderer
-import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.player.Player
-import net.neoforged.api.distmarker.Dist
-import net.neoforged.bus.api.SubscribeEvent
-import net.neoforged.fml.common.EventBusSubscriber
-import net.neoforged.neoforge.client.event.EntityRenderersEvent
-
 //@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = Fallacy.MOD_ID, value = [Dist.CLIENT])
 class Handler {
 //    @SubscribeEvent

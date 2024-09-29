@@ -1,6 +1,7 @@
 package dev.deepslate.fallacy.race.impl
 
 import dev.deepslate.fallacy.Fallacy
+import dev.deepslate.fallacy.common.data.player.DietState
 import dev.deepslate.fallacy.common.data.player.PlayerAttribute
 import dev.deepslate.fallacy.race.Race
 import net.minecraft.core.BlockPos
@@ -20,6 +21,8 @@ class Unknown : Race {
     override val namespacedId: ResourceLocation = ID
 
     override val attribute: PlayerAttribute = PlayerAttribute()
+
+    override val diet: DietState = DietState()
 
     override fun tick(
         level: ServerLevel,

@@ -101,12 +101,12 @@ object Handler {
         PacketDistributor.sendToPlayer(player, ThirstSyncPacket(cap.value))
     }
 
-    fun handleThirstSyncPacket(data: ThirstSyncPacket, context: IPayloadContext) {
+    internal fun handleThirstSyncPacket(data: ThirstSyncPacket, context: IPayloadContext) {
         context.player().getCapability(FallacyCapabilities.THIRST)!!.value = data.value
         Fallacy.LOGGER.info("Syncing thirst.")
     }
 
-    fun handleDrinkInWorldPacket(data: DrinkInWorldPacket, context: IPayloadContext) {
+    internal fun handleDrinkInWorldPacket(data: DrinkInWorldPacket, context: IPayloadContext) {
         val player = context.player() as ServerPlayer
         val result = Drink.attemptDrink(player.level(), player)
         if (result.shouldSwing()) player.swing(InteractionHand.MAIN_HAND, true)

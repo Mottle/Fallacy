@@ -1,6 +1,6 @@
 package dev.deepslate.fallacy.mixin;
 
-import dev.deepslate.fallacy.rule.item.EnchantmentRule;
+import dev.deepslate.fallacy.rule.item.SmiteEnchantmentRule;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -22,7 +22,7 @@ public abstract class EnchantmentMixin {
         if (lookup == null) return;
         var enchantments = tool.getAllEnchantments(lookup);
         for (var holder : enchantments.keySet()) {
-            EnchantmentRule.INSTANCE.modifyDamage(damage, holder, enchantmentLevel, entity);
+            SmiteEnchantmentRule.INSTANCE.modifyDamage(damage, holder, enchantmentLevel, entity);
         }
     }
 }

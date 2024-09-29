@@ -2,11 +2,12 @@ package dev.deepslate.fallacy.race.impl
 
 import com.mojang.datafixers.util.Either
 import dev.deepslate.fallacy.Fallacy
+import dev.deepslate.fallacy.common.data.player.DietState
 import dev.deepslate.fallacy.common.data.player.PlayerAttribute
 import dev.deepslate.fallacy.common.item.FallacyItemTags
 import dev.deepslate.fallacy.common.item.FallacyItems
-import dev.deepslate.fallacy.common.item.data.CladdingData
-import dev.deepslate.fallacy.common.item.data.FallacyDataComponents
+import dev.deepslate.fallacy.common.item.component.CladdingData
+import dev.deepslate.fallacy.common.item.component.FallacyDataComponents
 import dev.deepslate.fallacy.common.network.packet.CladdingPacket
 import dev.deepslate.fallacy.race.Race
 import dev.deepslate.fallacy.race.Respawnable
@@ -58,7 +59,6 @@ import kotlin.collections.component2
 import kotlin.collections.map
 import kotlin.jvm.optionals.getOrNull
 import kotlin.math.pow
-import kotlin.math.sqrt
 
 class Rock : Race, Respawnable {
 
@@ -117,10 +117,16 @@ class Rock : Race, Respawnable {
         moveSpeed = 9.0 / 100.0,
         strength = 8.0,
         gravity = 0.08 * 1.5,
-        jumpStrength = 0.42 * 1.21,
+        jumpStrength = 0.42 * 1.195, // Magic number
         fallDamageMultiplier = 1.5,
         scale = 2.0.pow(1.0 / 3.0),
+        entityInteractionRange = 3.0 * 2.0.pow(1.0 / 3.0),
+        blockInteractionRange = 4.5 * 2.0.pow(1.0 / 3.0),
+        knockBackResistance = 0.2,
+        hunger = 60.0
     )
+
+    override val diet: DietState = DietState.noNeed()
 
     override fun tick(
         level: ServerLevel,
@@ -212,6 +218,7 @@ class Rock : Race, Respawnable {
 
     override fun onRespawn(player: ServerPlayer, original: ServerPlayer) {
         setAllArmor(player)
+        player.getAttribute(Attributes.ATTACK_SPEED)!!.addPermanentModifier(attackSpeedModifier)
         copyData(original, player, EquipmentSlot.HEAD)
         copyData(original, player, EquipmentSlot.CHEST)
         copyData(original, player, EquipmentSlot.LEGS)
@@ -362,7 +369,7 @@ class Rock : Race, Respawnable {
 
     @EventBusSubscriber(modid = Fallacy.MOD_ID)
     object Handler {
-        fun handleCladdingPacket(data: CladdingPacket, context: IPayloadContext) {
+        internal fun handleCladdingPacket(data: CladdingPacket, context: IPayloadContext) {
             val armorIndex = data.index
             val player = context.player() as ServerPlayer
             val stack = player.inventory.getItem(armorIndex)

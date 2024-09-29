@@ -1,6 +1,7 @@
 package dev.deepslate.fallacy.race.impl
 
 import dev.deepslate.fallacy.Fallacy
+import dev.deepslate.fallacy.common.data.player.DietState
 import dev.deepslate.fallacy.common.data.player.PlayerAttribute
 import dev.deepslate.fallacy.race.Race
 import dev.deepslate.fallacy.util.ServerHelper
@@ -20,6 +21,8 @@ class God : Race {
 
     override val attribute: PlayerAttribute =
         PlayerAttribute(health = 200.0, armor = 1000.0, attackSpeed = 50.0, moveSpeed = 0.2)
+
+    override val diet: DietState = DietState()
 
     override fun tick(
         level: ServerLevel,

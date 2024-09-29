@@ -1,7 +1,9 @@
 package dev.deepslate.fallacy.common.network
 
 import dev.deepslate.fallacy.Fallacy
+import dev.deepslate.fallacy.common.data.player.DietState
 import dev.deepslate.fallacy.common.network.packet.CladdingPacket
+import dev.deepslate.fallacy.common.network.packet.DietStateSyncPacket
 import dev.deepslate.fallacy.common.network.packet.DrinkInWorldPacket
 import dev.deepslate.fallacy.common.network.packet.RaceIdSyncPacket
 import dev.deepslate.fallacy.common.network.packet.ThirstSyncPacket
@@ -43,6 +45,12 @@ object FallacyNetwork {
             CladdingPacket.TYPE,
             CladdingPacket.STREAM_CODEC,
             Rock.Handler::handleCladdingPacket
+        )
+
+        registrar.playToClient(
+            DietStateSyncPacket.TYPE,
+            DietStateSyncPacket.STREAM_CODEC,
+            DietState.Handler::handleSync
         )
     }
 }

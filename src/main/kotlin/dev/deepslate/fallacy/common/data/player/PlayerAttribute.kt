@@ -40,7 +40,7 @@ data class PlayerAttribute(
     val thirst: Double = 20.0,
     val strength: Double = 1.0,
     val magicResistance: Double = 0.0,
-    val magicStrength: Double = 0.0
+    val magicStrength: Double = 0.0,
 ) {
     fun set(player: ServerPlayer, refresh: Boolean = true) {
         set(player, Attributes.ARMOR, armor)

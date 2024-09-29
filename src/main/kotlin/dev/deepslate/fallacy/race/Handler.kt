@@ -15,7 +15,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext
 @EventBusSubscriber(modid = Fallacy.MOD_ID)
 object Handler {
 
-    fun handleRaceIdSyncPacket(data: RaceIdSyncPacket, context: IPayloadContext) {
+    internal fun handleRaceIdSyncPacket(data: RaceIdSyncPacket, context: IPayloadContext) {
         val player = context.player()
         player.setData(FallacyAttachments.RACE_ID, data.raceId)
         Fallacy.LOGGER.info("Syncing race id: ${data.raceId}.")

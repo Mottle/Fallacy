@@ -12,10 +12,12 @@
         "EquipableMixin",
         "LivingEntityMixin",
         "NearestAttackableTargetGoalMixin",
-        "RangedAttributeMixin",
-        "client.ItemStackMixin"
+        "player.PlayerMixin",
+        "item.ItemMixin",
+        "item.ItemStackMixin"
     ],
     "client": [
+        "client.ItemStackMixin",
         "client.PlayerRenderMixin"
     ],
     "injectors": {

@@ -1,6 +1,6 @@
 package dev.deepslate.fallacy.mixin;
 
-import dev.deepslate.fallacy.common.item.data.FallacyDataComponents;
+import dev.deepslate.fallacy.common.item.component.FallacyDataComponents;
 import dev.deepslate.fallacy.rule.item.ForceBindItemRule;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;

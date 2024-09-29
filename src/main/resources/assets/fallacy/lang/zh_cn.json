@@ -16,9 +16,11 @@
     "item.fallacy.rock_skin_broken_chestplate": "破损的岩石皮肤",
     "item.fallacy.rock_skin_broken_helmet": "破损的岩石皮肤",
     "item.fallacy.rock_skin_broken_leggings": "破损的岩石皮肤",
-    "item.fallacy.diet_data.carbohydrate": "碳水化合物",
+    "item.fallacy.diet_data.carbohydrate": "碳水",
     "item.fallacy.diet_data.protein": "蛋白质",
-    "item.fallacy.diet_data.grease": "脂肪",
+    "item.fallacy.diet_data.fat": "脂肪",
     "item.fallacy.diet_data.fiber": "纤维",
-    "item.fallacy.diet_data.electrolyte": "电解质"
+    "item.fallacy.diet_data.electrolyte": "电解质",
+
+    "gui.fallacy.diet_ui.title": "饮食"
 }

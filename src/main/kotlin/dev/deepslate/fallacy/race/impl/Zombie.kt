@@ -2,6 +2,7 @@ package dev.deepslate.fallacy.race.impl
 
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.behavior.BehaviorTags
+import dev.deepslate.fallacy.common.data.player.DietState
 import dev.deepslate.fallacy.common.data.player.PlayerAttribute
 import dev.deepslate.fallacy.race.Race
 import net.minecraft.core.BlockPos
@@ -23,6 +24,8 @@ class Zombie : Race {
 
     override val attribute: PlayerAttribute =
         PlayerAttribute(health = 40.0, attackDamage = 4.0, strength = 2.0, armor = 4.0)
+
+    override val diet: DietState = DietState.noNeed()
 
     override fun tick(
         level: ServerLevel,

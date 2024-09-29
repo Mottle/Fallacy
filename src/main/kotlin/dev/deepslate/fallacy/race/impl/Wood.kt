@@ -1,8 +1,10 @@
 package dev.deepslate.fallacy.race.impl
 
 import dev.deepslate.fallacy.Fallacy
+import dev.deepslate.fallacy.common.data.player.DietState
 import dev.deepslate.fallacy.common.data.player.PlayerAttribute
 import dev.deepslate.fallacy.race.Race
+import dev.deepslate.fallacy.race.Respawnable
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
@@ -11,7 +13,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import kotlin.math.pow
 
-class Wood : Race {
+class Wood : Race, Respawnable {
 
     companion object {
         val ID = Fallacy.id("wood")
@@ -23,12 +25,21 @@ class Wood : Race {
         health = 100.0,
         attackDamage = 10.0,
         attackKnockBack = 1.0,
-        moveSpeed = 0.091,
+        moveSpeed = 9.1 / 100.0,
         armor = 6.0,
         strength = 5.0,
+        gravity = 0.08 * 1.5,
+        jumpStrength = 0.42 * 1.195, // Magic number
+        fallDamageMultiplier = 0.95,
         burningTime = 2.0,
         scale = 2.0.pow(1.0 / 3.0),
+        entityInteractionRange = 3.0 * 2.0.pow(1.0 / 3.0),
+        blockInteractionRange = 4.5 * 2.0.pow(1.0 / 3.0),
+        knockBackResistance = 0.3,
+        hunger = 80.0
     )
+
+    override val diet: DietState = DietState(fat = DietState.Diet.NoNeed, protein = DietState.Diet.NoNeed)
 
     override fun tick(
         level: ServerLevel,
@@ -52,5 +63,12 @@ class Wood : Race {
 
     override fun remove(player: ServerPlayer) {
         player.getAttribute(Attributes.ATTACK_SPEED)!!.removeModifier(attackSpeedModifier)
+    }
+
+    override fun onRespawn(
+        player: ServerPlayer,
+        origin: ServerPlayer
+    ) {
+        player.getAttribute(Attributes.ATTACK_SPEED)!!.addPermanentModifier(attackSpeedModifier)
     }
 }

@@ -32,6 +32,8 @@ public abstract class NearestAttackableTargetGoalMixin<T extends LivingEntity> e
     @Nullable
     @Shadow
     protected LivingEntity target;
+    @Shadow
+    protected TargetingConditions targetConditions;
 
     public NearestAttackableTargetGoalMixin(Mob mob, boolean mustSee) {
         super(mob, mustSee);
@@ -39,9 +41,6 @@ public abstract class NearestAttackableTargetGoalMixin<T extends LivingEntity> e
 
     @Shadow
     protected abstract AABB getTargetSearchArea(double targetDistance);
-
-    @Shadow
-    protected TargetingConditions targetConditions;
 
     @Inject(method = "findTarget", at = @At("HEAD"), cancellable = true)
     void injectFindTarget(CallbackInfo ci) {
