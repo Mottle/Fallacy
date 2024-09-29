@@ -55,6 +55,6 @@ class Fallacy(val modBus: IEventBus) {
     private fun playRule() {
         VanillaFoodRule.rule()
         RangedAttributeRule.rule()
-        LOGGER.info("rules load over.")
+        LOGGER.info("Rules load over.")
     }
 }

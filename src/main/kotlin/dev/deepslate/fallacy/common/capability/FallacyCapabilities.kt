@@ -1,6 +1,8 @@
 package dev.deepslate.fallacy.common.capability
 
 import dev.deepslate.fallacy.Fallacy
+import dev.deepslate.fallacy.common.capability.diet.DietProvider
+import dev.deepslate.fallacy.common.capability.diet.IDiet
 import dev.deepslate.fallacy.common.capability.hydration.HydrationProvider
 import dev.deepslate.fallacy.common.capability.hydration.IHydration
 import dev.deepslate.fallacy.common.capability.thirst.IThirst
@@ -23,6 +25,8 @@ object FallacyCapabilities {
     val HYDRATION: ItemCapability<IHydration, Void?> =
         ItemCapability.createVoid(Fallacy.id("hydration"), IHydration::class.java)
 
+    val DIET: EntityCapability<IDiet, Void?> = EntityCapability.createVoid(Fallacy.id("diet"), IDiet::class.java)
+
     @SubscribeEvent
     fun registerAll(event: RegisterCapabilitiesEvent) {
         event.registerEntity(THIRST, EntityType.PLAYER, ThirstProvider())
@@ -31,6 +35,12 @@ object FallacyCapabilities {
             HYDRATION,
             HydrationProvider(),
             *BuiltInRegistries.ITEM.filter { it.defaultInstance.has(DataComponents.FOOD) }.toTypedArray()
+        )
+
+        event.registerEntity(
+            DIET,
+            EntityType.PLAYER,
+            DietProvider(),
         )
     }
 }

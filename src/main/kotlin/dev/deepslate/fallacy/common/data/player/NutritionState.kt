@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.data.FallacyAttachments
 import dev.deepslate.fallacy.common.item.component.NutritionData
-import dev.deepslate.fallacy.common.network.packet.DietStateSyncPacket
+import dev.deepslate.fallacy.common.network.packet.NutritionStateSyncPacket
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
@@ -46,21 +46,23 @@ data class NutritionState(
             ::NutritionState
         )
 
-        fun noNeed() = NutritionState(Nutrition.NoNeed, Nutrition.NoNeed, Nutrition.NoNeed, Nutrition.NoNeed, Nutrition.NoNeed)
+        fun noNeed() =
+            NutritionState(Nutrition.NoNeed, Nutrition.NoNeed, Nutrition.NoNeed, Nutrition.NoNeed, Nutrition.NoNeed)
     }
 
     @EventBusSubscriber(modid = Fallacy.MOD_ID)
     object Handler {
-        internal fun handleSync(data: DietStateSyncPacket, context: IPayloadContext) {
+        internal fun handleSync(data: NutritionStateSyncPacket, context: IPayloadContext) {
             val player = context.player()
             player.setData(FallacyAttachments.NUTRITION_STATE, data.state)
+            Fallacy.LOGGER.info("Syncing nutrition data.")
         }
 
         @SubscribeEvent
         fun onPlayerJoin(event: PlayerEvent.PlayerLoggedInEvent) {
             val player = event.entity as? ServerPlayer ?: return
             val data = player.getData(FallacyAttachments.NUTRITION_STATE)
-            val packet = DietStateSyncPacket(data)
+            val packet = NutritionStateSyncPacket(data)
             PacketDistributor.sendToPlayer(player, packet)
         }
     }
@@ -73,13 +75,14 @@ data class NutritionState(
         }
 
         class State(val value: Float) : Nutrition() {
-            override fun add(value: Float): Nutrition = State((this.value + value).coerceIn(DIET_RANGE_MIN, DIET_RANGE_MAX))
+            override fun add(value: Float): Nutrition =
+                State((this.value + value).coerceIn(NUTRITION_RANGE_MIN, NUTRITION_RANGE_MAX))
         }
 
         companion object {
-            const val DIET_RANGE_MAX = 100f
+            const val NUTRITION_RANGE_MAX = 100f
 
-            const val DIET_RANGE_MIN = 0f
+            const val NUTRITION_RANGE_MIN = 0f
 
             private val NO_NEED_CODEC: Codec<NoNeed> = RecordCodecBuilder.create { instance ->
                 instance.group(Codec.STRING.fieldOf("value").forGetter { "no_need" }).apply(instance) { _ -> NoNeed }
@@ -88,7 +91,9 @@ data class NutritionState(
             private val NO_NEED_STREAM_CODEC: StreamCodec<ByteBuf, NoNeed> = StreamCodec.unit(NoNeed)
 
             private val STATE_CODEC: Codec<State> = RecordCodecBuilder.create { instance ->
-                instance.group(Codec.FLOAT.fieldOf("value").forGetter(State::value)).apply(instance, ::State)
+                instance.group(
+                    Codec.floatRange(NUTRITION_RANGE_MIN, NUTRITION_RANGE_MAX).fieldOf("value").forGetter(State::value)
+                ).apply(instance, ::State)
             }
 
             private val STATE_STREAM_CODEC: StreamCodec<ByteBuf, State> =

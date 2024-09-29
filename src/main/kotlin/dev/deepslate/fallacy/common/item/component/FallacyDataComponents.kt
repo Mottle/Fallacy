@@ -32,8 +32,14 @@ object FallacyDataComponents {
             builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT)
         }
 
+    //食物营养度
     val NUTRITION = REGISTER.registerComponentType("nutrition") { builder ->
         builder.persistent(NutritionData.CODEC).networkSynchronized(NutritionData.STREAM_CODEC)
+    }
+
+    //食物饱腹等级
+    val FULL_LEVEL = REGISTER.registerComponentType("full_level") { builder ->
+        builder.persistent(Codec.intRange(0, 4)).networkSynchronized(ByteBufCodecs.INT)
     }
 
     fun init(bus: IEventBus) {

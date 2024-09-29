@@ -21,11 +21,13 @@ data class NutritionData(
 
         val CODEC = RecordCodecBuilder.create { instance ->
             instance.group(
-                Codec.floatRange(ITEM_DIET_MIN, ITEM_DIET_MAX).fieldOf("carbohydrate").forGetter(NutritionData::electrolyte),
+                Codec.floatRange(ITEM_DIET_MIN, ITEM_DIET_MAX).fieldOf("carbohydrate")
+                    .forGetter(NutritionData::electrolyte),
                 Codec.floatRange(ITEM_DIET_MIN, ITEM_DIET_MAX).fieldOf("protein").forGetter(NutritionData::protein),
                 Codec.floatRange(ITEM_DIET_MIN, ITEM_DIET_MAX).fieldOf("fat").forGetter(NutritionData::fat),
                 Codec.floatRange(ITEM_DIET_MIN, ITEM_DIET_MAX).fieldOf("fiber").forGetter(NutritionData::fiber),
-                Codec.floatRange(ITEM_DIET_MIN, ITEM_DIET_MAX).fieldOf("electrolyte").forGetter(NutritionData::electrolyte)
+                Codec.floatRange(ITEM_DIET_MIN, ITEM_DIET_MAX).fieldOf("electrolyte")
+                    .forGetter(NutritionData::electrolyte)
             ).apply(instance, ::NutritionData)
         }
 

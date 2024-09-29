@@ -15,13 +15,10 @@ import com.github.wintersteve25.tau.layout.LayoutSetting
 import com.github.wintersteve25.tau.theme.Theme
 import com.github.wintersteve25.tau.utils.Color
 import com.github.wintersteve25.tau.utils.FlexSizeBehaviour
-import com.github.wintersteve25.tau.utils.SimpleVec2i
 import com.github.wintersteve25.tau.utils.Size
-import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.client.screen.UIContext
 import dev.deepslate.fallacy.client.screen.component.ContextWrapperUI
 import dev.deepslate.fallacy.client.screen.component.ProcessBar
-import dev.deepslate.fallacy.client.screen.component.primitive.ColoredTexture
 import dev.deepslate.fallacy.common.data.FallacyAttachments
 import dev.deepslate.fallacy.common.data.player.NutritionState
 import dev.deepslate.fallacy.util.RGB
@@ -37,8 +34,8 @@ class DietUI : ContextWrapperUI() {
 
         val list = Align.Builder().withHorizontal(LayoutSetting.CENTER).build(getList())
         val title = getTitle()
-        val t = ColoredTexture.Builder(Fallacy.id("textures/gui/title.png")).withColor(RGB.fromHex("0xf4fc03"))
-            .withTextureSize(SimpleVec2i(100, 15)).withUvSize(SimpleVec2i(100, 15)).withSize(SimpleVec2i(100, 15))
+//        val t = ColoredTexture.Builder(Fallacy.id("textures/gui/title.png")).withColor(RGB.fromHex("0xf4fc03"))
+//            .withTextureSize(SimpleVec2i(100, 15)).withUvSize(SimpleVec2i(100, 15)).withSize(SimpleVec2i(100, 15))
 
         val button = Align.Builder().withHorizontal(LayoutSetting.CENTER)
             .build(
@@ -47,7 +44,7 @@ class DietUI : ContextWrapperUI() {
                     Button.Builder().withOnPress { context.displayPreviousUI() }.build(Center(Text.Builder("OK")))
                 )
             )
-        val col = Column.Builder().withSpacing(5).withSizeBehaviour(FlexSizeBehaviour.MAX).build(t, title, list, button)
+        val col = Column.Builder().withSpacing(5).withSizeBehaviour(FlexSizeBehaviour.MAX).build(title, list, button)
 
         val window = Container.Builder().withChild(col)
         return Center(Sized(Size.staticSize(300, 200), window))
@@ -59,31 +56,32 @@ class DietUI : ContextWrapperUI() {
     )
 
     private fun getList(): UIComponent {
-        val data = Minecraft.getInstance().player?.getData(FallacyAttachments.NUTRITION_STATE) ?: NutritionState()
-        val carbohydrate = if (data.carbohydrate is NutritionState.Nutrition.State) DescriptionProcessBar(
+        val nutrition =
+            Minecraft.getInstance().player?.getData(FallacyAttachments.NUTRITION_STATE) ?: NutritionState.noNeed()
+        val carbohydrate = if (nutrition.carbohydrate is NutritionState.Nutrition.State) DescriptionProcessBar(
             "item.fallacy.diet_data.carbohydrate",
-            data.carbohydrate.value.toInt(),
+            nutrition.carbohydrate.value.toInt(),
             RGB.fromHex("0xff4500")
         ) else null
-        val protein = if (data.protein is NutritionState.Nutrition.State) DescriptionProcessBar(
+        val protein = if (nutrition.protein is NutritionState.Nutrition.State) DescriptionProcessBar(
             "item.fallacy.diet_data.protein",
-            data.protein.value.toInt(),
+            nutrition.protein.value.toInt(),
             RGB.fromHex("0xffa500")
         ) else null
-        val fat = if (data.fat is NutritionState.Nutrition.State) DescriptionProcessBar(
+        val fat = if (nutrition.fat is NutritionState.Nutrition.State) DescriptionProcessBar(
             "item.fallacy.diet_data.fat",
-            data.fat.value.toInt(),
+            nutrition.fat.value.toInt(),
             RGB.fromHex("0x8b7e66")
         ) else null
         val fiber =
-            if (data.fiber is NutritionState.Nutrition.State) DescriptionProcessBar(
+            if (nutrition.fiber is NutritionState.Nutrition.State) DescriptionProcessBar(
                 "item.fallacy.diet_data.fiber",
-                data.fiber.value.toInt(),
+                nutrition.fiber.value.toInt(),
                 RGB.fromHex("0x32cd32")
             ) else null
-        val electrolyte = if (data.electrolyte is NutritionState.Nutrition.State) DescriptionProcessBar(
+        val electrolyte = if (nutrition.electrolyte is NutritionState.Nutrition.State) DescriptionProcessBar(
             "item.fallacy.diet_data.electrolyte",
-            data.electrolyte.value.toInt(),
+            nutrition.electrolyte.value.toInt(),
             RGB.fromHex("0x00ced1")
         ) else null
         val array = arrayOf(carbohydrate, protein, fat, fiber, electrolyte).filterNotNull()

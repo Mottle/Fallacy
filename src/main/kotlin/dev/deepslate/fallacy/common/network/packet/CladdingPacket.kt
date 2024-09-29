@@ -14,5 +14,5 @@ data class CladdingPacket(val index: Int) : CustomPacketPayload {
             StreamCodec.composite(ByteBufCodecs.INT, CladdingPacket::index, ::CladdingPacket)
     }
 
-    override fun type(): CustomPacketPayload.Type<out CustomPacketPayload?> = TYPE
+    override fun type(): CustomPacketPayload.Type<out CustomPacketPayload> = TYPE
 }

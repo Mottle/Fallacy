@@ -14,5 +14,5 @@ data class RaceIdSyncPacket(val raceId: ResourceLocation) : CustomPacketPayload 
             StreamCodec.composite(ResourceLocation.STREAM_CODEC, RaceIdSyncPacket::raceId, ::RaceIdSyncPacket)
     }
 
-    override fun type(): CustomPacketPayload.Type<out CustomPacketPayload?> = TYPE
+    override fun type(): CustomPacketPayload.Type<out CustomPacketPayload> = TYPE
 }

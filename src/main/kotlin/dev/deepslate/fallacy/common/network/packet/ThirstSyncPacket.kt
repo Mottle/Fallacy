@@ -15,6 +15,6 @@ data class ThirstSyncPacket(val value: Float) : CustomPacketPayload {
         )
     }
 
-    override fun type(): CustomPacketPayload.Type<out CustomPacketPayload?> = TYPE
+    override fun type(): CustomPacketPayload.Type<out CustomPacketPayload> = TYPE
 
 }

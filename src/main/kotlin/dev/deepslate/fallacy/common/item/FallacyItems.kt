@@ -83,6 +83,5 @@ object FallacyItems {
                 ArmorItem.Type.HELMET, Item.Properties().durability(1000).setNoRepair()
             )
         }.lang("rock skin").defaultModelWithTexture("race/rock_skin").register()
-
     }
 }

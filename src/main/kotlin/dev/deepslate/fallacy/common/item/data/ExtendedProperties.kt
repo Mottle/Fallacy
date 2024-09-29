@@ -1,8 +1,6 @@
 package dev.deepslate.fallacy.common.item.data
 
 import dev.deepslate.fallacy.util.extendedProperties
-import net.minecraft.core.component.DataComponents
-import net.minecraft.world.food.FoodProperties
 import net.minecraft.world.item.ItemStack
 
 data class ExtendedProperties(val foodProperties: ExtendedFoodProperties?) {
@@ -23,20 +21,9 @@ data class ExtendedProperties(val foodProperties: ExtendedFoodProperties?) {
             val item = itemStack.item
             val extended = item.extendedProperties ?: return
 
-            if (extended.foodProperties == null) return
-            if (!itemStack.has(DataComponents.FOOD)) return
-
-            val foodData = itemStack.get(DataComponents.FOOD)!!
-            val fixedFoodData = FoodProperties(
-                foodData.nutrition,
-                foodData.saturation,
-                foodData.canAlwaysEat,
-                extended.foodProperties.eatenDurationTicks.toFloat() / 20f,
-                foodData.usingConvertsTo,
-                foodData.effects
-            )
-
-            itemStack.set(DataComponents.FOOD, fixedFoodData)
+            if (extended.foodProperties != null) {
+                ExtendedFoodProperties.onItemStack(itemStack, extended.foodProperties)
+            }
         }
     }
 }

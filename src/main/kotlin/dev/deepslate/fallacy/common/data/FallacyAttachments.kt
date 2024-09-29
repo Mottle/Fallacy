@@ -2,6 +2,7 @@ package dev.deepslate.fallacy.common.data
 
 import com.mojang.serialization.Codec
 import dev.deepslate.fallacy.Fallacy
+import dev.deepslate.fallacy.common.data.player.FoodHistory
 import dev.deepslate.fallacy.common.data.player.NutritionState
 import dev.deepslate.fallacy.race.impl.Unknown
 import net.minecraft.resources.ResourceLocation
@@ -33,6 +34,10 @@ object FallacyAttachments {
 
     val NUTRITION_STATE = REGISTRY.register("nutrition_state") { _ ->
         AttachmentType.builder { _ -> NutritionState() }.serialize(NutritionState.CODEC).copyOnDeath().build()
+    }
+
+    val FOOD_HISTORY = REGISTRY.register("food_history") { _ ->
+        AttachmentType.builder { _ -> FoodHistory() }.serialize(FoodHistory.CODEC).copyOnDeath().build()
     }
 
     fun register(bus: IEventBus) {
