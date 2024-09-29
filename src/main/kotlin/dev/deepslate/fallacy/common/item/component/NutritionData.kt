@@ -6,7 +6,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 
-data class DietData(
+data class NutritionData(
     val carbohydrate: Float = 0f,
     val protein: Float = 0f,
     val fat: Float = 0f,
@@ -21,21 +21,21 @@ data class DietData(
 
         val CODEC = RecordCodecBuilder.create { instance ->
             instance.group(
-                Codec.floatRange(ITEM_DIET_MIN, ITEM_DIET_MAX).fieldOf("carbohydrate").forGetter(DietData::electrolyte),
-                Codec.floatRange(ITEM_DIET_MIN, ITEM_DIET_MAX).fieldOf("protein").forGetter(DietData::protein),
-                Codec.floatRange(ITEM_DIET_MIN, ITEM_DIET_MAX).fieldOf("fat").forGetter(DietData::fat),
-                Codec.floatRange(ITEM_DIET_MIN, ITEM_DIET_MAX).fieldOf("fiber").forGetter(DietData::fiber),
-                Codec.floatRange(ITEM_DIET_MIN, ITEM_DIET_MAX).fieldOf("electrolyte").forGetter(DietData::electrolyte)
-            ).apply(instance, ::DietData)
+                Codec.floatRange(ITEM_DIET_MIN, ITEM_DIET_MAX).fieldOf("carbohydrate").forGetter(NutritionData::electrolyte),
+                Codec.floatRange(ITEM_DIET_MIN, ITEM_DIET_MAX).fieldOf("protein").forGetter(NutritionData::protein),
+                Codec.floatRange(ITEM_DIET_MIN, ITEM_DIET_MAX).fieldOf("fat").forGetter(NutritionData::fat),
+                Codec.floatRange(ITEM_DIET_MIN, ITEM_DIET_MAX).fieldOf("fiber").forGetter(NutritionData::fiber),
+                Codec.floatRange(ITEM_DIET_MIN, ITEM_DIET_MAX).fieldOf("electrolyte").forGetter(NutritionData::electrolyte)
+            ).apply(instance, ::NutritionData)
         }
 
         val STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.FLOAT, DietData::electrolyte,
-            ByteBufCodecs.FLOAT, DietData::protein,
-            ByteBufCodecs.FLOAT, DietData::fat,
-            ByteBufCodecs.FLOAT, DietData::fiber,
-            ByteBufCodecs.FLOAT, DietData::electrolyte,
-            ::DietData
+            ByteBufCodecs.FLOAT, NutritionData::electrolyte,
+            ByteBufCodecs.FLOAT, NutritionData::protein,
+            ByteBufCodecs.FLOAT, NutritionData::fat,
+            ByteBufCodecs.FLOAT, NutritionData::fiber,
+            ByteBufCodecs.FLOAT, NutritionData::electrolyte,
+            ::NutritionData
         )
     }
 

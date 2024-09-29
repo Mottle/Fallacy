@@ -23,7 +23,7 @@ import dev.deepslate.fallacy.client.screen.component.ContextWrapperUI
 import dev.deepslate.fallacy.client.screen.component.ProcessBar
 import dev.deepslate.fallacy.client.screen.component.primitive.ColoredTexture
 import dev.deepslate.fallacy.common.data.FallacyAttachments
-import dev.deepslate.fallacy.common.data.player.DietState
+import dev.deepslate.fallacy.common.data.player.NutritionState
 import dev.deepslate.fallacy.util.RGB
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
@@ -59,29 +59,29 @@ class DietUI : ContextWrapperUI() {
     )
 
     private fun getList(): UIComponent {
-        val data = Minecraft.getInstance().player?.getData(FallacyAttachments.DIET_STATE) ?: DietState()
-        val carbohydrate = if (data.carbohydrate is DietState.Diet.State) DescriptionProcessBar(
+        val data = Minecraft.getInstance().player?.getData(FallacyAttachments.NUTRITION_STATE) ?: NutritionState()
+        val carbohydrate = if (data.carbohydrate is NutritionState.Nutrition.State) DescriptionProcessBar(
             "item.fallacy.diet_data.carbohydrate",
             data.carbohydrate.value.toInt(),
             RGB.fromHex("0xff4500")
         ) else null
-        val protein = if (data.protein is DietState.Diet.State) DescriptionProcessBar(
+        val protein = if (data.protein is NutritionState.Nutrition.State) DescriptionProcessBar(
             "item.fallacy.diet_data.protein",
             data.protein.value.toInt(),
             RGB.fromHex("0xffa500")
         ) else null
-        val fat = if (data.fat is DietState.Diet.State) DescriptionProcessBar(
+        val fat = if (data.fat is NutritionState.Nutrition.State) DescriptionProcessBar(
             "item.fallacy.diet_data.fat",
             data.fat.value.toInt(),
             RGB.fromHex("0x8b7e66")
         ) else null
         val fiber =
-            if (data.fiber is DietState.Diet.State) DescriptionProcessBar(
+            if (data.fiber is NutritionState.Nutrition.State) DescriptionProcessBar(
                 "item.fallacy.diet_data.fiber",
                 data.fiber.value.toInt(),
                 RGB.fromHex("0x32cd32")
             ) else null
-        val electrolyte = if (data.electrolyte is DietState.Diet.State) DescriptionProcessBar(
+        val electrolyte = if (data.electrolyte is NutritionState.Nutrition.State) DescriptionProcessBar(
             "item.fallacy.diet_data.electrolyte",
             data.electrolyte.value.toInt(),
             RGB.fromHex("0x00ced1")

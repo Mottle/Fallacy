@@ -2,7 +2,7 @@ package dev.deepslate.fallacy.race.impl
 
 import com.mojang.datafixers.util.Either
 import dev.deepslate.fallacy.Fallacy
-import dev.deepslate.fallacy.common.data.player.DietState
+import dev.deepslate.fallacy.common.data.player.NutritionState
 import dev.deepslate.fallacy.common.data.player.PlayerAttribute
 import dev.deepslate.fallacy.common.item.FallacyItemTags
 import dev.deepslate.fallacy.common.item.FallacyItems
@@ -126,7 +126,7 @@ class Rock : Race, Respawnable {
         hunger = 60.0
     )
 
-    override val diet: DietState = DietState.noNeed()
+    override val diet: NutritionState = NutritionState.noNeed()
 
     override fun tick(
         level: ServerLevel,

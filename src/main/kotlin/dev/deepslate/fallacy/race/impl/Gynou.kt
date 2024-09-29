@@ -1,7 +1,7 @@
 package dev.deepslate.fallacy.race.impl
 
 import dev.deepslate.fallacy.Fallacy
-import dev.deepslate.fallacy.common.data.player.DietState
+import dev.deepslate.fallacy.common.data.player.NutritionState
 import dev.deepslate.fallacy.common.data.player.PlayerAttribute
 import dev.deepslate.fallacy.common.item.component.FallacyDataComponents
 import dev.deepslate.fallacy.race.Race
@@ -59,7 +59,7 @@ class Gynou : Race, Respawnable {
         fallDamageMultiplier = 0.5
     )
 
-    override val diet: DietState = DietState()
+    override val diet: NutritionState = NutritionState()
 
     override fun tick(
         level: ServerLevel,

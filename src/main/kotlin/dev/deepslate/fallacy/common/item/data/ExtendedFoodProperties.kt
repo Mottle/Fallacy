@@ -1,14 +1,14 @@
 package dev.deepslate.fallacy.common.item.data
 
-import dev.deepslate.fallacy.common.item.component.DietData
+import dev.deepslate.fallacy.common.item.component.NutritionData
 
-data class ExtendedFoodProperties(val defaultDiet: DietData, val eatenDurationTicks: Int) {
+data class ExtendedFoodProperties(val defaultDiet: NutritionData, val eatenDurationTicks: Int) {
     class Builder {
-        private var defaultDiet: DietData = DietData()
+        private var defaultDiet: NutritionData = NutritionData()
 
         private var eatenDurationTicks: Int = 16
 
-        fun withDefaultDiet(defaultDiet: DietData): Builder {
+        fun withDefaultDiet(defaultDiet: NutritionData): Builder {
             this.defaultDiet = defaultDiet
             return this
         }

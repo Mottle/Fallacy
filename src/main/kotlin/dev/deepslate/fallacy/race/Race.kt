@@ -2,7 +2,7 @@ package dev.deepslate.fallacy.race
 
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.data.FallacyAttachments
-import dev.deepslate.fallacy.common.data.player.DietState
+import dev.deepslate.fallacy.common.data.player.NutritionState
 import dev.deepslate.fallacy.common.data.player.PlayerAttribute
 import dev.deepslate.fallacy.common.network.packet.RaceIdSyncPacket
 import dev.deepslate.fallacy.race.impl.Unknown
@@ -18,7 +18,7 @@ interface Race {
 
     val attribute: PlayerAttribute
 
-    val diet: DietState
+    val diet: NutritionState
 
     fun tick(level: ServerLevel, player: ServerPlayer, position: BlockPos)
 

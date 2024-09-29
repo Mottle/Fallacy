@@ -2,7 +2,7 @@ package dev.deepslate.fallacy.common.data
 
 import com.mojang.serialization.Codec
 import dev.deepslate.fallacy.Fallacy
-import dev.deepslate.fallacy.common.data.player.DietState
+import dev.deepslate.fallacy.common.data.player.NutritionState
 import dev.deepslate.fallacy.race.impl.Unknown
 import net.minecraft.resources.ResourceLocation
 import net.neoforged.bus.api.IEventBus
@@ -31,8 +31,8 @@ object FallacyAttachments {
             .copyOnDeath().build()
     }
 
-    val DIET_STATE = REGISTRY.register("diet_state") { _ ->
-        AttachmentType.builder { _ -> DietState() }.serialize(DietState.CODEC).copyOnDeath().build()
+    val NUTRITION_STATE = REGISTRY.register("nutrition_state") { _ ->
+        AttachmentType.builder { _ -> NutritionState() }.serialize(NutritionState.CODEC).copyOnDeath().build()
     }
 
     fun register(bus: IEventBus) {

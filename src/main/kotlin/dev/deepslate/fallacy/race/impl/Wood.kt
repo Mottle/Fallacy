@@ -1,7 +1,7 @@
 package dev.deepslate.fallacy.race.impl
 
 import dev.deepslate.fallacy.Fallacy
-import dev.deepslate.fallacy.common.data.player.DietState
+import dev.deepslate.fallacy.common.data.player.NutritionState
 import dev.deepslate.fallacy.common.data.player.PlayerAttribute
 import dev.deepslate.fallacy.race.Race
 import dev.deepslate.fallacy.race.Respawnable
@@ -39,7 +39,7 @@ class Wood : Race, Respawnable {
         hunger = 80.0
     )
 
-    override val diet: DietState = DietState(fat = DietState.Diet.NoNeed, protein = DietState.Diet.NoNeed)
+    val nutrition: NutritionState = NutritionState(fat = NutritionState.Nutrition.NoNeed, protein = NutritionState.Nutrition.NoNeed)
 
     override fun tick(
         level: ServerLevel,

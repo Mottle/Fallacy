@@ -5,7 +5,7 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.data.FallacyAttachments
-import dev.deepslate.fallacy.common.item.component.DietData
+import dev.deepslate.fallacy.common.item.component.NutritionData
 import dev.deepslate.fallacy.common.network.packet.DietStateSyncPacket
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
@@ -18,62 +18,62 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent
 import net.neoforged.neoforge.network.PacketDistributor
 import net.neoforged.neoforge.network.handling.IPayloadContext
 
-data class DietState(
-    val carbohydrate: Diet = Diet.State(90f),
-    val protein: Diet = Diet.State(90f),
-    val fat: Diet = Diet.State(90f),
-    val fiber: Diet = Diet.State(90f),
-    val electrolyte: Diet = Diet.State(90f),
+data class NutritionState(
+    val carbohydrate: Nutrition = Nutrition.State(90f),
+    val protein: Nutrition = Nutrition.State(90f),
+    val fat: Nutrition = Nutrition.State(90f),
+    val fiber: Nutrition = Nutrition.State(90f),
+    val electrolyte: Nutrition = Nutrition.State(90f),
 ) {
 
     companion object {
         val CODEC = RecordCodecBuilder.create { instance ->
             instance.group(
-                Diet.CODEC.fieldOf("carbohydrate").forGetter(DietState::carbohydrate),
-                Diet.CODEC.fieldOf("protein").forGetter(DietState::protein),
-                Diet.CODEC.fieldOf("fat").forGetter(DietState::fat),
-                Diet.CODEC.fieldOf("fiber").forGetter(DietState::fiber),
-                Diet.CODEC.fieldOf("electrolyte").forGetter(DietState::electrolyte)
-            ).apply(instance, ::DietState)
+                Nutrition.CODEC.fieldOf("carbohydrate").forGetter(NutritionState::carbohydrate),
+                Nutrition.CODEC.fieldOf("protein").forGetter(NutritionState::protein),
+                Nutrition.CODEC.fieldOf("fat").forGetter(NutritionState::fat),
+                Nutrition.CODEC.fieldOf("fiber").forGetter(NutritionState::fiber),
+                Nutrition.CODEC.fieldOf("electrolyte").forGetter(NutritionState::electrolyte)
+            ).apply(instance, ::NutritionState)
         }
 
         val STREAM_CODEC = StreamCodec.composite(
-            Diet.STREAM_CODEC, DietState::carbohydrate,
-            Diet.STREAM_CODEC, DietState::protein,
-            Diet.STREAM_CODEC, DietState::fat,
-            Diet.STREAM_CODEC, DietState::fiber,
-            Diet.STREAM_CODEC, DietState::electrolyte,
-            ::DietState
+            Nutrition.STREAM_CODEC, NutritionState::carbohydrate,
+            Nutrition.STREAM_CODEC, NutritionState::protein,
+            Nutrition.STREAM_CODEC, NutritionState::fat,
+            Nutrition.STREAM_CODEC, NutritionState::fiber,
+            Nutrition.STREAM_CODEC, NutritionState::electrolyte,
+            ::NutritionState
         )
 
-        fun noNeed() = DietState(Diet.NoNeed, Diet.NoNeed, Diet.NoNeed, Diet.NoNeed, Diet.NoNeed)
+        fun noNeed() = NutritionState(Nutrition.NoNeed, Nutrition.NoNeed, Nutrition.NoNeed, Nutrition.NoNeed, Nutrition.NoNeed)
     }
 
     @EventBusSubscriber(modid = Fallacy.MOD_ID)
     object Handler {
         internal fun handleSync(data: DietStateSyncPacket, context: IPayloadContext) {
             val player = context.player()
-            player.setData(FallacyAttachments.DIET_STATE, data.state)
+            player.setData(FallacyAttachments.NUTRITION_STATE, data.state)
         }
 
         @SubscribeEvent
         fun onPlayerJoin(event: PlayerEvent.PlayerLoggedInEvent) {
             val player = event.entity as? ServerPlayer ?: return
-            val data = player.getData(FallacyAttachments.DIET_STATE)
+            val data = player.getData(FallacyAttachments.NUTRITION_STATE)
             val packet = DietStateSyncPacket(data)
             PacketDistributor.sendToPlayer(player, packet)
         }
     }
 
-    sealed class Diet {
-        abstract fun add(value: Float): Diet
+    sealed class Nutrition {
+        abstract fun add(value: Float): Nutrition
 
-        object NoNeed : Diet() {
-            override fun add(value: Float): Diet = NoNeed
+        object NoNeed : Nutrition() {
+            override fun add(value: Float): Nutrition = NoNeed
         }
 
-        class State(val value: Float) : Diet() {
-            override fun add(value: Float): Diet = State((this.value + value).coerceIn(DIET_RANGE_MIN, DIET_RANGE_MAX))
+        class State(val value: Float) : Nutrition() {
+            override fun add(value: Float): Nutrition = State((this.value + value).coerceIn(DIET_RANGE_MIN, DIET_RANGE_MAX))
         }
 
         companion object {
@@ -94,12 +94,12 @@ data class DietState(
             private val STATE_STREAM_CODEC: StreamCodec<ByteBuf, State> =
                 StreamCodec.composite(ByteBufCodecs.FLOAT, State::value, ::State)
 
-            private fun toEither(diet: Diet): Either<NoNeed, State> = when (diet) {
+            private fun toEither(nutrition: Nutrition): Either<NoNeed, State> = when (nutrition) {
                 is NoNeed -> Either<NoNeed, State>.left(NoNeed)
-                is State -> Either<NoNeed, State>.right(diet)
+                is State -> Either<NoNeed, State>.right(nutrition)
             }
 
-            private fun fromEither(either: Either<NoNeed, State>): Diet =
+            private fun fromEither(either: Either<NoNeed, State>): Nutrition =
                 if (either.right().isPresent) either.right().get() else NoNeed
 
             val CODEC = Codec.either(NO_NEED_CODEC, STATE_CODEC).xmap(::fromEither, ::toEither)
@@ -109,7 +109,7 @@ data class DietState(
         }
     }
 
-    fun add(data: DietData) = copy(
+    fun add(data: NutritionData) = copy(
         carbohydrate.add(data.carbohydrate),
         protein.add(data.protein),
         fat.add(data.fat),
@@ -118,6 +118,6 @@ data class DietState(
     )
 
     fun set(player: Player) {
-        player.setData(FallacyAttachments.DIET_STATE, this)
+        player.setData(FallacyAttachments.NUTRITION_STATE, this)
     }
 }
