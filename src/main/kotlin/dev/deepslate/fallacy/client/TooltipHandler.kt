@@ -25,7 +25,7 @@ object TooltipHandler {
         val diet = player.getCapability(FallacyCapabilities.DIET)!!
         val eatTimes = diet.history.countFood(stack)
         val nutrition = stack.get(FallacyDataComponents.NUTRITION)
-        val fullLevel = stack.get(FallacyDataComponents.FULL_LEVEL)
+        val fullLevel = stack.get(FallacyDataComponents.FULL_LEVEL) ?: 2
 
         event.tooltipElements.add(
             Either.left(

@@ -1,7 +1,7 @@
 package dev.deepslate.fallacy.common.capability.diet
 
-import dev.deepslate.fallacy.common.data.FallacyAttachments
 import dev.deepslate.fallacy.common.data.player.FoodHistory
+import dev.deepslate.fallacy.common.data.player.NutritionState
 import dev.deepslate.fallacy.common.item.component.FallacyDataComponents
 import dev.deepslate.fallacy.common.item.component.NutritionData
 import net.minecraft.world.effect.MobEffectInstance
@@ -9,13 +9,14 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 
 interface IDiet {
+
     val player: Player
 
     var history: FoodHistory
-        get() = player.getData(FallacyAttachments.FOOD_HISTORY)
-        set(value) {
-            player.setData(FallacyAttachments.FOOD_HISTORY, value)
-        }
+
+    var nutrition: NutritionState
+
+    fun sync()
 
     //food必须保证可食用
     fun eat(food: ItemStack) {
@@ -24,11 +25,10 @@ interface IDiet {
             handleNutrition(nutrition)
         }
 
-        if (food.has(FallacyDataComponents.FULL_LEVEL)) {
-            val fullLevel = food.get(FallacyDataComponents.FULL_LEVEL)!!
-            val effect = getFullEffectInstance(fullLevel)
-            player.addEffect(effect)
-        }
+        val fullLevel = food.get(FallacyDataComponents.FULL_LEVEL) ?: 2
+        val effect = getFullEffectInstance(fullLevel)
+        player.addEffect(effect)
+
         history = history.addFood(food)
     }
 

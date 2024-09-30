@@ -37,7 +37,7 @@ object FallacyDataComponents {
         builder.persistent(NutritionData.CODEC).networkSynchronized(NutritionData.STREAM_CODEC)
     }
 
-    //食物饱腹等级
+    //食物饱腹等级 默认2
     val FULL_LEVEL = REGISTER.registerComponentType("full_level") { builder ->
         builder.persistent(Codec.intRange(0, 4)).networkSynchronized(ByteBufCodecs.INT)
     }

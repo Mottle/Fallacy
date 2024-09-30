@@ -55,6 +55,7 @@ data class ExtendedFoodProperties(val fullLevel: Int, val nutrition: NutritionDa
             )
 
             itemStack.set(DataComponents.FOOD, fixedFoodData)
+            itemStack.set(FallacyDataComponents.NUTRITION, properties.nutrition)
             itemStack.set(FallacyDataComponents.FULL_LEVEL, properties.fullLevel)
         }
     }

@@ -1,6 +1,7 @@
 package dev.deepslate.fallacy.race
 
 import dev.deepslate.fallacy.Fallacy
+import dev.deepslate.fallacy.common.capability.FallacyCapabilities
 import dev.deepslate.fallacy.common.data.FallacyAttachments
 import dev.deepslate.fallacy.common.data.player.NutritionState
 import dev.deepslate.fallacy.common.data.player.PlayerAttribute
@@ -57,7 +58,11 @@ interface Race {
             oldRace.remove(player)
             player.setData(FallacyAttachments.RACE_ID, race.namespacedId)
             race.attribute.set(player)
-            race.nutrition.set(player)
+
+            val diet = player.getCapability(FallacyCapabilities.DIET)!!
+            diet.nutrition = race.nutrition
+            diet.sync()
+
             race.set(player)
             sync(player)
         }

@@ -2,6 +2,7 @@ package dev.deepslate.fallacy.mixin.player;
 
 import com.mojang.authlib.GameProfile;
 import dev.deepslate.fallacy.common.data.player.ExtendedFoodData;
+import dev.deepslate.fallacy.common.effect.FallacyEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
@@ -27,5 +28,12 @@ public abstract class PlayerMixin {
     @Inject(method = "<init>", at = @At("TAIL"))
     void mixinInit(Level level, BlockPos pos, float yRot, GameProfile gameProfile, CallbackInfo ci) {
         foodData = new ExtendedFoodData(fallacy$self());
+    }
+
+    //存在Full effect时不消耗饱食度
+    @Inject(method = "causeFoodExhaustion", at = @At("HEAD"), cancellable = true)
+    void injectCauseFoodExhaustion(float exhaustion, CallbackInfo ci) {
+        var player = fallacy$self();
+        if(player.hasEffect(FallacyEffects.INSTANCE.getFULL())) ci.cancel();
     }
 }
