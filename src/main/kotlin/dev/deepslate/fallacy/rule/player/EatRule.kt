@@ -21,9 +21,10 @@ object EatRule {
             if (!item.has(DataComponents.FOOD)) return
 
             val diet = entity.getCapability(FallacyCapabilities.DIET)!!
-
             val multiple = diet.getEatDurationMultiple(item)
-            event.duration = (event.duration * max(1f, multiple)).toInt()
+            val fixedMultiple = max(1f, multiple)
+
+            event.duration = (event.duration * fixedMultiple).toInt()
         }
 
         @SubscribeEvent
