@@ -10,8 +10,8 @@ object FallacyCommands {
 
     val commands: List<GameCommand> get() = subcommands.toList()
 
-    internal fun add(command: GameCommand) {
-        subcommands.add(command)
+    internal fun add(vararg command: GameCommand) {
+        subcommands += command
     }
 
     init {

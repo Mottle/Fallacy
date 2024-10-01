@@ -5,6 +5,7 @@ import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.util.announce.Autoload
 import kotlin.reflect.full.superclasses
 
+//Bug
 class Loader(val name: String, private val packageName: String = "dev.deepslate") {
     private val systemLoader = ClassLoader.getSystemClassLoader()
 
