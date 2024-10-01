@@ -33,6 +33,10 @@ object FallacyAttributes {
         RangedAttribute("fallacy.attribute.name.player.magic_strength", 0.0, -1024.0, 1024.0).setSyncable(true)
     }
 
+    val MAX_BONE = ATTRIBUTES.register("fallacy.max_bone") { _ ->
+        RangedAttribute("fallacy.attribute.name.player.max_bone", 10.0, 10.0, 1024.0).setSyncable(true)
+    }
+
     fun init(bus: IEventBus) {
         ATTRIBUTES.register(bus)
     }
@@ -46,6 +50,7 @@ object FallacyAttributes {
             event.add(EntityType.PLAYER, STRENGTH)
             event.add(EntityType.PLAYER, MAGIC_RESISTANCE)
             event.add(EntityType.PLAYER, MAGIC_STRENGTH)
+            event.add(EntityType.PLAYER, MAX_BONE)
         }
     }
 }

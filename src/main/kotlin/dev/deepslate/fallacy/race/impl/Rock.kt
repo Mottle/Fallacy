@@ -216,13 +216,19 @@ class Rock : Race, Respawnable {
         removeAllArmor(player)
     }
 
-    override fun onRespawn(player: ServerPlayer, original: ServerPlayer) {
-        setAllArmor(player)
+    override fun onRespawn(player: ServerPlayer) {
         player.getAttribute(Attributes.ATTACK_SPEED)!!.addPermanentModifier(attackSpeedModifier)
-        copyData(original, player, EquipmentSlot.HEAD)
-        copyData(original, player, EquipmentSlot.CHEST)
-        copyData(original, player, EquipmentSlot.LEGS)
-        copyData(original, player, EquipmentSlot.FEET)
+    }
+
+    override fun onClone(
+        player: ServerPlayer,
+        origin: ServerPlayer
+    ) {
+        setAllArmor(player)
+        copyData(origin, player, EquipmentSlot.HEAD)
+        copyData(origin, player, EquipmentSlot.CHEST)
+        copyData(origin, player, EquipmentSlot.LEGS)
+        copyData(origin, player, EquipmentSlot.FEET)
         Helper.applyAllArmor(player)
     }
 
@@ -409,6 +415,7 @@ class Rock : Race, Respawnable {
         fun onDamage(event: LivingDamageEvent.Pre) {
             val damage = event.source
             val player = event.entity as? ServerPlayer ?: return
+            if (!player.isAlive) return
             if (Race.get(player) !is Rock) return
 
             if (damage.`is`(DamageTypeTags.BYPASSES_ARMOR)) return

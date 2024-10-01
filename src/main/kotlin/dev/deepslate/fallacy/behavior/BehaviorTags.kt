@@ -10,6 +10,8 @@ object BehaviorTags {
 
     val BURNING_IN_SUNLIGHT = Fallacy.id("burning_in_sunlight")
 
+    val WEAKNESS_IN_SUNLIGHT = Fallacy.id("weakness_in_water")
+
     val WEAKNESS2_IN_SUNLIGHT = Fallacy.id("weakness2_in_sunlight")
 
     val WEAKNESS_IN_DAY = Fallacy.id("weakness_in_day")

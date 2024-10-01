@@ -34,6 +34,6 @@ public abstract class PlayerMixin {
     @Inject(method = "causeFoodExhaustion", at = @At("HEAD"), cancellable = true)
     void injectCauseFoodExhaustion(float exhaustion, CallbackInfo ci) {
         var player = fallacy$self();
-        if(player.hasEffect(FallacyEffects.INSTANCE.getFULL())) ci.cancel();
+        if (player.hasEffect(FallacyEffects.INSTANCE.getFULL())) ci.cancel();
     }
 }

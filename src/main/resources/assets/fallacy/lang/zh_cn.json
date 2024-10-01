@@ -5,9 +5,7 @@
     "effect.fallacy.dehydration": "脱水",
     "effect.fallacy.full": "饱腹",
     "death.attack.fallacy.dehydration": "%1$s 死于脱水",
-
     "block.fallacy.miu_berry_bush": "缪浆果灌木",
-
     "item.fallacy.miu_berry": "缪浆果",
     "item.fallacy.gynou_wings": "翼",
     "item.fallacy.rock_skin_boots": "岩石皮肤",
@@ -24,7 +22,6 @@
     "item.fallacy.diet_data.fat": "脂肪",
     "item.fallacy.diet_data.fiber": "纤维",
     "item.fallacy.diet_data.electrolyte": "电解质",
-
     "item.tooltips.food_eat_times": "在过去%s次中你食用了%s次",
     "item.tooltips.food_never_eat": "最近还没吃过呢",
     "item.tooltips.full_level0": "微不足道",
@@ -32,6 +29,5 @@
     "item.tooltips.full_level2": "简餐",
     "item.tooltips.full_level3": "大餐",
     "item.tooltips.full_level4": "饕餮盛宴",
-
     "gui.fallacy.diet_ui.title": "饮食"
 }

@@ -15,7 +15,7 @@ class Zombie : Race {
     companion object {
         val ID = Fallacy.id("zombie")
         val TAGS = arrayOf(
-            BehaviorTags.UNDEAD, BehaviorTags.WEAKNESS2_IN_SUNLIGHT, BehaviorTags.WEAKNESS_IN_DAY,
+            BehaviorTags.UNDEAD, BehaviorTags.WEAKNESS_IN_SUNLIGHT, BehaviorTags.WEAKNESS_IN_DAY,
             BehaviorTags.BURNING_IN_SUNLIGHT
         )
     }

@@ -72,7 +72,7 @@ class Gynou : Race, Respawnable {
         setWings(player)
     }
 
-    override fun onRespawn(player: ServerPlayer, original: ServerPlayer) {
+    override fun onRespawn(player: ServerPlayer) {
         setWings(player)
     }
 

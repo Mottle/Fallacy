@@ -67,8 +67,7 @@ class Wood : Race, Respawnable {
     }
 
     override fun onRespawn(
-        player: ServerPlayer,
-        origin: ServerPlayer
+        player: ServerPlayer
     ) {
         player.getAttribute(Attributes.ATTACK_SPEED)!!.addPermanentModifier(attackSpeedModifier)
     }

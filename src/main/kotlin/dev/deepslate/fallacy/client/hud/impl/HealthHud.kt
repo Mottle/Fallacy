@@ -1,6 +1,8 @@
 package dev.deepslate.fallacy.client.hud.impl
 
 import com.mojang.blaze3d.systems.RenderSystem
+import dev.deepslate.fallacy.race.Race
+import dev.deepslate.fallacy.race.impl.Skeleton
 import dev.deepslate.fallacy.util.RGB
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
@@ -62,6 +64,9 @@ class HealthHud : HudLayerImpl("health") {
             return dev.deepslate.fallacy.client.hud.HealthEffect.NONE
         }
     }
+
+    //玩家不为Skeleton时显示
+    override fun shouldRender(player: Player): Boolean = Race.get(player) !is Skeleton
 
     private var playerHealth = 0f
 

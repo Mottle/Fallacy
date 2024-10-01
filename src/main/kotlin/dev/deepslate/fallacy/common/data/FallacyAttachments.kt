@@ -40,6 +40,10 @@ object FallacyAttachments {
         AttachmentType.builder { _ -> FoodHistory() }.serialize(FoodHistory.CODEC).copyOnDeath().build()
     }
 
+    val BONE = REGISTRY.register("bone") { _ ->
+        AttachmentType.builder { _ -> 10f }.serialize(Codec.FLOAT).build()
+    }
+
     fun register(bus: IEventBus) {
         REGISTRY.register(bus)
     }

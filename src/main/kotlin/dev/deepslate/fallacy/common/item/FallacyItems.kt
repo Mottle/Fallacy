@@ -26,6 +26,10 @@ object FallacyItems {
         .tab(FallacyTabs.NATURE.key!!).register()
 
     object Race {
+//        val GYNOU_WINGS = REG.item<ElytraItem>("gynou_wings") {
+//            ElytraItem(Item.Properties().component(DataComponents.UNBREAKABLE, Unbreakable(true)))
+//        }.lang("gynou wings").register()
+
         val ROCK_SKIN_BOOTS: ItemEntry<ArmorItem> = REG.item<ArmorItem>("rock_skin_boots") { _ ->
             ArmorItem(
                 FallacyArmorMaterials.Rock,

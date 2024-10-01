@@ -12,9 +12,9 @@
         "EquipableMixin",
         "LivingEntityMixin",
         "NearestAttackableTargetGoalMixin",
-        "player.PlayerMixin",
         "item.ItemMixin",
-        "item.ItemStackMixin"
+        "item.ItemStackMixin",
+        "player.PlayerMixin"
     ],
     "client": [
         "client.ItemStackMixin",

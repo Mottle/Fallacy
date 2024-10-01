@@ -43,15 +43,26 @@ object Handler {
     }
 
     @SubscribeEvent
-    fun onServerPlayerRespawn(event: PlayerEvent.Clone) {
+    fun onServerPlayerRespawn(event: PlayerEvent.PlayerRespawnEvent) {
+        if (event.entity.level().isClientSide) return
+
+        val player = event.entity as ServerPlayer
+        val race = Race.get(player)
+
+        Race.sync(player)
+        if (race !is Respawnable) return
+        race.onRespawn(player)
+    }
+
+    @SubscribeEvent
+    fun onServerPlayerClone(event: PlayerEvent.Clone) {
         if (!event.isWasDeath) return
         if (event.entity.level().isClientSide) return
 
         val player = event.entity as ServerPlayer
         val original = event.original as ServerPlayer
         val race = Race.get(player)
-        Race.sync(player)
         if (race !is Respawnable) return
-        race.onRespawn(player, original)
+        race.onClone(player, original)
     }
 }

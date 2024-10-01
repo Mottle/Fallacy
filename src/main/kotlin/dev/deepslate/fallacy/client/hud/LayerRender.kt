@@ -13,7 +13,7 @@ class LayerRender : LayeredDraw.Layer {
 
     companion object {
         private val BARS = listOf(
-            HealthHud(), HungerHud(), AbsorptionHud(), HydrationHud(), AirHud(), VehicleHud(),
+            HealthHud(), BoneHud(), HungerHud(), AbsorptionHud(), HydrationHud(), AirHud(), VehicleHud(),
             ArmorHud()
         )
     }
@@ -50,6 +50,7 @@ class LayerRender : LayeredDraw.Layer {
         }
 
         mc.profiler.pop()
+//        Fallacy.LOGGER.info(mc.player?.getData(FallacyAttachments.RACE_ID))
     }
 
     private fun getOffset(graphic: GuiGraphics, right: Boolean) = with(Minecraft.getInstance().gui) {
