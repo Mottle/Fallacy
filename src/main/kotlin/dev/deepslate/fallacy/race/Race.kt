@@ -8,6 +8,7 @@ import dev.deepslate.fallacy.common.data.player.PlayerAttribute
 import dev.deepslate.fallacy.common.network.packet.RaceIdSyncPacket
 import dev.deepslate.fallacy.race.impl.Unknown
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Holder
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
@@ -26,6 +27,10 @@ interface Race {
     fun set(player: ServerPlayer)
 
     fun remove(player: ServerPlayer)
+
+    fun isSame(race: Race) = this.namespacedId == race.namespacedId
+
+    fun isSame(holder: Holder<Race>) = isSame(holder.value())
 
     companion object {
         const val RACE_TICK_RATE = 2 * 20

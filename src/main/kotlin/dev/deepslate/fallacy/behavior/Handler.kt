@@ -1,7 +1,10 @@
 package dev.deepslate.fallacy.behavior
 
 import dev.deepslate.fallacy.Fallacy
-import dev.deepslate.fallacy.util.Loader
+import dev.deepslate.fallacy.behavior.impl.BurningInSunlight
+import dev.deepslate.fallacy.behavior.impl.Weakness2InSunlight
+import dev.deepslate.fallacy.behavior.impl.WeaknessInDay
+import dev.deepslate.fallacy.behavior.impl.WeaknessInSunlight
 import dev.deepslate.fallacy.util.TickHelper
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
@@ -32,6 +35,10 @@ object Handler {
     }
 
     init {
-        Loader().load<TickableBehavior>(::addBehavior)
+//        Loader("Behavior").load<TickableBehavior>(::addBehavior)
+        addBehavior(BurningInSunlight())
+        addBehavior(WeaknessInDay())
+        addBehavior(Weakness2InSunlight())
+        addBehavior(WeaknessInSunlight())
     }
 }
