@@ -2,6 +2,7 @@ package dev.deepslate.fallacy.behavior.impl
 
 import dev.deepslate.fallacy.behavior.BehaviorTags
 import dev.deepslate.fallacy.behavior.TickableBehavior
+import dev.deepslate.fallacy.util.EntityHelper
 import dev.deepslate.fallacy.util.announce.Autoload
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
@@ -22,23 +23,17 @@ class BurningInSunlight : TickableBehavior {
         player: ServerPlayer,
         position: BlockPos
     ) {
-        if (!level.isDay) return
-        if (!level.canSeeSky(position)) return
-        with(player) {
-            if (isInWaterRainOrBubble) return
-            if (isInPowderSnow) return
-            if (wasInPowderSnow) return
-        }
+        if (!EntityHelper.checkUndeadBurning(level, player, position)) return
 
         val head = player.getItemBySlot(EquipmentSlot.HEAD)
         if (!head.isEmpty) {
-            if (head.isDamageableItem) damageHead(head, player)
+            if (head.isDamageableItem) damageHeadByRandom(head, player)
         } else {
             player.igniteForTicks(20 * 4)
         }
     }
 
-    private fun damageHead(head: ItemStack, player: ServerPlayer) {
+    private fun damageHeadByRandom(head: ItemStack, player: ServerPlayer) {
         val damage = max(head.maxDamage / 120, 1)
         head.damageValue += player.random.nextInt(damage)
         if (head.damageValue >= head.maxDamage) {

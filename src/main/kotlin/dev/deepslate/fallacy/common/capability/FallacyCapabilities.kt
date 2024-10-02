@@ -5,6 +5,8 @@ import dev.deepslate.fallacy.common.capability.diet.DietProvider
 import dev.deepslate.fallacy.common.capability.diet.IDiet
 import dev.deepslate.fallacy.common.capability.hydration.HydrationProvider
 import dev.deepslate.fallacy.common.capability.hydration.IHydration
+import dev.deepslate.fallacy.common.capability.skeleton.ISkeleton
+import dev.deepslate.fallacy.common.capability.skeleton.SkeletonProvider
 import dev.deepslate.fallacy.common.capability.thirst.IThirst
 import dev.deepslate.fallacy.common.capability.thirst.ThirstProvider
 import net.minecraft.core.component.DataComponents
@@ -27,6 +29,9 @@ object FallacyCapabilities {
 
     val DIET: EntityCapability<IDiet, Void?> = EntityCapability.createVoid(Fallacy.id("diet"), IDiet::class.java)
 
+    val SKELETON: EntityCapability<ISkeleton, Void?> =
+        EntityCapability.createVoid(Fallacy.id("skeleton"), ISkeleton::class.java)
+
     @SubscribeEvent
     fun registerAll(event: RegisterCapabilitiesEvent) {
         event.registerEntity(THIRST, EntityType.PLAYER, ThirstProvider())
@@ -41,6 +46,12 @@ object FallacyCapabilities {
             DIET,
             EntityType.PLAYER,
             DietProvider(),
+        )
+
+        event.registerEntity(
+            SKELETON,
+            EntityType.PLAYER,
+            SkeletonProvider(),
         )
     }
 }

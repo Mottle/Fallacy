@@ -2,6 +2,7 @@ package dev.deepslate.fallacy.race.impl
 
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.behavior.BehaviorTags
+import dev.deepslate.fallacy.common.capability.FallacyCapabilities
 import dev.deepslate.fallacy.common.data.FallacyAttachments
 import dev.deepslate.fallacy.common.data.FallacyAttributes
 import dev.deepslate.fallacy.common.data.player.NutritionState
@@ -10,10 +11,10 @@ import dev.deepslate.fallacy.common.network.packet.BoneSyncPacket
 import dev.deepslate.fallacy.race.FallacyRaces
 import dev.deepslate.fallacy.race.Race
 import dev.deepslate.fallacy.race.Respawnable
+import dev.deepslate.fallacy.util.EntityHelper
 import dev.deepslate.fallacy.util.TickHelper
 import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.Registries
-import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
@@ -67,7 +68,6 @@ class Skeleton : Race, Respawnable {
 
             if (player is ServerPlayer) {
                 race.syncBone(player)
-                player.sendSystemMessage(Component.literal("damage: ${damage + 4}, bone: ${newBone.toInt()}"))
             }
 
             if (newBone <= 0f && player.isAlive) internalKill(player, event.source)
@@ -123,9 +123,10 @@ class Skeleton : Race, Respawnable {
 
         @SubscribeEvent
         fun onPlayerJoin(event: PlayerEvent.PlayerLoggedInEvent) {
-            val race = Race.get(event.entity)
-            if (race !is Skeleton) return
-            race.syncBone(event.entity as ServerPlayer)
+//            val race = Race.get(event.entity)
+//            if (race !is Skeleton) return
+//            race.syncBone(event.entity as ServerPlayer)
+            event.entity.getCapability(FallacyCapabilities.SKELETON)?.sync()
         }
 
         private fun check(entity: LivingEntity, item: ItemStack): Boolean {
@@ -197,11 +198,14 @@ class Skeleton : Race, Respawnable {
         position: BlockPos
     ) {
         player.foodData.foodLevel = max(10, player.foodData.foodLevel)
-//        if(player.getData(FallacyAttachments.BONE) <= 0f) {
-//            val access = player.registryAccess().lookup(Registries.DAMAGE_TYPE)
-//            val damageType = access.get().get(DamageTypes.GENERIC).get()
-//            player.die(player.lastDamageSource ?: DamageSource(damageType))
-//        }
+
+        if (EntityHelper.checkUndeadBurning(level, player, position)) {
+            val cap = player.getCapability(FallacyCapabilities.SKELETON) ?: return
+            cap.bone -= 0.5f
+            cap.sync()
+            EntityHelper.damageHead(player, 2)
+        }
+
     }
 
     override fun set(player: ServerPlayer) {

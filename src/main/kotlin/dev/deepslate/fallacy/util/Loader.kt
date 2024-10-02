@@ -12,12 +12,18 @@ class Loader(val name: String, private val packageName: String = "dev.deepslate"
     private val localLoader = javaClass.classLoader
 
     private fun checkPackage(info: ClassPath.ClassInfo): Boolean {
+        return info.name != "module-info"
+
         val name = info.name
         if (name == "module-info") return false
         return name.startsWith(packageName) || !name.contains('.')
     }
 
-    private fun loadClass(info: ClassPath.ClassInfo) = systemLoader.loadClass(info.name)
+    private fun loadClass(info: ClassPath.ClassInfo) = try {
+        systemLoader.loadClass(info.name)
+    } catch (_: Throwable) {
+        null
+    }
 
     private fun checkInterface(clazz: Class<*>) = clazz.isInterface
 
@@ -34,8 +40,9 @@ class Loader(val name: String, private val packageName: String = "dev.deepslate"
         Fallacy.LOGGER.info("Dynamic Loader for $name is starting.")
         val classes = ClassPath.from(systemLoader).topLevelClasses
 
+        val t1 = System.currentTimeMillis()
         classes.filter(::checkPackage).forEach {
-            val clazz = loadClass(it)
+            val clazz = loadClass(it) ?: return@forEach
 
             if (checkInterface(clazz)) return@forEach
             if (!checkAnnounce<Autoload>(clazz)) return@forEach
@@ -46,5 +53,7 @@ class Loader(val name: String, private val packageName: String = "dev.deepslate"
 
             then(instance)
         }
+        val t2 = System.currentTimeMillis()
+        Fallacy.LOGGER.info("Dynamic Loader for $name has finished. (${t2 - t1}ms)")
     }
 }

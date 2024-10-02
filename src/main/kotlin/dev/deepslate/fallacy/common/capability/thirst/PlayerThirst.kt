@@ -30,7 +30,8 @@ class PlayerThirst(val player: Player) : IThirst {
             }
         }
 
-    override val max: Float = player.getAttributeValue(FallacyAttributes.MAX_THIRST).toFloat()
+    override val max: Float
+        get() = player.getAttributeValue(FallacyAttributes.MAX_THIRST).toFloat()
 
     override fun drink(value: Float) {
         this@PlayerThirst.value = min(max, this@PlayerThirst.value + value)
