@@ -3,8 +3,8 @@ package dev.deepslate.fallacy.race.impl
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.behavior.BehaviorTags
 import dev.deepslate.fallacy.common.capability.FallacyCapabilities
+import dev.deepslate.fallacy.common.capability.skeleton.ISkeleton
 import dev.deepslate.fallacy.common.data.FallacyAttachments
-import dev.deepslate.fallacy.common.data.FallacyAttributes
 import dev.deepslate.fallacy.common.data.player.NutritionState
 import dev.deepslate.fallacy.common.data.player.PlayerAttribute
 import dev.deepslate.fallacy.common.network.packet.BoneSyncPacket
@@ -35,7 +35,6 @@ import net.neoforged.neoforge.network.PacketDistributor
 import net.neoforged.neoforge.network.handling.IPayloadContext
 import kotlin.math.floor
 import kotlin.math.max
-import kotlin.math.min
 import kotlin.math.sqrt
 
 class Skeleton : Race, Respawnable {
@@ -47,6 +46,13 @@ class Skeleton : Race, Respawnable {
             BehaviorTags.UNDEAD, BehaviorTags.WEAKNESS2_IN_SUNLIGHT,
             BehaviorTags.BURNING_IN_SUNLIGHT
         )
+
+        internal fun internalKill(player: Player, source: DamageSource?) {
+            val access = player.registryAccess().lookup(Registries.DAMAGE_TYPE).get()
+            val type = access.get(DamageTypes.GENERIC_KILL).get()
+            val dieSource = DamageSource(type, source?.entity)
+            player.hurt(dieSource, 114514f)
+        }
     }
 
     @EventBusSubscriber(modid = Fallacy.MOD_ID)
@@ -55,16 +61,16 @@ class Skeleton : Race, Respawnable {
         fun onDamage(event: LivingDamageEvent.Pre) {
             if (event.entity !is Player) return
 
+            val cap = event.entity.getCapability(FallacyCapabilities.SKELETON) ?: return
             val player = event.entity as Player
-            val race = Race.get(player)
+            val race = Race.get(player) as Skeleton
             val damage = event.newDamage - 4
 
-            if (race !is Skeleton) return
             if (checkDamage(event.source)) return
 
             fixDamage(event)
 
-            val newBone = loseBone(player, damage)
+            val newBone = loseBone(cap, player, damage)
 
             if (player is ServerPlayer) {
                 race.syncBone(player)
@@ -73,30 +79,17 @@ class Skeleton : Race, Respawnable {
             if (newBone <= 0f && player.isAlive) internalKill(player, event.source)
         }
 
-        private fun internalKill(player: Player, source: DamageSource) {
-            val access = player.registryAccess().lookup(Registries.DAMAGE_TYPE).get()
-            val type = access.get(DamageTypes.GENERIC_KILL).get()
-            val dieSource = DamageSource(type, source.entity)
-            player.hurt(dieSource, 114514f)
-        }
-
-        private fun loseBone(player: Player, fixedDamage: Float): Float {
-            if (fixedDamage <= 0f) return getBone(player)
+        private fun loseBone(cap: ISkeleton, player: Player, fixedDamage: Float): Float {
+            if (fixedDamage <= 0f) return cap.bone
 
             val realArmor = player.getAttributeValue(Attributes.ARMOR).toFloat()
             val prob = getProbability(realArmor, fixedDamage)
             val beforeLoss = floor(sqrt(max(0f, fixedDamage)))
             val boneLoss = if (player.random.nextIntBetweenInclusive(0, 99) < prob) 0f else beforeLoss
-            updateBone(player, -boneLoss)
-            return getBone(player)
+            cap.bone -= boneLoss
+            return cap.bone
         }
 
-        private fun getBone(player: Player): Float = player.getData(FallacyAttachments.BONE)
-
-        private fun updateBone(player: Player, delta: Float) {
-            val bone = player.getData(FallacyAttachments.BONE)
-            player.setData(FallacyAttachments.BONE, bone + delta)
-        }
 
         private fun getProbability(armor: Float, damage: Float): Float {
             val fixedArmor = max(0f, armor)
@@ -109,9 +102,10 @@ class Skeleton : Race, Respawnable {
             event.newDamage = 0f
         }
 
-        private val set = setOf(DamageTypes.FELL_OUT_OF_WORLD, DamageTypes.OUTSIDE_BORDER, DamageTypes.GENERIC_KILL)
+        private val passByDamageSet =
+            setOf(DamageTypes.FELL_OUT_OF_WORLD, DamageTypes.OUTSIDE_BORDER, DamageTypes.GENERIC_KILL)
 
-        private fun checkDamage(damage: DamageSource): Boolean = set.any { damage.`is`(it) }
+        private fun checkDamage(damage: DamageSource): Boolean = passByDamageSet.any { damage.`is`(it) }
     }
 
     @EventBusSubscriber(modid = Fallacy.MOD_ID)
@@ -139,8 +133,9 @@ class Skeleton : Race, Respawnable {
         @SubscribeEvent
         fun onPlayerRightClickItem(event: PlayerInteractEvent.RightClickItem) {
             if (!check(event.entity, event.itemStack)) return
-            val player = event.entity
-            if (player.getData(FallacyAttachments.BONE) >= player.getAttributeValue(FallacyAttributes.MAX_BONE)) return
+            val player = event.entity as Player
+            val cap = player.getCapability(FallacyCapabilities.SKELETON) ?: return
+            if (cap.bone >= cap.max) return
 
             player.startUsingItem(event.hand)
         }
@@ -172,10 +167,10 @@ class Skeleton : Race, Respawnable {
             if (!check(event.entity, event.item)) return
 
             val player = event.entity as Player
+            val cap = player.getCapability(FallacyCapabilities.SKELETON) ?: return
 
             event.resultStack.count--
-            val maxValue = player.getAttributeValue(FallacyAttributes.MAX_BONE).toFloat()
-            player.setData(FallacyAttachments.BONE, min(maxValue, player.getData(FallacyAttachments.BONE) + 1f))
+            cap.bone += 1 + if (player.combatTracker.inCombat) 0f else 1f
             player.swing(player.usedItemHand)
         }
     }
@@ -198,13 +193,15 @@ class Skeleton : Race, Respawnable {
         position: BlockPos
     ) {
         player.foodData.foodLevel = max(10, player.foodData.foodLevel)
+        val cap = player.getCapability(FallacyCapabilities.SKELETON) ?: return
 
         if (EntityHelper.checkUndeadBurning(level, player, position)) {
-            val cap = player.getCapability(FallacyCapabilities.SKELETON) ?: return
             cap.bone -= 0.5f
             cap.sync()
             EntityHelper.damageHead(player, 2)
         }
+
+        if (cap.bone <= 0f && player.isAlive) internalKill(player, player.lastDamageSource)
 
     }
 
