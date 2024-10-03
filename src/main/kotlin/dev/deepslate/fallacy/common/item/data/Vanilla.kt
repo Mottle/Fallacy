@@ -1,7 +1,7 @@
 package dev.deepslate.fallacy.common.item.data
 
 import dev.deepslate.fallacy.common.item.component.NutritionData
-import dev.deepslate.fallacy.util.extendedProperties
+import dev.deepslate.fallacy.util.internalExtendedProperties
 import net.minecraft.world.item.Items
 
 object Vanilla {
@@ -80,7 +80,7 @@ object Vanilla {
                 foodData.withFullLevel(fullLevel)
             }
 
-            item.extendedProperties = ExtendedProperties.Builder().withFoodProperties(foodData.build()).build()
+            item.internalExtendedProperties = ExtendedProperties.Builder().withFoodProperties(foodData.build()).build()
         }
     }
 }

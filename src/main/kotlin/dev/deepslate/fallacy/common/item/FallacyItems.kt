@@ -4,24 +4,36 @@ import com.tterrag.registrate.util.entry.ItemEntry
 import dev.deepslate.fallacy.common.FallacyTabs
 import dev.deepslate.fallacy.common.block.FallacyBlocks.MIU_BERRY_BUSH
 import dev.deepslate.fallacy.common.item.armor.FallacyArmorMaterials
+import dev.deepslate.fallacy.common.item.component.NutritionData
+import dev.deepslate.fallacy.common.item.data.ExtendedFoodProperties
+import dev.deepslate.fallacy.common.item.data.ExtendedProperties
+import dev.deepslate.fallacy.common.item.data.FallacyItemNameBlockItem
 import dev.deepslate.fallacy.common.registrate.REG
 import dev.deepslate.fallacy.common.registrate.defaultModelWithTexture
 import net.minecraft.world.food.FoodProperties
 import net.minecraft.world.item.ArmorItem
 import net.minecraft.world.item.Item
-import net.minecraft.world.item.ItemNameBlockItem
+import net.minecraft.world.item.Rarity
 
 object FallacyItems {
     init {
         Race
     }
 
-    val MIU_BERRIES: ItemEntry<Item> = REG.item<Item>("miu_berry", ::Item).properties { p ->
-        p.food(FoodProperties.Builder().nutrition(3).saturationModifier(0.5f).fast().build())
-    }.lang("miu berry").defaultModelWithTexture("nature/miu_berries").tab(FallacyTabs.NATURE.key!!).register()
+    val MIU_BERRIES: ItemEntry<FallacyItem> =
+        REG.item("miu_berry") {
+            FallacyItem(
+                it, ExtendedProperties.Builder().withFoodProperties(
+                    ExtendedFoodProperties.Builder().withFullLevel(1)
+                        .withNutrition(NutritionData(carbohydrate = 0.3f, fiber = 0.5f)).build()
+                ).build()
+            )
+        }.properties {
+            it.food(FoodProperties.Builder().nutrition(3).saturationModifier(0.5f).fast().build())
+        }.lang("miu berry").defaultModelWithTexture("nature/miu_berries").tab(FallacyTabs.NATURE.key!!).register()
 
-    val MIU_BERRY_BUSH_SEED: ItemEntry<Item> = REG.item<Item>("miu_berry_bush_seeds") {
-        ItemNameBlockItem(MIU_BERRY_BUSH.get(), it)
+    val MIU_BERRY_BUSH_SEED: ItemEntry<FallacyItemNameBlockItem> = REG.item("miu_berry_bush_seeds") {
+        FallacyItemNameBlockItem(MIU_BERRY_BUSH.get(), it.rarity(Rarity.UNCOMMON), ExtendedProperties.default())
     }.lang("miu berry bush seeds").defaultModelWithTexture("nature/miu_berry_bush_seeds")
         .tab(FallacyTabs.NATURE.key!!).register()
 

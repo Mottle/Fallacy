@@ -1,6 +1,6 @@
 package dev.deepslate.fallacy.common.item.data
 
-import dev.deepslate.fallacy.util.extendedProperties
+import dev.deepslate.fallacy.util.internalExtendedProperties
 import net.minecraft.world.item.ItemStack
 
 data class ExtendedProperties(val rank: Int, val foodProperties: ExtendedFoodProperties?) {
@@ -25,9 +25,12 @@ data class ExtendedProperties(val rank: Int, val foodProperties: ExtendedFoodPro
     }
 
     companion object {
+
+        fun default() = Builder().build()
+
         fun onItemStack(itemStack: ItemStack) {
             val item = itemStack.item
-            val extended = item.extendedProperties ?: return
+            val extended = item.internalExtendedProperties ?: return
 
             if (extended.foodProperties != null) {
                 ExtendedFoodProperties.onItemStack(itemStack, extended.foodProperties)

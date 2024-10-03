@@ -41,6 +41,7 @@ data class ExtendedFoodProperties(val fullLevel: Int, val nutrition: NutritionDa
     }
 
     companion object {
+
         fun onItemStack(itemStack: ItemStack, properties: ExtendedFoodProperties) {
             if (!itemStack.has(DataComponents.FOOD)) return
 

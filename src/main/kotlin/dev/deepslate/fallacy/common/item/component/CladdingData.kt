@@ -83,6 +83,7 @@ data class CladdingData(val claddings: List<Cladding>) {
         materialCountMap: Map<ResourceLocation, Int>,
         contextHandler: (T, Int) -> Pair<V, I>
     ): List<Pair<V, I>> = materialCountMap.map { (id, count) ->
+        @Suppress("UNCHECKED_CAST")
         val contexts =
             claddingEffectMap[id]!!.effects.filter { it is T } as List<T>
         val mods = contexts.map { contextHandler(it, count) }
