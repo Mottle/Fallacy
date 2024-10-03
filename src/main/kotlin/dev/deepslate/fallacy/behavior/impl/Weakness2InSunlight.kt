@@ -27,6 +27,7 @@ class Weakness2InSunlight : TickableBehavior {
         if (!level.isDay) return
         if (!level.canSeeSky(position)) return
         if (!player.getItemBySlot(EquipmentSlot.HEAD).isEmpty) return
+        if (player.isInvulnerable) return
 
         player.addEffect(createWeakness2())
     }

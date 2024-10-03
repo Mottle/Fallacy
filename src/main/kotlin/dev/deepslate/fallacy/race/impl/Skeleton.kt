@@ -201,7 +201,7 @@ class Skeleton : Race, Respawnable {
             EntityHelper.damageHead(player, 2)
         }
 
-        if (cap.bone <= 0f && player.isAlive) internalKill(player, player.lastDamageSource)
+        if (cap.bone <= 0f && player.isAlive && !player.isInvulnerable) internalKill(player, player.lastDamageSource)
 
     }
 
