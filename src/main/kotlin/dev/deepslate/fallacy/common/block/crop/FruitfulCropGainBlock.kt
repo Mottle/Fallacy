@@ -9,8 +9,7 @@ import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.IntegerProperty
 import net.minecraft.world.level.storage.loot.LootParams
 
-
-class FruitfulCropBlock(properties: Properties, val cropItem: Holder<Item>) : Block(properties) {
+open class FruitfulCropGainBlock(properties: Properties, val cropItem: Holder<Item>) : Block(properties) {
 
     companion object {
         val AMOUNT = IntegerProperty.create("amount", 0, 15)
@@ -26,7 +25,7 @@ class FruitfulCropBlock(properties: Properties, val cropItem: Holder<Item>) : Bl
     fun setAmount(state: BlockState, amount: Int): BlockState = state.setValue(AMOUNT, amount)
 
     fun getCropItemStack(state: BlockState): ItemStack {
-        return ItemStack(cropItem, getAmount(state))
+        return ItemStack(cropItem.value(), getAmount(state))
     }
 
     override fun getDrops(
