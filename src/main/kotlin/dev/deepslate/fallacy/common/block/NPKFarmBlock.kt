@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.FarmBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
-import net.minecraft.world.level.block.state.properties.IntegerProperty
 import net.minecraft.world.level.gameevent.GameEvent
 import net.neoforged.neoforge.common.FarmlandWaterManager
 
@@ -25,11 +24,11 @@ open class NPKFarmBlock(
     val baseDirt: Holder<Block> = BuiltInRegistries.BLOCK.getHolder(BuiltInRegistries.BLOCK.getKey(Blocks.DIRT)).get()
 ) : FarmBlock(properties) {
     companion object {
-        val N = IntegerProperty.create("nitrogen", 0, 7)
+        val N = FallacyStateProperties.N
 
-        val P = IntegerProperty.create("phosphorus", 0, 7)
+        val P = FallacyStateProperties.P
 
-        val K = IntegerProperty.create("potassium", 0, 7)
+        val K = FallacyStateProperties.K
 
         /**
          * @see net.minecraft.world.level.block.FarmBlock.isNearWater
@@ -53,7 +52,7 @@ open class NPKFarmBlock(
     }
 
     init {
-        registerDefaultState(stateDefinition.any().setValue(N, 0).setValue(P, 0).setValue(K, 0))
+        registerDefaultState(defaultBlockState().setValue(N, 0).setValue(P, 0).setValue(K, 0))
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block?, BlockState?>) {
@@ -70,6 +69,8 @@ open class NPKFarmBlock(
     }
 
     override fun getStateForPlacement(context: BlockPlaceContext): BlockState? {
+//        val bn = context.level.getBiome(context.clickedPos).value()
+
         val default = defaultBlockState()
         return if (default.canSurvive(context.level, context.clickedPos)) {
             default

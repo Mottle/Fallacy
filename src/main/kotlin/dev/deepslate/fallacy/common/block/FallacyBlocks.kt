@@ -81,6 +81,13 @@ object FallacyBlocks {
     }.lang("farmland").register()
 
     object Crop {
+        private val defaultTags = arrayOf(
+            BlockTags.CROPS, BlockTags.MAINTAINS_FARMLAND,
+            BlockTags.MINEABLE_WITH_AXE
+        )
+
+        private val defaultProperties = Properties.ofFullCopy(Blocks.WHEAT)
+
         val DYING_CROP = REG.block("dying_crop", ::DyingCropBlock).properties { Properties.ofFullCopy(Blocks.WHEAT) }
             .blockstate { ctx, prov ->
                 prov.simpleBlock(
@@ -91,50 +98,30 @@ object FallacyBlocks {
             }.lang("dying crop").tag(BlockTags.CROPS, BlockTags.MAINTAINS_FARMLAND)
             .register()
 
-        val BARLEY = REG.block("barley") { FallacyCropBlock(it, NPK(0, 0, 0)) }.properties {
-            Properties.ofFullCopy(Blocks.WHEAT)
-        }.blockstate(FallacyCropBlock::withBlockState)
+        val BARLEY = REG.block("barley") { FallacyCropBlock(it, NPK(0, 0, 0)) }.properties { defaultProperties }
+            .blockstate(FallacyCropBlock::withBlockState)
             .loot(FallacyCropBlock.withLoot(FallacyItems.Crop.BARLEY, (1..3), (1..4)))
-            .tag(
-                BlockTags.CROPS, BlockTags.MAINTAINS_FARMLAND,
-                BlockTags.MINEABLE_WITH_AXE
-            ).lang("barley").register()
+            .tag(*defaultTags).lang("barley").register()
 
-        val OAT = REG.block("oat") { FallacyCropBlock(it, NPK(0, 0, 0)) }.properties {
-            Properties.ofFullCopy(Blocks.WHEAT)
-        }.blockstate(FallacyCropBlock::withBlockState)
+        val OAT = REG.block("oat") { FallacyCropBlock(it, NPK(0, 0, 0)) }.properties { defaultProperties }
+            .blockstate(FallacyCropBlock::withBlockState)
             .loot(FallacyCropBlock.withLoot(FallacyItems.Crop.OAT, (1..3), (1..4)))
-            .tag(
-                BlockTags.CROPS, BlockTags.MAINTAINS_FARMLAND,
-                BlockTags.MINEABLE_WITH_AXE
-            ).lang("oat").register()
+            .tag(*defaultTags).lang("oat").register()
 
-        val SOYBEAN = REG.block("soybean") { FallacyCropBlock(it, NPK(1, 1, 1)) }.properties {
-            Properties.ofFullCopy(Blocks.POTATOES)
-        }.blockstate(FallacyCropBlock::withBlockState)
+        val SOYBEAN = REG.block("soybean") { FallacyCropBlock(it, NPK(1, 1, 1)) }.properties { defaultProperties }
+            .blockstate(FallacyCropBlock::withBlockState)
             .loot(FallacyCropBlock.withNoSeedsLoot(FallacyItems.Crop.SOYBEAN, (2..8)))
-            .tag(
-                BlockTags.CROPS, BlockTags.MAINTAINS_FARMLAND,
-                BlockTags.MINEABLE_WITH_AXE
-            ).lang("soybean").register()
+            .tag(*defaultTags).lang("soybean").register()
 
-        val TOMATO = REG.block("tomato") { FallacyCropBlock(it, NPK(0, 0, 0)) }.properties {
-            Properties.ofFullCopy(Blocks.POTATOES)
-        }.blockstate(FallacyCropBlock::withBlockState)
+        val TOMATO = REG.block("tomato") { FallacyCropBlock(it, NPK(0, 0, 0)) }.properties { defaultProperties }
+            .blockstate(FallacyCropBlock::withBlockState)
             .loot(FallacyCropBlock.withLoot(FallacyItems.Crop.TOMATO, (1..3), (1..3)))
-            .tag(
-                BlockTags.CROPS, BlockTags.MAINTAINS_FARMLAND,
-                BlockTags.MINEABLE_WITH_AXE
-            ).lang("tomato").register()
+            .tag(*defaultTags).lang("tomato").register()
 
-        val SPINACH = REG.block("spinach") { FallacyCropBlock(it, NPK(0, 0, 0)) }.properties {
-            Properties.ofFullCopy(Blocks.WHEAT)
-        }.blockstate(FallacyCropBlock::withBlockState)
+        val SPINACH = REG.block("spinach") { FallacyCropBlock(it, NPK(0, 0, 0)) }.properties { defaultProperties }
+            .blockstate(FallacyCropBlock::withBlockState)
             .loot(FallacyCropBlock.withLoot(FallacyItems.Crop.SPINACH, (1..3), (1..3)))
-            .tag(
-                BlockTags.CROPS, BlockTags.MAINTAINS_FARMLAND,
-                BlockTags.MINEABLE_WITH_AXE
-            ).lang("spinach").register()
+            .tag(*defaultTags).lang("spinach").register()
     }
 }
 

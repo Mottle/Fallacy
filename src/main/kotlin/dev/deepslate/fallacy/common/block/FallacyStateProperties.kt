@@ -8,5 +8,11 @@ object FallacyStateProperties {
 
     val DYING_COUNTER = IntegerProperty.create("dying_counter", 0, 3)
 
+    val N = IntegerProperty.create("nitrogen", 0, 7)
+
+    val P = IntegerProperty.create("phosphorus", 0, 7)
+
+    val K = IntegerProperty.create("potassium", 0, 7)
+
     val PART2 = IntegerProperty.create("part", 0, 1)
 }

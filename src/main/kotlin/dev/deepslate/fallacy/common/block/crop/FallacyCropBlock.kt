@@ -19,7 +19,6 @@ import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.CropBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
@@ -40,7 +39,12 @@ import net.neoforged.neoforge.client.model.generators.ConfiguredModel
 import net.neoforged.neoforge.common.CommonHooks
 
 
-open class FallacyCropBlock(properties: Properties, val npkRequired: NPK) : CropBlock(properties) {
+open class FallacyCropBlock(
+    properties: Properties,
+    val npkRequired: NPK,
+    val brightnessRange: IntRange = (9..Int.MAX_VALUE)
+) :
+    CropBlock(properties) {
     companion object {
         protected val SHAPE_BY_AGE: List<VoxelShape> = listOf(
             box(0.0, 0.0, 0.0, 16.0, 2.0, 16.0),
@@ -168,7 +172,7 @@ open class FallacyCropBlock(properties: Properties, val npkRequired: NPK) : Crop
         registerDefaultState(defaultBlockState().setValue(AGE, 0).setValue(DYING_COUNTER, 0))
     }
 
-    protected val dead: Holder<Block>? = FallacyBlocks.Crop.DYING_CROP
+    protected open val dead: Holder<Block> = FallacyBlocks.Crop.DYING_CROP
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block?, BlockState?>) {
         super.createBlockStateDefinition(builder)
@@ -183,7 +187,7 @@ open class FallacyCropBlock(properties: Properties, val npkRequired: NPK) : Crop
         level: BlockGetter,
         pos: BlockPos
     ): Boolean {
-        return super.mayPlaceOn(state, level, pos)
+        return state.block is NPKFarmBlock
     }
 
     /**
@@ -219,10 +223,19 @@ open class FallacyCropBlock(properties: Properties, val npkRequired: NPK) : Crop
             return
         }
 
-        if (level.getRawBrightness(pos, 0) >= 9) {
+        tryGrow(state, level, pos, random, isFine)
+    }
+
+    protected open fun tryGrow(
+        state: BlockState,
+        level: ServerLevel,
+        pos: BlockPos,
+        random: RandomSource,
+        isFine: Boolean
+    ) {
+        if (level.getRawBrightness(pos, 0) in brightnessRange) {
             val age = this.getAge(state)
-            val farmland = level.getBlockState(pos.below())
-            if (age < this.maxAge && npkRequired.canGrowAt(farmland)) {
+            if (age < this.maxAge) {
                 val growthSpeed = getGrowthSpeed(state, level, pos)
                 if (CommonHooks.canCropGrow(
                         level,
@@ -232,10 +245,11 @@ open class FallacyCropBlock(properties: Properties, val npkRequired: NPK) : Crop
                     )
                 ) {
                     val dyingCount = state.getValue(DYING_COUNTER)
-                    val newState = if (isFine) getStateForAge(age + 1).setValue(
+                    val defaultGrowthState = getStateForAge(age + 1)
+                    val newState = if (isFine) defaultGrowthState.setValue(
                         DYING_COUNTER,
                         (dyingCount - 1).coerceAtLeast(0)
-                    ) else getStateForAge(age + 1)
+                    ) else defaultGrowthState
 
                     level.setBlock(pos, newState, 2)
                     CommonHooks.fireCropGrowPost(level, pos, state)
@@ -244,14 +258,14 @@ open class FallacyCropBlock(properties: Properties, val npkRequired: NPK) : Crop
         }
     }
 
-    protected fun setDying(level: Level, pos: BlockPos) {
-        level.setBlock(pos, dead?.value()?.defaultBlockState() ?: Blocks.AIR.defaultBlockState(), 2)
+    protected open fun setDying(level: Level, pos: BlockPos) {
+        level.setBlock(pos, dead.value().defaultBlockState(), 2)
     }
 
-    protected fun increaseDyingCounter(state: BlockState, level: Level, pos: BlockPos) {
+    protected open fun increaseDyingCounter(state: BlockState, level: Level, pos: BlockPos) {
         val count = state.getValue(DYING_COUNTER)
         level.setBlock(pos, state.setValue(DYING_COUNTER, count + 1), 2)
     }
 
-    protected fun shouldDie(state: BlockState) = state.getValue(DYING_COUNTER) >= 3
+    protected open fun shouldDie(state: BlockState) = state.getValue(DYING_COUNTER) >= 3
 }
