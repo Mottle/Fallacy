@@ -28,7 +28,7 @@ open class TallFruitfulCropGainBlock(properties: Properties, cropItem: Holder<It
     init {
 //        require(partCount > 1)
 //        require(partCount <= MAX_HEIGHT)
-        registerDefaultState(stateDefinition.any().setValue(PART, 0))
+        registerDefaultState(defaultBlockState().setValue(PART, 0))
     }
 
     open val partCount: Int = 2

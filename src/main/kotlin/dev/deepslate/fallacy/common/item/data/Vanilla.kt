@@ -64,6 +64,7 @@ object Vanilla {
         Items.COOKIE to 1,
         Items.GOLDEN_APPLE to 3,
         Items.ENCHANTED_GOLDEN_APPLE to 4,
+        Items.DRIED_KELP to 1
     )
 
     fun set() {

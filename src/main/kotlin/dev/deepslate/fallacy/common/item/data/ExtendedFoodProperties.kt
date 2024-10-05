@@ -16,7 +16,8 @@ data class ExtendedFoodProperties(val fullLevel: Int, val nutrition: NutritionDa
 
         private var eatenDurationTicks: Int = -1
 
-        private fun calEatenTicks(fullLevel: Int): Int = if (fullLevel == 0) 4 else fullLevel * 8
+        //8 16 32 48 64
+        private fun getEatenTicks(fullLevel: Int): Int = if (fullLevel == 0) 8 else fullLevel * 16
 
         fun withFullLevel(fullLevel: Int): Builder {
             this.fullLevel = fullLevel
@@ -34,7 +35,7 @@ data class ExtendedFoodProperties(val fullLevel: Int, val nutrition: NutritionDa
         }
 
         fun build(): ExtendedFoodProperties {
-            val eatenDuration = if (eatenDurationTicks != -1) eatenDurationTicks else calEatenTicks(fullLevel)
+            val eatenDuration = if (eatenDurationTicks != -1) eatenDurationTicks else getEatenTicks(fullLevel)
 
             return ExtendedFoodProperties(fullLevel, nutrition, eatenDuration)
         }

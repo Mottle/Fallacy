@@ -2,11 +2,24 @@
     "itemGroup.fallacy.other": "缪: 杂项",
     "itemGroup.fallacy.tool": "缪: 工具",
     "itemGroup.fallacy.nature": "缪: 自然",
+    "itemGroup.fallacy.farming": "缪: 农业",
+
     "effect.fallacy.dehydration": "脱水",
     "effect.fallacy.full": "饱腹",
+
     "death.attack.fallacy.dehydration": "%1$s 死于脱水",
+
     "block.fallacy.miu_berry_bush": "缪浆果灌木",
+    "block.fallacy.farmland": "耕地",
+    "block.fallacy.dying_crop": "枯萎作物",
+    "block.fallacy.barley": "大麦",
+    "block.fallacy.oat": "燕麦",
+    "block.fallacy.soybean": "大豆",
+    "block.fallacy.tomato": "番茄",
+    "block.fallacy.spinach": "菠菜",
+
     "item.fallacy.miu_berry": "缪浆果",
+    "item.fallacy.barley": "大麦",
     "item.fallacy.gynou_wings": "翼",
     "item.fallacy.rock_skin_boots": "岩石皮肤",
     "item.fallacy.rock_skin_chestplate": "岩石皮肤",
@@ -22,12 +35,22 @@
     "item.fallacy.diet_data.fat": "脂肪",
     "item.fallacy.diet_data.fiber": "纤维",
     "item.fallacy.diet_data.electrolyte": "电解质",
+    "item.fallacy.barley_seeds": "大麦种子",
+    "item.fallacy.oat": "燕麦",
+    "item.fallacy.oat_seeds": "燕麦种子",
+    "item.fallacy.soybean": "大豆",
+    "item.fallacy.tomato": "番茄",
+    "item.fallacy.tomato_seeds": "番茄种子",
+    "item.fallacy.spinach": "菠菜",
+    "item.fallacy.spinach_seeds": "菠菜种子",
+
+    "gui.fallacy.diet_ui.title": "饮食",
+
     "item.tooltips.food_eat_times": "在过去%s次中你食用了%s次",
     "item.tooltips.food_never_eat": "最近还没吃过呢",
     "item.tooltips.full_level0": "微不足道",
     "item.tooltips.full_level1": "零嘴",
     "item.tooltips.full_level2": "简餐",
     "item.tooltips.full_level3": "大餐",
-    "item.tooltips.full_level4": "饕餮盛宴",
-    "gui.fallacy.diet_ui.title": "饮食"
+    "item.tooltips.full_level4": "饕餮盛宴"
 }

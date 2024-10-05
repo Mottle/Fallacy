@@ -15,6 +15,10 @@ open class FruitfulCropGainBlock(properties: Properties, val cropItem: Holder<It
         val AMOUNT = IntegerProperty.create("amount", 0, 15)
     }
 
+    init {
+        registerDefaultState(defaultBlockState().setValue(AMOUNT, 0))
+    }
+
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block?, BlockState?>) {
         super.createBlockStateDefinition(builder)
         builder.add(AMOUNT)
