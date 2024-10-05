@@ -66,6 +66,7 @@ class Skeleton : Race, Respawnable {
             val race = Race.get(player) as Skeleton
             val damage = event.newDamage - 4
 
+            if (player.isInvulnerable) return
             if (checkDamage(event.source)) return
 
             fixDamage(event)
@@ -195,13 +196,14 @@ class Skeleton : Race, Respawnable {
         player.foodData.foodLevel = max(10, player.foodData.foodLevel)
         val cap = player.getCapability(FallacyCapabilities.SKELETON) ?: return
 
+        if (player.isInvulnerable) return
         if (EntityHelper.checkUndeadBurning(level, player, position)) {
             cap.bone -= 0.5f
             cap.sync()
             EntityHelper.damageHead(player, 2)
         }
 
-        if (cap.bone <= 0f && player.isAlive && !player.isInvulnerable) internalKill(player, player.lastDamageSource)
+        if (cap.bone <= 0f && player.isAlive) internalKill(player, player.lastDamageSource)
 
     }
 
