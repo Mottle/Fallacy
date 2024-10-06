@@ -47,6 +47,7 @@ class Wood : Race, Respawnable {
         player: ServerPlayer,
         position: BlockPos
     ) {
+        if (player.isInvulnerable) return
         if (player.isOnFire && player.health > 1.5f) {
             player.health -= Math.clamp(2f, 0f, player.health - 1f)
         }

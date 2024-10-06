@@ -23,6 +23,7 @@ class WeaknessInDay : TickableBehavior {
         position: BlockPos
     ) {
         if (!level.isDay) return
+        if (player.isInvulnerable) return
         player.addEffect(createWeakness())
     }
 
