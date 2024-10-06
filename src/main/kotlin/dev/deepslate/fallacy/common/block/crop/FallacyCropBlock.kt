@@ -33,8 +33,6 @@ import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator
-import net.minecraft.world.phys.shapes.CollisionContext
-import net.minecraft.world.phys.shapes.VoxelShape
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel
 import net.neoforged.neoforge.common.CommonHooks
 
@@ -46,20 +44,57 @@ open class FallacyCropBlock(
 ) :
     CropBlock(properties) {
     companion object {
-        protected val SHAPE_BY_AGE: List<VoxelShape> = listOf(
-            box(0.0, 0.0, 0.0, 16.0, 2.0, 16.0),
-            box(0.0, 0.0, 0.0, 16.0, 3.0, 16.0),
-            box(0.0, 0.0, 0.0, 16.0, 4.0, 16.0),
-            box(0.0, 0.0, 0.0, 16.0, 5.0, 16.0),
-            box(0.0, 0.0, 0.0, 16.0, 8.0, 16.0),
-            box(0.0, 0.0, 0.0, 16.0, 10.0, 16.0),
-            box(0.0, 0.0, 0.0, 16.0, 12.0, 16.0),
-            box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0)
-        )
+//        protected val SHAPE_BY_AGE: List<VoxelShape> = listOf(
+//            box(0.0, 0.0, 0.0, 16.0, 2.0, 16.0),
+//            box(0.0, 0.0, 0.0, 16.0, 3.0, 16.0),
+//            box(0.0, 0.0, 0.0, 16.0, 4.0, 16.0),
+//            box(0.0, 0.0, 0.0, 16.0, 5.0, 16.0),
+//            box(0.0, 0.0, 0.0, 16.0, 8.0, 16.0),
+//            box(0.0, 0.0, 0.0, 16.0, 10.0, 16.0),
+//            box(0.0, 0.0, 0.0, 16.0, 12.0, 16.0),
+//            box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0)
+//        )
 
         val AGE: IntegerProperty = FallacyStateProperties.AGE
 
         val DYING_COUNTER = FallacyStateProperties.DYING_COUNTER
+
+        fun withVanillaBlockStack(
+            context: DataGenContext<Block, FallacyCropBlock>,
+            provider: RegistrateBlockstateProvider
+        ) {
+            val name = context.name
+            provider.getVariantBuilder(context.entry).forAllStates { state ->
+                val age = state.getValue(AGE)
+                val model =
+                    provider.models().crop("block/crop/${name}_stage$age", provider.mcLoc("block/${name}_stage$age"))
+                        .renderType("cutout")
+                return@forAllStates ConfiguredModel.builder().modelFile(model).build()
+            }
+        }
+
+        fun withVanillaBlockStateAlt(
+            context: DataGenContext<Block, FallacyCropBlock>,
+            provider: RegistrateBlockstateProvider
+        ) {
+            val name = context.name
+            val models =
+                (0..3).map {
+                    provider.models().crop("block/crop/${name}_stage$it", provider.mcLoc("block/${name}_stage$it"))
+                        .renderType("cutout")
+                }
+            provider.getVariantBuilder(context.entry).forAllStates { state ->
+                val age = state.getValue(AGE)
+                val stage = when (age) {
+                    in 0..1 -> 0
+                    in 2..3 -> 1
+                    in 4..6 -> 2
+                    else -> 3
+                }
+                val stateModel = models[stage]
+                return@forAllStates ConfiguredModel.builder().modelFile(stateModel).build()
+            }
+        }
 
         fun withBlockState(context: DataGenContext<Block, FallacyCropBlock>, provider: RegistrateBlockstateProvider) {
             val name = context.name
@@ -92,7 +127,7 @@ open class FallacyCropBlock(
                 val ageStateCondition = LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
                     .setProperties(
                         StatePropertiesPredicate.Builder.properties()
-                            .hasProperty(AGE, 7)
+                            .hasProperty(AGE, block.maxAge)
                     )
 
                 provide.add(
@@ -138,7 +173,7 @@ open class FallacyCropBlock(
                 val ageStateCondition = LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
                     .setProperties(
                         StatePropertiesPredicate.Builder.properties()
-                            .hasProperty(AGE, 7)
+                            .hasProperty(AGE, block.maxAge)
                     )
 
                 provide.add(
@@ -172,15 +207,18 @@ open class FallacyCropBlock(
         registerDefaultState(defaultBlockState().setValue(AGE, 0).setValue(DYING_COUNTER, 0))
     }
 
-    protected open val dead: Holder<Block> = FallacyBlocks.Crop.DYING_CROP
+    override fun getAgeProperty(): IntegerProperty = AGE
+
+    protected open val dead: Holder<Block>
+        get() = FallacyBlocks.Crop.DYING_CROP
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block?, BlockState?>) {
         super.createBlockStateDefinition(builder)
         builder.add(DYING_COUNTER)
     }
 
-    override fun getShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape =
-        SHAPE_BY_AGE[state.getValue(AGE)]
+//    override fun getShape(state: BlockState, level: BlockGetter, pos: BlockPos, context: CollisionContext): VoxelShape =
+//        SHAPE_BY_AGE[state.getValue(AGE)]
 
     override fun mayPlaceOn(
         state: BlockState,
@@ -268,4 +306,6 @@ open class FallacyCropBlock(
     }
 
     protected open fun shouldDie(state: BlockState) = state.getValue(DYING_COUNTER) >= 3
+
+    open val canGrowByBoneMeal: Boolean = false
 }

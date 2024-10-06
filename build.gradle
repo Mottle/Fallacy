@@ -135,7 +135,6 @@ dependencies {
     implementation(group: 'thedarkcolour', name: 'kotlinforforge-neoforge', version: '5.5.0')
 //    jarJar(group: 'thedarkcolour', name: 'kotlinforforge-neoforge', version: '[5.0, 6.0)')
 
-//    implementation(group: 'thedarkcolour', name: 'kotlinforforge', version: '5.5.0')
     jarJar('blank:kotlinforforge-5.5.0:all')
 
     implementation(group: 'com.tterrag.registrate', name: 'Registrate', version: 'MC1.21-1.3.0+50')

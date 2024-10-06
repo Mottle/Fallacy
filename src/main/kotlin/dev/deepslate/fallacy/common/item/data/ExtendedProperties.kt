@@ -3,13 +3,15 @@ package dev.deepslate.fallacy.common.item.data
 import dev.deepslate.fallacy.util.internalExtendedProperties
 import net.minecraft.world.item.ItemStack
 
-data class ExtendedProperties(val rank: Int, val foodProperties: ExtendedFoodProperties?) {
+data class ExtendedProperties(val rank: Int, val foodProperties: ExtendedFoodProperties?, val isDeprecated: Boolean) {
 
     class Builder() {
 
         private var rank = 0
 
         private var foodProperties: ExtendedFoodProperties? = null
+
+        private var isDeprecated = false
 
         fun withRank(rank: Int): Builder {
             this.rank = rank
@@ -21,7 +23,12 @@ data class ExtendedProperties(val rank: Int, val foodProperties: ExtendedFoodPro
             return this
         }
 
-        fun build(): ExtendedProperties = ExtendedProperties(rank, foodProperties)
+        fun deprecated(): Builder {
+            this.isDeprecated = true
+            return this
+        }
+
+        fun build(): ExtendedProperties = ExtendedProperties(rank, foodProperties, isDeprecated)
     }
 
     companion object {

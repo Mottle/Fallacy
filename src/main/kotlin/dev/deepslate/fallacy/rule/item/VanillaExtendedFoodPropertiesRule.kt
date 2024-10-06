@@ -1,10 +1,13 @@
-package dev.deepslate.fallacy.common.item.data
+package dev.deepslate.fallacy.rule.item
 
 import dev.deepslate.fallacy.common.item.component.NutritionData
+import dev.deepslate.fallacy.common.item.data.ExtendedFoodProperties
+import dev.deepslate.fallacy.common.item.data.ExtendedProperties
 import dev.deepslate.fallacy.util.internalExtendedProperties
 import net.minecraft.world.item.Items
 
-object Vanilla {
+object VanillaExtendedFoodPropertiesRule {
+
     private val defaultNutrition = mapOf(
         Items.ENCHANTED_GOLDEN_APPLE to NutritionData(
             carbohydrate = 5f,
@@ -67,7 +70,7 @@ object Vanilla {
         Items.DRIED_KELP to 1
     )
 
-    fun set() {
+    fun rule() {
         (defaultNutrition.keys + defaultFullLevel.keys).map { item ->
             val nutrition = defaultNutrition[item]
             val fullLevel = defaultFullLevel[item]
@@ -84,4 +87,4 @@ object Vanilla {
             item.internalExtendedProperties = ExtendedProperties.Builder().withFoodProperties(foodData.build()).build()
         }
     }
-}
+} 

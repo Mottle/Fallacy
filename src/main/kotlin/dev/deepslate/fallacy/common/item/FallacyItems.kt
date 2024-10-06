@@ -9,10 +9,17 @@ import dev.deepslate.fallacy.common.item.data.ExtendedFoodProperties
 import dev.deepslate.fallacy.common.item.data.ExtendedProperties
 import dev.deepslate.fallacy.common.registrate.REG
 import dev.deepslate.fallacy.common.registrate.defaultModelWithTexture
+import dev.deepslate.fallacy.common.registrate.defaultModelWithVanillaTexture
+import dev.deepslate.fallacy.common.registrate.formattedLang
+import net.minecraft.core.Holder
+import net.minecraft.tags.ItemTags
+import net.minecraft.tags.TagKey
 import net.minecraft.world.food.FoodProperties
+import net.minecraft.world.food.Foods
 import net.minecraft.world.item.ArmorItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Rarity
+import net.minecraft.world.level.block.Block
 
 object FallacyItems {
     init {
@@ -30,7 +37,7 @@ object FallacyItems {
             )
         }.properties {
             it.food(FoodProperties.Builder().nutrition(3).saturationModifier(0.5f).fast().build())
-        }.lang("miu berry").defaultModelWithTexture("nature/miu_berries").tab(FallacyTabs.NATURE.key!!).register()
+        }.formattedLang().defaultModelWithTexture("nature/miu_berries").tab(FallacyTabs.NATURE.key!!).register()
 
     val MIU_BERRY_BUSH_SEEDS: ItemEntry<FallacyItemNameBlockItem> = REG.item("miu_berry_bush_seeds") {
         FallacyItemNameBlockItem(
@@ -38,81 +45,96 @@ object FallacyItems {
             it.rarity(Rarity.UNCOMMON),
             ExtendedProperties.default()
         )
-    }.lang("miu berry bush seeds").defaultModelWithTexture("nature/miu_berry_bush_seeds")
+    }.formattedLang().defaultModelWithTexture("nature/miu_berry_bush_seeds")
         .tab(FallacyTabs.NATURE.key!!).register()
 
     object Crop {
-        val BARLEY: ItemEntry<FallacyItem> = REG.item("barley") {
+        private val seedTags = arrayOf(ItemTags.CHICKEN_FOOD, ItemTags.PARROT_FOOD, ItemTags.VILLAGER_PLANTABLE_SEEDS)
+
+        val WHEAT_SEEDS: ItemEntry<FallacyItemNameBlockItem> = REG.item("wheat_seeds") {
+            FallacyItemNameBlockItem(FallacyBlocks.Crop.WHEAT, it, ExtendedProperties.default())
+        }.formattedLang().defaultModelWithVanillaTexture("wheat_seeds").tag(*seedTags).tab(FallacyTabs.FARMING.key!!)
+            .register()
+
+        val POTATO: ItemEntry<FallacyItemNameBlockItem> = REG.item("potato") {
+            FallacyItemNameBlockItem(FallacyBlocks.Crop.POTATOES, it, ExtendedProperties.default())
+        }.properties { it.food(Foods.POTATO) }.formattedLang().defaultModelWithVanillaTexture("potato")
+            .tag(ItemTags.PIG_FOOD, ItemTags.VILLAGER_PLANTABLE_SEEDS).tab(FallacyTabs.FARMING.key!!).register()
+
+        val CARROT: ItemEntry<FallacyItemNameBlockItem> = REG.item("carrot") {
+            FallacyItemNameBlockItem(FallacyBlocks.Crop.CARROTS, it, ExtendedProperties.default())
+        }.properties { it.food(Foods.CARROT) }.formattedLang().defaultModelWithVanillaTexture("carrot")
+            .tag(ItemTags.PIG_FOOD, ItemTags.VILLAGER_PLANTABLE_SEEDS).tab(FallacyTabs.FARMING.key!!).register()
+
+        val BEETROOT_SEEDS: ItemEntry<FallacyItemNameBlockItem> = REG.item("beetroot_seeds") {
+            FallacyItemNameBlockItem(FallacyBlocks.Crop.BEETROOTS, it, ExtendedProperties.default())
+        }.formattedLang().defaultModelWithVanillaTexture("beetroot_seeds").tag(*seedTags).tab(FallacyTabs.FARMING.key!!)
+            .register()
+
+        val BARLEY: ItemEntry<FallacyItem> =
+            crop("barley", 2, NutritionData(carbohydrate = 0.1f, fiber = 0.1f), 1, 0.5f)
+
+        val BARLEY_SEEDS: ItemEntry<FallacyItemNameBlockItem> =
+            seeds("barley_seeds") { FallacyBlocks.Crop.BARLEY }
+
+        val OAT: ItemEntry<FallacyItem> = crop("oat", 2, NutritionData(carbohydrate = 0.1f, fiber = 0.1f), 1, 0.5f)
+
+        val OAT_SEEDS: ItemEntry<FallacyItemNameBlockItem> = seeds("oat_seeds") { FallacyBlocks.Crop.OAT }
+
+        val SOYBEAN: ItemEntry<FallacyItemNameBlockItem> =
+            seedCrop("soybean", 2, NutritionData(carbohydrate = 0.2f, fat = 0.2f), 1, 0.5f)
+
+        val TOMATO: ItemEntry<FallacyItem> =
+            crop("tomato", 2, NutritionData(carbohydrate = 0.1f, fiber = 0.1f, electrolyte = 0.1f), 1, 0.5f)
+
+        val TOMATO_SEEDS: ItemEntry<FallacyItemNameBlockItem> = seeds("tomato_seeds") { FallacyBlocks.Crop.TOMATO }
+
+        val SPINACH: ItemEntry<FallacyItem> =
+            crop("spinach", 2, NutritionData(fiber = 0.3f, electrolyte = 0.2f), 1, 0.5f)
+
+        val SPINACH_SEEDS: ItemEntry<FallacyItemNameBlockItem> = seeds("spinach_seeds") { FallacyBlocks.Crop.SPINACH }
+
+        private fun seeds(name: String, cropGetter: () -> Holder<Block>): ItemEntry<FallacyItemNameBlockItem> =
+            REG.item(name) {
+                FallacyItemNameBlockItem(cropGetter(), it, ExtendedProperties.default())
+            }.formattedLang().defaultModelWithTexture("crop/$name").tag(*seedTags)
+                .tab(FallacyTabs.FARMING.key!!).register()
+
+        private fun crop(
+            name: String,
+            foodLevel: Int = 2,
+            nutritionData: NutritionData = NutritionData(),
+            nutrition: Int = 1,
+            saturation: Float = 0.5f,
+            tags: Array<out TagKey<Item>> = arrayOf()
+        ) = REG.item(name) {
             FallacyItem(
                 it, ExtendedProperties.Builder().withFoodProperties(
-                    ExtendedFoodProperties.Builder().withFullLevel(2)
-                        .withNutrition(NutritionData(carbohydrate = 0.1f, fiber = 0.1f)).build()
+                    ExtendedFoodProperties.Builder().withFullLevel(foodLevel)
+                        .withNutrition(nutritionData).build()
                 ).build()
             )
         }.properties {
-            it.food(FoodProperties.Builder().nutrition(1).saturationModifier(0.5f).build())
-        }.lang("barley").defaultModelWithTexture("crop/barley").tab(FallacyTabs.FARMING.key!!).register()
+            it.food(FoodProperties.Builder().nutrition(nutrition).saturationModifier(saturation).build())
+        }.formattedLang().defaultModelWithTexture("crop/$name").tab(FallacyTabs.FARMING.key!!).tag(*tags).register()
 
-        val BARLEY_SEEDS: ItemEntry<FallacyItemNameBlockItem> = REG.item("barley_seeds") {
-            FallacyItemNameBlockItem(FallacyBlocks.Crop.BARLEY, it, ExtendedProperties.default())
-        }.lang("barley seeds").defaultModelWithTexture("crop/barley_seeds").tab(FallacyTabs.FARMING.key!!).register()
-
-        val OAT: ItemEntry<FallacyItem> = REG.item("oat") {
-            FallacyItem(
-                it, ExtendedProperties.Builder().withFoodProperties(
-                    ExtendedFoodProperties.Builder().withFullLevel(2)
-                        .withNutrition(NutritionData(carbohydrate = 0.1f, fiber = 0.1f)).build()
-                ).build()
-            )
-        }.properties {
-            it.food(FoodProperties.Builder().nutrition(1).saturationModifier(0.5f).build())
-        }.lang("oat").defaultModelWithTexture("crop/oat").tab(FallacyTabs.FARMING.key!!).register()
-
-        val OAT_SEEDS: ItemEntry<FallacyItemNameBlockItem> = REG.item("oat_seeds") {
-            FallacyItemNameBlockItem(FallacyBlocks.Crop.OAT, it, ExtendedProperties.default())
-        }.lang("oat seeds").defaultModelWithTexture("crop/oat_seeds").tab(FallacyTabs.FARMING.key!!).register()
-
-        val SOYBEAN: ItemEntry<FallacyItemNameBlockItem> = REG.item("soybean") {
+        fun seedCrop(
+            name: String,
+            foodLevel: Int = 2,
+            nutritionData: NutritionData = NutritionData(),
+            nutrition: Int = 1,
+            saturation: Float = 0.5f,
+            tags: Array<out TagKey<Item>> = arrayOf()
+        ) = REG.item(name) {
             FallacyItemNameBlockItem(
                 FallacyBlocks.Crop.SOYBEAN, it, ExtendedProperties.Builder().withFoodProperties(
-                    ExtendedFoodProperties.Builder().withFullLevel(2)
-                        .withNutrition(NutritionData(carbohydrate = 0.2f, fat = 0.2f)).build()
+                    ExtendedFoodProperties.Builder().withFullLevel(foodLevel)
+                        .withNutrition(nutritionData).build()
                 ).build()
             )
         }.properties {
-            it.food(FoodProperties.Builder().nutrition(1).saturationModifier(0.5f).build())
-        }.lang("soybean").defaultModelWithTexture("crop/soybean").tab(FallacyTabs.FARMING.key!!).register()
-
-        val TOMATO = REG.item("tomato") {
-            FallacyItem(
-                it, ExtendedProperties.Builder().withFoodProperties(
-                    ExtendedFoodProperties.Builder().withFullLevel(2)
-                        .withNutrition(NutritionData(carbohydrate = 0.1f, fiber = 0.1f, electrolyte = 0.1f)).build()
-                ).build()
-            )
-        }.properties {
-            it.food(FoodProperties.Builder().nutrition(1).saturationModifier(0.5f).build())
-        }.lang("tomato").defaultModelWithTexture("crop/tomato").tab(FallacyTabs.FARMING.key!!).register()
-
-        val TOMATO_SEEDS = REG.item("tomato_seeds") {
-            FallacyItemNameBlockItem(FallacyBlocks.Crop.TOMATO, it, ExtendedProperties.default())
-        }.lang("tomato seeds").defaultModelWithTexture("crop/tomato_seeds").tab(FallacyTabs.FARMING.key!!).register()
-
-        val SPINACH = REG.item("spinach") {
-            FallacyItem(
-                it,
-                ExtendedProperties.Builder().withFoodProperties(
-                    ExtendedFoodProperties.Builder().withFullLevel(2)
-                        .withNutrition(NutritionData(fiber = 0.3f, electrolyte = 0.2f)).build()
-                ).build()
-            )
-        }.properties {
-            it.food(FoodProperties.Builder().nutrition(1).saturationModifier(0.5f).build())
-        }.lang("spinach").defaultModelWithTexture("crop/spinach").tab(FallacyTabs.FARMING.key!!).register()
-
-        val SPINACH_SEEDS = REG.item("spinach_seeds") {
-            FallacyItemNameBlockItem(FallacyBlocks.Crop.SPINACH, it, ExtendedProperties.default())
-        }.lang("spinach seeds").defaultModelWithTexture("crop/spinach_seeds").tab(FallacyTabs.FARMING.key!!).register()
+            it.food(FoodProperties.Builder().nutrition(nutrition).saturationModifier(saturation).build())
+        }.formattedLang().defaultModelWithTexture("crop/$name").tab(FallacyTabs.FARMING.key!!).tag(*tags).register()
     }
 
     object Race {

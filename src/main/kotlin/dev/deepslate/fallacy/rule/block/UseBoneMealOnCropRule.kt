@@ -10,6 +10,7 @@ import net.neoforged.neoforge.event.entity.player.BonemealEvent
 object UseBoneMealOnCropRule {
     @SubscribeEvent
     fun onBoneMeal(event: BonemealEvent) {
-        if (event.state.block is FallacyCropBlock) event.isCanceled = true
+        val block = event.state.block
+        if (block is FallacyCropBlock && !block.canGrowByBoneMeal) event.isCanceled = true
     }
 }

@@ -5,17 +5,31 @@ import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.capability.FallacyCapabilities
 import dev.deepslate.fallacy.common.data.player.FoodHistory
 import dev.deepslate.fallacy.common.item.component.FallacyDataComponents
+import dev.deepslate.fallacy.util.extendedProperties
 import net.minecraft.ChatFormatting
 import net.minecraft.client.Minecraft
 import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
 import net.neoforged.api.distmarker.Dist
+import net.neoforged.bus.api.EventPriority
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.client.event.RenderTooltipEvent
 
 @EventBusSubscriber(modid = Fallacy.MOD_ID, value = [Dist.CLIENT])
 object TooltipHandler {
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    fun onDeprecatedTooltip(event: RenderTooltipEvent.GatherComponents) {
+        val extendedProperties = event.itemStack.item.extendedProperties ?: return
+        if (!extendedProperties.isDeprecated) return
+        event.tooltipElements.add(
+            Either.left(
+                Component.translatable("item.tooltips.deprecated")
+                    .withStyle(ChatFormatting.BOLD, ChatFormatting.RED, ChatFormatting.ITALIC)
+            )
+        )
+    }
+
     @SubscribeEvent
     fun onFoodTooltip(event: RenderTooltipEvent.GatherComponents) {
         val stack = event.itemStack

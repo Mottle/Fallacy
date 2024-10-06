@@ -60,14 +60,6 @@ open class NPKFarmBlock(
         builder.add(N, P, K)
     }
 
-    override fun canSurvive(
-        state: BlockState,
-        level: LevelReader,
-        pos: BlockPos
-    ): Boolean {
-        return true
-    }
-
     override fun getStateForPlacement(context: BlockPlaceContext): BlockState? {
 //        val bn = context.level.getBiome(context.clickedPos).value()
 

@@ -22,7 +22,7 @@ open class TallFruitfulCropGainBlock(properties: Properties, cropItem: Holder<It
 //
 //        fun part(count: Int) = PARTS[count - 2]
 
-        val PART = FallacyStateProperties.PART2
+        val PART = FallacyStateProperties.PART_2
     }
 
     init {
