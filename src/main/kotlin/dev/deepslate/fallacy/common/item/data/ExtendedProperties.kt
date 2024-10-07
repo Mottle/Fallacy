@@ -35,13 +35,13 @@ data class ExtendedProperties(val rank: Int, val foodProperties: ExtendedFoodPro
 
         fun default() = Builder().build()
 
-        fun onItemStack(itemStack: ItemStack) {
-            val item = itemStack.item
-            val extended = item.internalExtendedProperties ?: return
-
-            if (extended.foodProperties != null) {
-                ExtendedFoodProperties.onItemStack(itemStack, extended.foodProperties)
-            }
-        }
+//        fun onItemStack(itemStack: ItemStack) {
+//            val item = itemStack.item
+//            val extended = item.internalExtendedProperties ?: return
+//
+//            if (extended.foodProperties != null) {
+//                ExtendedFoodProperties.onItemStack(itemStack, extended.foodProperties)
+//            }
+//        }
     }
 }

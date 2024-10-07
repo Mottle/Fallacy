@@ -1,10 +1,15 @@
 package dev.deepslate.fallacy.common.item.data
 
+import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.item.component.FallacyDataComponents
 import dev.deepslate.fallacy.common.item.component.NutritionData
+import dev.deepslate.fallacy.util.extendedProperties
 import net.minecraft.core.component.DataComponents
 import net.minecraft.world.food.FoodProperties
-import net.minecraft.world.item.ItemStack
+import net.neoforged.bus.api.EventPriority
+import net.neoforged.bus.api.SubscribeEvent
+import net.neoforged.fml.common.EventBusSubscriber
+import net.neoforged.neoforge.event.ModifyDefaultComponentsEvent
 
 data class ExtendedFoodProperties(val fullLevel: Int, val nutrition: NutritionData, val eatDurationTicks: Int) {
     class Builder {
@@ -41,24 +46,51 @@ data class ExtendedFoodProperties(val fullLevel: Int, val nutrition: NutritionDa
         }
     }
 
-    companion object {
+//    companion object {
+//
+//        fun onItemStack(itemStack: ItemStack, properties: ExtendedFoodProperties) {
+//            if (!itemStack.has(DataComponents.FOOD)) return
+//
+//            val foodData = itemStack.get(DataComponents.FOOD)!!
+//            val fixedFoodData = FoodProperties(
+//                foodData.nutrition,
+//                foodData.saturation,
+//                foodData.canAlwaysEat,
+//                properties.eatDurationTicks.toFloat() / 20f,
+//                foodData.usingConvertsTo,
+//                foodData.effects
+//            )
+//
+//            itemStack.set(DataComponents.FOOD, fixedFoodData)
+//            itemStack.set(FallacyDataComponents.NUTRITION, properties.nutrition)
+//            itemStack.set(FallacyDataComponents.FULL_LEVEL, properties.fullLevel)
+//        }
+//    }
 
-        fun onItemStack(itemStack: ItemStack, properties: ExtendedFoodProperties) {
-            if (!itemStack.has(DataComponents.FOOD)) return
+    @EventBusSubscriber(modid = Fallacy.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+    object Handler {
+        @SubscribeEvent(priority = EventPriority.LOWEST)
+        fun onModifyDefaultComponent(event: ModifyDefaultComponentsEvent) {
+            val item = event.allItems.filter { it.components().has(DataComponents.FOOD) }
+                .filter { it.extendedProperties?.foodProperties != null }.forEach { item ->
+                    val foodData = item.components().get(DataComponents.FOOD)!!
+                    val properties = item.extendedProperties!!.foodProperties!!
 
-            val foodData = itemStack.get(DataComponents.FOOD)!!
-            val fixedFoodData = FoodProperties(
-                foodData.nutrition,
-                foodData.saturation,
-                foodData.canAlwaysEat,
-                properties.eatDurationTicks.toFloat() / 20f,
-                foodData.usingConvertsTo,
-                foodData.effects
-            )
+                    val fixedFoodData = FoodProperties(
+                        foodData.nutrition,
+                        foodData.saturation,
+                        foodData.canAlwaysEat,
+                        properties.eatDurationTicks.toFloat() / 20f,
+                        foodData.usingConvertsTo,
+                        foodData.effects
+                    )
 
-            itemStack.set(DataComponents.FOOD, fixedFoodData)
-            itemStack.set(FallacyDataComponents.NUTRITION, properties.nutrition)
-            itemStack.set(FallacyDataComponents.FULL_LEVEL, properties.fullLevel)
+                    event.modify(item) { builder ->
+                        builder.set(DataComponents.FOOD, fixedFoodData)
+                        builder.set(FallacyDataComponents.NUTRITION.get(), properties.nutrition)
+                        builder.set(FallacyDataComponents.FULL_LEVEL.get(), properties.fullLevel)
+                    }
+                }
         }
     }
 }
