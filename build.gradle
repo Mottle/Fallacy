@@ -137,8 +137,8 @@ dependencies {
 
     jarJar('blank:kotlinforforge-5.5.0:all')
 
-    implementation(group: 'com.tterrag.registrate', name: 'Registrate', version: 'MC1.21-1.3.0+50')
-    jarJar(group: 'com.tterrag.registrate', name: 'Registrate', version: 'MC1.21-1.3.0+50')
+    implementation(group: 'com.tterrag.registrate', name: 'Registrate', version: 'MC1.21-1.3.0+55')
+    jarJar(group: 'com.tterrag.registrate', name: 'Registrate', version: 'MC1.21-1.3.0+55')
 
     implementation(group: 'com.github.wintersteve25.tau', name: 'tau', version: '2.0.4')
     jarJar(group: 'com.github.wintersteve25.tau', name: 'tau', version: '[2.0.4, 3)')
