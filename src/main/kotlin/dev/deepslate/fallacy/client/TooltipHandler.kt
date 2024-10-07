@@ -20,14 +20,26 @@ import net.neoforged.neoforge.client.event.RenderTooltipEvent
 object TooltipHandler {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     fun onDeprecatedTooltip(event: RenderTooltipEvent.GatherComponents) {
-        val extendedProperties = event.itemStack.item.extendedProperties ?: return
-        if (!extendedProperties.isDeprecated) return
-        event.tooltipElements.add(
-            Either.left(
-                Component.translatable("item.tooltips.deprecated")
-                    .withStyle(ChatFormatting.BOLD, ChatFormatting.RED, ChatFormatting.ITALIC)
+        val stack = event.itemStack
+        val item = stack.item
+        val extendedProperties = item.extendedProperties
+        if ((extendedProperties != null && extendedProperties.isDeprecated) || stack.has(FallacyDataComponents.DEPRECATED)) {
+            event.tooltipElements.add(
+                Either.left(
+                    Component.translatable("item.tooltips.deprecated")
+                        .withStyle(ChatFormatting.BOLD, ChatFormatting.RED, ChatFormatting.ITALIC)
+                )
             )
-        )
+        }
+
+        if (stack.has(FallacyDataComponents.OUTDATED)) {
+            event.tooltipElements.add(
+                Either.left(
+                    Component.translatable("item.tooltips.outdated")
+                        .withStyle(ChatFormatting.BOLD, ChatFormatting.RED, ChatFormatting.ITALIC)
+                )
+            )
+        }
     }
 
     @SubscribeEvent

@@ -17,6 +17,10 @@
     "block.fallacy.soybean": "大豆",
     "block.fallacy.tomato": "番茄",
     "block.fallacy.spinach": "菠菜",
+    "block.fallacy.beetroots": "甜菜根",
+    "block.fallacy.carrots": "胡萝卜",
+    "block.fallacy.potatoes": "土豆",
+    "block.fallacy.wheat": "小麦",
 
     "item.fallacy.miu_berry": "缪浆果",
     "item.fallacy.barley": "大麦",
@@ -43,10 +47,14 @@
     "item.fallacy.tomato_seeds": "番茄种子",
     "item.fallacy.spinach": "菠菜",
     "item.fallacy.spinach_seeds": "菠菜种子",
+    "item.fallacy.beetroot_seeds": "甜菜种子",
+    "item.fallacy.carrot": "胡萝卜",
+    "item.fallacy.potato": "土豆",
 
     "gui.fallacy.diet_ui.title": "饮食",
 
     "item.tooltips.deprecated": "已移除",
+    "item.tooltips.outdated": "已过期",
     "item.tooltips.food_eat_times": "在过去%s次中你食用了%s次",
     "item.tooltips.food_never_eat": "最近还没吃过呢",
     "item.tooltips.full_level0": "微不足道",

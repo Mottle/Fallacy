@@ -11,6 +11,14 @@ import net.neoforged.neoforge.registries.DeferredRegister
 object FallacyDataComponents {
     private val REGISTER = DeferredRegister.createDataComponents(Fallacy.MOD_ID)
 
+    val OUTDATED = REGISTER.registerComponentType("outdated") { builder ->
+        builder.persistent(Unit.CODEC).networkSynchronized(StreamCodec.unit(Unit.INSTANCE))
+    }
+
+    val DEPRECATED = REGISTER.registerComponentType("deprecated") { builder ->
+        builder.persistent(Unit.CODEC).networkSynchronized(StreamCodec.unit(Unit.INSTANCE))
+    }
+
     val HYDRATION = REGISTER.registerComponentType("hydration") { builder ->
         builder.persistent(Codec.FLOAT).networkSynchronized(ByteBufCodecs.FLOAT)
     }
