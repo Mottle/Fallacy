@@ -8,7 +8,7 @@ import net.minecraft.network.codec.StreamCodec
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-class HeatLayer(private var defaultHeat: UInt = FREEZING_POINT, private var data: ByteArray? = null) {
+class HeatLayer(private var data: ByteArray? = null) {
 
     companion object {
         const val UNIT_COUNT = 16
@@ -23,29 +23,19 @@ class HeatLayer(private var defaultHeat: UInt = FREEZING_POINT, private var data
 
         val CODEC: Codec<HeatLayer> = RecordCodecBuilder.create { instance ->
             instance.group(
-                Codec.INT.fieldOf("default_heat").forGetter { it.defaultHeat.toInt() },
                 Codec.BYTE.listOf().optionalFieldOf("data").forGetter { Optional.ofNullable(it?.data?.toList()) })
-                .apply(instance) { heat, data ->
-                    HeatLayer(heat.toUInt(), data.getOrNull()?.toByteArray())
+                .apply(instance) { data ->
+                    HeatLayer(data.getOrNull()?.toByteArray())
                 }
         }
 
         val STREAM_CODEC: StreamCodec<ByteBuf, HeatLayer> =
-            StreamCodec.composite(ByteBufCodecs.INT,
-                { layer -> layer.defaultHeat.toInt() },
+            StreamCodec.composite(
                 ByteBufCodecs.BYTE.apply(ByteBufCodecs.list()).apply(ByteBufCodecs::optional),
                 { layer -> Optional.ofNullable(layer?.data?.toList()) }
-            ) { heat, data ->
-                HeatLayer(heat.toUInt(), data.getOrNull()?.toByteArray())
+            ) { data ->
+                HeatLayer(data.getOrNull()?.toByteArray())
             }
-    }
-
-    constructor(heat: UInt) : this(heat, null)
-
-    constructor(data: ByteArray) : this(FREEZING_POINT, data)
-
-    init {
-        require(defaultHeat <= HEAT_MAX)
     }
 
     fun init() {
@@ -59,11 +49,8 @@ class HeatLayer(private var defaultHeat: UInt = FREEZING_POINT, private var data
     val isEmpty: Boolean
         get() = data?.all { it == 0.toByte() } != false
 
-    val isHomogeneous: Boolean
-        get() = defaultHeat == FREEZING_POINT && isEmpty
-
     fun getHeat(x: Int, y: Int, z: Int): UInt {
-        if (data == null) return defaultHeat
+        if (data == null) return FREEZING_POINT
 
         val index = getRawIndex(x, y, z)
         val high = data!![2 * index]
@@ -87,12 +74,7 @@ class HeatLayer(private var defaultHeat: UInt = FREEZING_POINT, private var data
         setHeat(x, y, z, heat)
     }
 
-    fun fill(heat: UInt) {
-        require(heat <= HEAT_MAX)
-        defaultHeat == heat
-    }
-
-    fun copy(): HeatLayer = HeatLayer(defaultHeat, data?.clone())
+    fun copy(): HeatLayer = HeatLayer(data?.clone())
 
     private fun merge(high: Byte, low: Byte): UInt {
         return (high.toUInt() shl 8) or low.toUInt()

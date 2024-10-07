@@ -7,7 +7,7 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 
-class LayerStack(private val array: MutableList<HeatLayer>) {
+class LayerStack(private val array: List<HeatLayer> = listOf()) {
     companion object {
         const val WORLD_DEEPEST = -64
 
@@ -15,13 +15,13 @@ class LayerStack(private val array: MutableList<HeatLayer>) {
 
         const val SIZE = (WORLD_HIGHEST - WORLD_DEEPEST) / HeatLayer.UNIT_COUNT
 
-        private val eitherCodec: Codec<Either<String, HeatLayer>> = Codec.either(Codec.STRING, HeatLayer.CODEC)
+        private val eitherCodec: Codec<Either<Int, HeatLayer>> = Codec.either(Codec.INT, HeatLayer.CODEC)
 
-        private fun to(either: Either<String, HeatLayer>): HeatLayer =
+        private fun to(either: Either<Int, HeatLayer>): HeatLayer =
             if (either.left().isPresent) HeatLayer() else either.right().get()
 
-        private fun from(layer: HeatLayer): Either<String, HeatLayer> =
-            if (layer.isHomogeneous) Either.left("homogeneous") else Either.right(layer)
+        private fun from(layer: HeatLayer): Either<Int, HeatLayer> =
+            if (layer.isEmpty) Either.left(0) else Either.right(layer)
 
         private val fixedHeatLayerCodec: Codec<HeatLayer> = eitherCodec.xmap(::to, ::from)
 
@@ -30,13 +30,14 @@ class LayerStack(private val array: MutableList<HeatLayer>) {
                 .apply(instance, ::LayerStack)
         }
 
-        private val eitherStreamCodec = ByteBufCodecs.either(ByteBufCodecs.STRING_UTF8, HeatLayer.STREAM_CODEC)
+        private val eitherStreamCodec: StreamCodec<ByteBuf, Either<Int, HeatLayer>> =
+            ByteBufCodecs.either(ByteBufCodecs.INT, HeatLayer.STREAM_CODEC)
 
         private val fixedHeatLayerStreamCodec: StreamCodec<ByteBuf, HeatLayer> = eitherStreamCodec.map(::to, ::from)
 
         val STREAM_CODEC: StreamCodec<ByteBuf, LayerStack> =
             StreamCodec.composite(
-                fixedHeatLayerStreamCodec.apply(ByteBufCodecs.list(24)),
+                fixedHeatLayerStreamCodec.apply(ByteBufCodecs.list()),
                 LayerStack::layers,
             ) { LayerStack(it) }
     }
