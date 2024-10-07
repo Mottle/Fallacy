@@ -11,8 +11,10 @@ import kotlin.jvm.optionals.getOrNull
 class HeatLayer(private var data: ByteArray? = null) {
 
     companion object {
+        //16 units
         const val UNIT_COUNT = 16
 
+        //unit 16 bit
         const val UNIT_SIZE = 16
 
         const val SIZE = UNIT_COUNT * UNIT_COUNT * UNIT_COUNT * UNIT_SIZE / 8

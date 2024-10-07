@@ -7,7 +7,7 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 
-class LayerStack(private val array: List<HeatLayer> = listOf()) {
+data class LayerStack(private val data: MutableList<HeatLayer> = mutableListOf()) {
     companion object {
         const val WORLD_DEEPEST = -64
 
@@ -42,5 +42,13 @@ class LayerStack(private val array: List<HeatLayer> = listOf()) {
             ) { LayerStack(it) }
     }
 
-    fun layers() = array.toList()
+    val layers: List<HeatLayer> get() = data
+
+    private fun getIndex(y: Int) = (y - WORLD_DEEPEST) % HeatLayer.UNIT_COUNT
+
+    fun getLayer(y: Int): HeatLayer = data[getIndex(y)]
+
+    fun setLayer(y: Int, layer: HeatLayer) {
+        data[getIndex(y)] = layer
+    }
 }
