@@ -1,5 +1,6 @@
 package dev.deepslate.fallacy.common.block
 
+import dev.deepslate.fallacy.util.setting
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
 import net.minecraft.core.registries.BuiltInRegistries
@@ -100,6 +101,15 @@ open class NPKFarmBlock(
             else -> K
         }
         val value = state.getValue(property)
+        val biomeSetting = level.getBiome(pos).value().setting
+        val biomeProperty = when (choice) {
+            0 -> biomeSetting.npk.n
+            1 -> biomeSetting.npk.p
+            else -> biomeSetting.npk.k
+        }
+
+        if (value <= biomeProperty) return state
+
         val nextValue = (value - 1).coerceAtLeast(0)
 
         return state.setValue(property, nextValue)

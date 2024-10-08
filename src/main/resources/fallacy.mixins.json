@@ -14,7 +14,8 @@
         "NearestAttackableTargetGoalMixin",
         "item.ItemExtensionMixin",
         "item.ItemStackMixin",
-        "player.PlayerMixin"
+        "player.PlayerMixin",
+        "BiomeMixin"
     ],
     "client": [
         "client.ItemStackMixin",
