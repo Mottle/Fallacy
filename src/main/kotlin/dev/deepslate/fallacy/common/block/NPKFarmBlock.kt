@@ -84,10 +84,25 @@ open class NPKFarmBlock(
     /**
      * @see net.minecraft.world.level.block.FarmBlock.turnToDirt
      */
-    protected open fun degenerate(entity: Entity?, state: BlockState, level: Level, pos: BlockPos) {
+    protected open fun turnBack(entity: Entity?, state: BlockState, level: Level, pos: BlockPos) {
         val dirtState = pushEntitiesUp(state, baseDirt.value().defaultBlockState(), level, pos)
         level.setBlockAndUpdate(pos, dirtState)
         level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(entity, dirtState))
+    }
+
+    //土壤肥力退化
+    protected open fun degenerate(state: BlockState, level: Level, pos: BlockPos): BlockState {
+        if (level.random.nextInt(5) != 0) return state
+        val choice = level.random.nextInt(3)
+        val property = when (choice) {
+            0 -> N
+            1 -> P
+            else -> K
+        }
+        val value = state.getValue(property)
+        val nextValue = (value - 1).coerceAtLeast(0)
+
+        return state.setValue(property, nextValue)
     }
 
     override fun randomTick(
@@ -96,15 +111,17 @@ open class NPKFarmBlock(
         pos: BlockPos,
         random: RandomSource
     ) {
-        val moisture = state.getValue(MOISTURE);
+        val state = degenerate(state, level, pos)
+        val moisture = state.getValue(MOISTURE)
+
         if (!isNearWater(level, pos) && !level.isRainingAt(pos.above())) {
             if (moisture > 0) {
-                level.setBlock(pos, state.setValue(MOISTURE, Integer.valueOf(moisture - 1)), 2);
+                level.setBlock(pos, state.setValue(MOISTURE, Integer.valueOf(moisture - 1)), 2)
             } else if (!shouldMaintainFarmland(level, pos)) {
-                degenerate(null, state, level, pos);
+                turnBack(null, state, level, pos)
             }
         } else if (moisture < 7) {
-            level.setBlock(pos, state.setValue(MOISTURE, Integer.valueOf(7)), 2);
+            level.setBlock(pos, state.setValue(MOISTURE, Integer.valueOf(7)), 2)
         }
     }
 }
