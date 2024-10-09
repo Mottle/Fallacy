@@ -1,5 +1,6 @@
 package dev.deepslate.fallacy.common.loot
 
+import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
@@ -11,7 +12,12 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier
 import net.neoforged.neoforge.common.loot.LootModifier
 
-class ReplaceItem(conditions: Array<LootItemCondition>, val replaced: ResourceLocation, val item: ResourceLocation) :
+class ReplaceItem(
+    conditions: Array<LootItemCondition>,
+    val replaced: ResourceLocation,
+    val item: ResourceLocation,
+    val multiple: Float
+) :
     LootModifier(conditions) {
 
     companion object {
@@ -19,7 +25,8 @@ class ReplaceItem(conditions: Array<LootItemCondition>, val replaced: ResourceLo
             codecStart(instance).and(
                 instance.group(
                     ResourceLocation.CODEC.fieldOf("replaced").forGetter(ReplaceItem::replaced),
-                    ResourceLocation.CODEC.fieldOf("item").forGetter(ReplaceItem::item)
+                    ResourceLocation.CODEC.fieldOf("item").forGetter(ReplaceItem::item),
+                    Codec.FLOAT.optionalFieldOf("multiple", 1.0f).forGetter(ReplaceItem::multiple)
                 )
             ).apply(instance, ::ReplaceItem)
         }
@@ -30,7 +37,9 @@ class ReplaceItem(conditions: Array<LootItemCondition>, val replaced: ResourceLo
         context: LootContext
     ): ObjectArrayList<ItemStack> = ObjectArrayList(generatedLoot.map {
         if (it.itemHolder.key!!.location() == replaced) {
-            return@map BuiltInRegistries.ITEM.get(item).defaultInstance
+            val drop = BuiltInRegistries.ITEM.get(item).defaultInstance
+            drop.count = (multiple * drop.count).toInt()
+            return@map drop
         } else {
             return@map it
         }
