@@ -1,5 +1,6 @@
 package dev.deepslate.fallacy.common.block
 
+import dev.deepslate.fallacy.common.block.data.NPK
 import dev.deepslate.fallacy.util.setting
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
@@ -34,7 +35,7 @@ open class NPKFarmBlock(
         /**
          * @see net.minecraft.world.level.block.FarmBlock.isNearWater
          */
-        fun isNearWater(level: LevelReader, pos: BlockPos): Boolean {
+        protected fun isNearWater(level: LevelReader, pos: BlockPos): Boolean {
             val state = level.getBlockState(pos);
             for (blockPos in BlockPos.betweenClosed(pos.offset(-4, 0, -4), pos.offset(4, 1, 4))) {
                 if (state.canBeHydrated(level, pos, level.getFluidState(blockPos), blockPos)) {
@@ -48,12 +49,12 @@ open class NPKFarmBlock(
         /**
          * @see net.minecraft.world.level.block.FarmBlock.shouldMaintainFarmland
          */
-        fun shouldMaintainFarmland(level: BlockGetter, pos: BlockPos) =
+        protected fun shouldMaintainFarmland(level: BlockGetter, pos: BlockPos) =
             level.getBlockState(pos.above()).`is`(BlockTags.MAINTAINS_FARMLAND);
     }
 
     init {
-        registerDefaultState(defaultBlockState().setValue(N, 0).setValue(P, 0).setValue(K, 0))
+        registerDefaultState(super.defaultBlockState().setValue(N, 0).setValue(P, 0).setValue(K, 0))
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block?, BlockState?>) {
@@ -61,10 +62,13 @@ open class NPKFarmBlock(
         builder.add(N, P, K)
     }
 
-    override fun getStateForPlacement(context: BlockPlaceContext): BlockState? {
-//        val bn = context.level.getBiome(context.clickedPos).value()
+    protected fun applyNPK(state: BlockState, npk: NPK): BlockState =
+        state.setValue(N, npk.n).setValue(P, npk.p).setValue(K, npk.k)
 
-        val default = defaultBlockState()
+    override fun getStateForPlacement(context: BlockPlaceContext): BlockState? {
+        val biomeNPK = context.level.getBiome(context.clickedPos).value().setting.npk
+        val default = applyNPK(defaultBlockState(), biomeNPK)
+
         return if (default.canSurvive(context.level, context.clickedPos)) {
             default
         } else {
@@ -85,10 +89,10 @@ open class NPKFarmBlock(
     /**
      * @see net.minecraft.world.level.block.FarmBlock.turnToDirt
      */
-    protected open fun turnBack(entity: Entity?, state: BlockState, level: Level, pos: BlockPos) {
+    protected open fun turnToDirt(state: BlockState, level: Level, pos: BlockPos) {
         val dirtState = pushEntitiesUp(state, baseDirt.value().defaultBlockState(), level, pos)
         level.setBlockAndUpdate(pos, dirtState)
-        level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(entity, dirtState))
+        level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(null, dirtState))
     }
 
     //土壤肥力退化
@@ -128,7 +132,7 @@ open class NPKFarmBlock(
             if (moisture > 0) {
                 level.setBlock(pos, state.setValue(MOISTURE, Integer.valueOf(moisture - 1)), 2)
             } else if (!shouldMaintainFarmland(level, pos)) {
-                turnBack(null, state, level, pos)
+                turnToDirt(state, level, pos)
             }
         } else if (moisture < 7) {
             level.setBlock(pos, state.setValue(MOISTURE, Integer.valueOf(7)), 2)

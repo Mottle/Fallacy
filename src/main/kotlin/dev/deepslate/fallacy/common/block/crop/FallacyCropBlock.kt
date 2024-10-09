@@ -204,7 +204,7 @@ open class FallacyCropBlock(
     }
 
     init {
-        registerDefaultState(defaultBlockState().setValue(AGE, 0).setValue(DYING_COUNTER, 0))
+        registerDefaultState(super.defaultBlockState().setValue(AGE, 0).setValue(DYING_COUNTER, 0))
     }
 
     override fun getAgeProperty(): IntegerProperty = AGE
