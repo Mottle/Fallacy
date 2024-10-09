@@ -1,0 +1,8 @@
+{
+    "replace": false,
+    "entries": [
+        "fallacy:replace_vanilla_wheat_seeds",
+        "fallacy:replace_vanilla_potato",
+        "fallacy:replace_vanilla_carrot"
+    ]
+}

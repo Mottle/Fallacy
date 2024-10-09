@@ -12,13 +12,13 @@ import net.neoforged.neoforge.registries.DeferredRegister
 
 object FallacyArmorMaterials {
 
-    private val REGISTRY = DeferredRegister.create(BuiltInRegistries.ARMOR_MATERIAL, Fallacy.MOD_ID)
+    private val registry = DeferredRegister.create(BuiltInRegistries.ARMOR_MATERIAL, Fallacy.MOD_ID)
 
     fun init(bus: IEventBus) {
-        REGISTRY.register(bus)
+        registry.register(bus)
     }
 
-    val Rock = REGISTRY.register("rock") { _ ->
+    val Rock = registry.register("rock") { _ ->
         ArmorMaterial(
             mapOf(
                 ArmorItem.Type.BOOTS to 8,
@@ -30,7 +30,7 @@ object FallacyArmorMaterials {
         )
     }
 
-    val BROKEN_ROCK = REGISTRY.register("broken_rock") { _ ->
+    val BROKEN_ROCK = registry.register("broken_rock") { _ ->
         ArmorMaterial(
             mapOf(
                 ArmorItem.Type.BOOTS to 0,

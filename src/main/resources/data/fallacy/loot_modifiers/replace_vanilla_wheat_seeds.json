@@ -1,0 +1,6 @@
+{
+    "type": "fallacy:replace_item",
+    "conditions": [],
+    "replaced": "minecraft:wheat_seeds",
+    "item": "fallacy:wheat_seeds"
+}

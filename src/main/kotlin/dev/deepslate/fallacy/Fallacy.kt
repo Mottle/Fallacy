@@ -8,6 +8,7 @@ import dev.deepslate.fallacy.common.effect.FallacyEffects
 import dev.deepslate.fallacy.common.item.FallacyItems
 import dev.deepslate.fallacy.common.item.armor.FallacyArmorMaterials
 import dev.deepslate.fallacy.common.item.component.FallacyDataComponents
+import dev.deepslate.fallacy.common.loot.FallacyLootModifiers
 import dev.deepslate.fallacy.common.registrate.Registration
 import dev.deepslate.fallacy.race.FallacyRaces
 import dev.deepslate.fallacy.rule.RangedAttributeRule
@@ -36,6 +37,7 @@ class Fallacy(val modBus: IEventBus) {
         Registration.init()
         FallacyAttachments.register(modBus)
 
+        FallacyLootModifiers.init(modBus)
         FallacyTabs.init(modBus)
         FallacyAttributes.init(modBus)
         FallacyEffects.init(modBus)

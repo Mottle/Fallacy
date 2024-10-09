@@ -21,11 +21,11 @@ import net.neoforged.neoforge.registries.RegistryBuilder
 
 @EventBusSubscriber(modid = Fallacy.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 object FallacyRaces {
-    private val KEY = ResourceKey.createRegistryKey<Race>(Fallacy.id("race"))
+    val KEY = ResourceKey.createRegistryKey<Race>(Fallacy.id("race"))
 
     val REGISTRY = RegistryBuilder(KEY).sync(true).maxId(256).create()
 
-    val RACE = DeferredRegister.create(REGISTRY, Fallacy.MOD_ID)
+    private val registry = DeferredRegister.create(REGISTRY, Fallacy.MOD_ID)
 
     @SubscribeEvent
     fun registerRegistries(event: NewRegistryEvent) {
@@ -33,26 +33,26 @@ object FallacyRaces {
     }
 
     fun init(bus: IEventBus) {
-        RACE.register(bus)
+        registry.register(bus)
     }
 
-    val UNKNOWN = RACE.register(Unknown.ID.path) { _ -> Unknown.INSTANCE }
+    val UNKNOWN = registry.register(Unknown.ID.path) { _ -> Unknown.INSTANCE }
 
-    val HUMANKIND = RACE.register(Humankind.ID.path) { _ -> Humankind() }
+    val HUMANKIND = registry.register(Humankind.ID.path) { _ -> Humankind() }
 
-    val ZOMBIE = RACE.register(Zombie.ID.path) { _ -> Zombie() }
+    val ZOMBIE = registry.register(Zombie.ID.path) { _ -> Zombie() }
 
-    val GYNOU = RACE.register(Gynou.ID.path) { _ -> Gynou() }
+    val GYNOU = registry.register(Gynou.ID.path) { _ -> Gynou() }
 
-    val ROCK = RACE.register(Rock.ID.path) { _ -> Rock() }
+    val ROCK = registry.register(Rock.ID.path) { _ -> Rock() }
 
-    val GOD = RACE.register(God.ID.path) { _ -> God() }
+    val GOD = registry.register(God.ID.path) { _ -> God() }
 
-    val WOOD = RACE.register(Wood.ID.path) { _ -> Wood() }
+    val WOOD = registry.register(Wood.ID.path) { _ -> Wood() }
 
-    val ELF = RACE.register(Elf.ID.path) { _ -> Elf() }
+    val ELF = registry.register(Elf.ID.path) { _ -> Elf() }
 
-    val ORC = RACE.register(Orc.ID.path) { _ -> Orc() }
+    val ORC = registry.register(Orc.ID.path) { _ -> Orc() }
 
-    val SKELETON = RACE.register(Skeleton.ID.path) { _ -> Skeleton() }
+    val SKELETON = registry.register(Skeleton.ID.path) { _ -> Skeleton() }
 }

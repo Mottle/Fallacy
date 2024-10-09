@@ -9,48 +9,48 @@ import net.neoforged.bus.api.IEventBus
 import net.neoforged.neoforge.registries.DeferredRegister
 
 object FallacyDataComponents {
-    private val REGISTER = DeferredRegister.createDataComponents(Fallacy.MOD_ID)
+    private val registry = DeferredRegister.createDataComponents(Fallacy.MOD_ID)
 
-    val OUTDATED = REGISTER.registerComponentType("outdated") { builder ->
+    val OUTDATED = registry.registerComponentType("outdated") { builder ->
         builder.persistent(Unit.CODEC).networkSynchronized(StreamCodec.unit(Unit.INSTANCE))
     }
 
-    val DEPRECATED = REGISTER.registerComponentType("deprecated") { builder ->
+    val DEPRECATED = registry.registerComponentType("deprecated") { builder ->
         builder.persistent(Unit.CODEC).networkSynchronized(StreamCodec.unit(Unit.INSTANCE))
     }
 
-    val HYDRATION = REGISTER.registerComponentType("hydration") { builder ->
+    val HYDRATION = registry.registerComponentType("hydration") { builder ->
         builder.persistent(Codec.FLOAT).networkSynchronized(ByteBufCodecs.FLOAT)
     }
 
-    val GYNOU_WINGS = REGISTER.registerComponentType("is_gynou_wings") { builder ->
+    val GYNOU_WINGS = registry.registerComponentType("is_gynou_wings") { builder ->
         builder.persistent(Unit.CODEC).networkSynchronized(StreamCodec.unit(Unit.INSTANCE))
     }
 
-    val FORCE_BINDING = REGISTER.registerComponentType("force_binding") { builder ->
+    val FORCE_BINDING = registry.registerComponentType("force_binding") { builder ->
         builder.persistent(Unit.CODEC).networkSynchronized(StreamCodec.unit(Unit.INSTANCE))
     }
 
-    val CLADDINGS = REGISTER.registerComponentType("claddings") { builder ->
+    val CLADDINGS = registry.registerComponentType("claddings") { builder ->
         builder.persistent(CladdingData.CODEC).networkSynchronized(CladdingData.STREAM_CODEC)
     }
 
     val ROCK_SKIN_REGENERATION_REST_TICKS =
-        REGISTER.registerComponentType("rock_skin_regeneration_rest_ticks") { builder ->
+        registry.registerComponentType("rock_skin_regeneration_rest_ticks") { builder ->
             builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT)
         }
 
     //食物营养度
-    val NUTRITION = REGISTER.registerComponentType("nutrition") { builder ->
+    val NUTRITION = registry.registerComponentType("nutrition") { builder ->
         builder.persistent(NutritionData.CODEC).networkSynchronized(NutritionData.STREAM_CODEC)
     }
 
     //食物饱腹等级 默认2
-    val FULL_LEVEL = REGISTER.registerComponentType("full_level") { builder ->
+    val FULL_LEVEL = registry.registerComponentType("full_level") { builder ->
         builder.persistent(Codec.intRange(0, 4)).networkSynchronized(ByteBufCodecs.INT)
     }
 
     fun init(bus: IEventBus) {
-        REGISTER.register(bus)
+        registry.register(bus)
     }
 }

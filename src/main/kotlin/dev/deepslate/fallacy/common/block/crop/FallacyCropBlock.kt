@@ -8,6 +8,7 @@ import dev.deepslate.fallacy.common.block.FallacyBlocks
 import dev.deepslate.fallacy.common.block.FallacyStateProperties
 import dev.deepslate.fallacy.common.block.NPKFarmBlock
 import dev.deepslate.fallacy.common.block.data.NPK
+import dev.deepslate.fallacy.common.item.FallacyItems
 import net.minecraft.advancements.critereon.StatePropertiesPredicate
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
@@ -17,6 +18,7 @@ import net.minecraft.util.RandomSource
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.BlockGetter
+import net.minecraft.world.level.ItemLike
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.CropBlock
@@ -308,4 +310,6 @@ open class FallacyCropBlock(
     protected open fun shouldDie(state: BlockState) = state.getValue(DYING_COUNTER) >= 3
 
     open val canGrowByBoneMeal: Boolean = false
+
+    override fun getBaseSeedId(): ItemLike = FallacyItems.Crop.WHEAT_SEEDS
 }
