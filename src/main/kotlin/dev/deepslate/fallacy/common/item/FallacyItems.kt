@@ -94,6 +94,38 @@ object FallacyItems {
 
         val SPINACH_SEEDS: ItemEntry<FallacyItemNameBlockItem> = seeds("spinach_seeds") { FallacyBlocks.Crop.SPINACH }
 
+        val CHILE_PEPPER: ItemEntry<FallacyItem> =
+            crop("chile_pepper", 2, NutritionData(fiber = 0.3f, electrolyte = 0.2f), 1, 0.5f)
+
+        val CHILE_PEPPER_SEEDS: ItemEntry<FallacyItemNameBlockItem> =
+            seeds("chile_pepper_seeds") { FallacyBlocks.Crop.CHILE_PEPPER }
+
+        val CORN: ItemEntry<FallacyItem> = crop("corn", 2, NutritionData(carbohydrate = 0.1f, fiber = 0.1f), 1, 0.5f)
+
+        val CORN_SEEDS: ItemEntry<FallacyItemNameBlockItem> = seeds("corn_seeds") { FallacyBlocks.Crop.CORN }
+
+        val EGGPLANT: ItemEntry<FallacyItem> =
+            crop("eggplant", 2, NutritionData(carbohydrate = 0.1f, fiber = 0.1f), 1, 0.5f)
+
+        val EGGPLANT_SEEDS: ItemEntry<FallacyItemNameBlockItem> =
+            seeds("eggplant_seeds") { FallacyBlocks.Crop.EGGPLANT }
+
+        val ASPARAGUS: ItemEntry<FallacyItem> =
+            crop("asparagus", 2, NutritionData(carbohydrate = 0.1f, fiber = 0.1f), 1, 0.5f)
+
+        val ASPARAGUS_SEEDS: ItemEntry<FallacyItemNameBlockItem> =
+            seeds("asparagus_seeds") { FallacyBlocks.Crop.ASPARAGUS }
+
+        val CELERY: ItemEntry<FallacyItem> =
+            crop("celery", 2, NutritionData(carbohydrate = 0.1f, fiber = 0.1f), 1, 0.5f)
+
+        val CELERY_SEEDS: ItemEntry<FallacyItemNameBlockItem> = seeds("celery_seeds") { FallacyBlocks.Crop.CELERY }
+
+        val CABBAGE: ItemEntry<FallacyItem> =
+            crop("cabbage", 2, NutritionData(carbohydrate = 0.1f, fiber = 0.1f), 1, 0.5f)
+
+        val CABBAGE_SEEDS: ItemEntry<FallacyItemNameBlockItem> = seeds("cabbage_seeds") { FallacyBlocks.Crop.CABBAGE }
+
         private fun seeds(name: String, cropGetter: () -> Holder<Block>): ItemEntry<FallacyItemNameBlockItem> =
             REG.item(name) {
                 FallacyItemNameBlockItem(cropGetter(), it, ExtendedProperties.default())
@@ -107,7 +139,7 @@ object FallacyItems {
             nutrition: Int = 1,
             saturation: Float = 0.5f,
             tags: Array<out TagKey<Item>> = arrayOf()
-        ) = REG.item(name) {
+        ): ItemEntry<FallacyItem> = REG.item(name) {
             FallacyItem(
                 it, ExtendedProperties.Builder().withFoodProperties(
                     ExtendedFoodProperties.Builder().withFullLevel(foodLevel)
@@ -125,7 +157,7 @@ object FallacyItems {
             nutrition: Int = 1,
             saturation: Float = 0.5f,
             tags: Array<out TagKey<Item>> = arrayOf()
-        ) = REG.item(name) {
+        ): ItemEntry<FallacyItemNameBlockItem> = REG.item(name) {
             FallacyItemNameBlockItem(
                 FallacyBlocks.Crop.SOYBEAN, it, ExtendedProperties.Builder().withFoodProperties(
                     ExtendedFoodProperties.Builder().withFullLevel(foodLevel)

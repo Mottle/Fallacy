@@ -9,8 +9,10 @@ import dev.deepslate.fallacy.common.item.FallacyItems
 import dev.deepslate.fallacy.common.registrate.REG
 import dev.deepslate.fallacy.common.registrate.formattedLang
 import net.minecraft.advancements.critereon.StatePropertiesPredicate
+import net.minecraft.core.Holder
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.tags.BlockTags
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.FarmBlock
@@ -91,77 +93,105 @@ object FallacyBlocks {
 
         private val defaultProperties = Properties.ofFullCopy(Blocks.WHEAT)
 
-        val DYING_CROP = REG.block("dying_crop", ::DyingCropBlock).properties { Properties.ofFullCopy(Blocks.WHEAT) }
-            .blockstate { ctx, prov ->
-                prov.simpleBlock(
-                    ctx.get(),
-                    prov.models().cross("block/crop/dying_crop", Fallacy.id("block/crop/dying_crop"))
-                        .renderType("cutout")
+        val DYING_CROP: BlockEntry<DyingCropBlock> =
+            REG.block("dying_crop", ::DyingCropBlock).properties { Properties.ofFullCopy(Blocks.WHEAT) }
+                .blockstate { ctx, prov ->
+                    prov.simpleBlock(
+                        ctx.get(),
+                        prov.models().cross("block/crop/dying_crop", Fallacy.id("block/crop/dying_crop"))
+                            .renderType("cutout")
+                    )
+                }.formattedLang().tag(BlockTags.CROPS, BlockTags.MAINTAINS_FARMLAND)
+                .register()
+
+        val WHEAT: BlockEntry<FallacyCropBlock> =
+            REG.block("wheat") { FallacyCropBlock(it, NPK(0, 0, 0)) }.properties { defaultProperties }
+                .blockstate(FallacyCropBlock::withVanillaBlockStack)
+                .loot(
+                    FallacyCropBlock.withLoot(
+                        BuiltInRegistries.ITEM.getHolder(BuiltInRegistries.ITEM.getKey(Items.WHEAT)).get(),
+                        (1..3),
+                        (1..3)
+                    )
                 )
-            }.formattedLang().tag(BlockTags.CROPS, BlockTags.MAINTAINS_FARMLAND)
-            .register()
+                .tag(*defaultTags).formattedLang().register()
 
-        val WHEAT = REG.block("wheat") { FallacyCropBlock(it, NPK(0, 0, 0)) }.properties { defaultProperties }
-            .blockstate(FallacyCropBlock::withVanillaBlockStack)
-            .loot(
-                FallacyCropBlock.withLoot(
-                    BuiltInRegistries.ITEM.getHolder(BuiltInRegistries.ITEM.getKey(Items.WHEAT)).get(),
-                    (1..3),
-                    (1..3)
-                )
-            )
-            .tag(*defaultTags).formattedLang().register()
+        val POTATOES: BlockEntry<FallacyCropBlock> =
+            REG.block("potatoes") { FallacyCropBlock(it, NPK(0, 0, 0)) }.properties { defaultProperties }
+                .blockstate(FallacyCropBlock::withVanillaBlockStateAlt).loot(
+                    FallacyCropBlock.withLoot(
+                        FallacyItems.Crop.POTATO,
+                        (1..3),
+                        (1..3)
+                    )
+                ).tag(*defaultTags).formattedLang().register()
 
-        val POTATOES = REG.block("potatoes") { FallacyCropBlock(it, NPK(0, 0, 0)) }.properties { defaultProperties }
-            .blockstate(FallacyCropBlock::withVanillaBlockStateAlt).loot(
-                FallacyCropBlock.withLoot(
-                    FallacyItems.Crop.POTATO,
-                    (1..3),
-                    (1..3)
-                )
-            ).tag(*defaultTags).formattedLang().register()
+        val CARROTS: BlockEntry<FallacyCropBlock> =
+            REG.block("carrots") { FallacyCropBlock(it, NPK(0, 0, 0)) }.properties { defaultProperties }
+                .blockstate(FallacyCropBlock::withVanillaBlockStateAlt).loot(
+                    FallacyCropBlock.withLoot(
+                        FallacyItems.Crop.CARROT,
+                        (1..3),
+                        (1..3)
+                    )
+                ).tag(*defaultTags).formattedLang().register()
 
-        val CARROTS = REG.block("carrots") { FallacyCropBlock(it, NPK(0, 0, 0)) }.properties { defaultProperties }
-            .blockstate(FallacyCropBlock::withVanillaBlockStateAlt).loot(
-                FallacyCropBlock.withLoot(
-                    FallacyItems.Crop.CARROT,
-                    (1..3),
-                    (1..3)
-                )
-            ).tag(*defaultTags).formattedLang().register()
+        val BEETROOTS: BlockEntry<FallacyCropBlock> =
+            REG.block("beetroots") { FallacyCropBlock(it, NPK(0, 0, 0)) }.properties { defaultProperties }
+                .blockstate(FallacyCropBlock::withVanillaBlockStateAlt).loot(
+                    FallacyCropBlock.withLoot(
+                        BuiltInRegistries.ITEM.getHolder(BuiltInRegistries.ITEM.getKey(Items.BEETROOT)).get(),
+                        (1..3),
+                        (1..3)
+                    )
+                ).tag(*defaultTags).formattedLang().register()
 
-        val BEETROOTS = REG.block("beetroots") { FallacyCropBlock(it, NPK(0, 0, 0)) }.properties { defaultProperties }
-            .blockstate(FallacyCropBlock::withVanillaBlockStateAlt).loot(
-                FallacyCropBlock.withLoot(
-                    BuiltInRegistries.ITEM.getHolder(BuiltInRegistries.ITEM.getKey(Items.BEETROOT)).get(),
-                    (1..3),
-                    (1..3)
-                )
-            ).tag(*defaultTags).formattedLang().register()
+        val BARLEY: BlockEntry<FallacyCropBlock> =
+            crop("barley", NPK(0, 0, 0), { FallacyItems.Crop.BARLEY }, seedsRange = 1..3)
 
-        val BARLEY = REG.block("barley") { FallacyCropBlock(it, NPK(0, 0, 0)) }.properties { defaultProperties }
-            .blockstate(FallacyCropBlock::withBlockState)
-            .loot(FallacyCropBlock.withLoot(FallacyItems.Crop.BARLEY, (1..3), (1..4)))
-            .tag(*defaultTags).formattedLang().register()
+        val OAT: BlockEntry<FallacyCropBlock> = crop("oat", NPK(0, 0, 0), { FallacyItems.Crop.OAT }, seedsRange = 1..4)
 
-        val OAT = REG.block("oat") { FallacyCropBlock(it, NPK(0, 0, 0)) }.properties { defaultProperties }
-            .blockstate(FallacyCropBlock::withBlockState)
-            .loot(FallacyCropBlock.withLoot(FallacyItems.Crop.OAT, (1..3), (1..4)))
-            .tag(*defaultTags).formattedLang().register()
+        val SOYBEAN: BlockEntry<FallacyCropBlock> =
+            seedCrop("soybean", NPK(0, 0, 0), { FallacyItems.Crop.SOYBEAN }, (2..8))
 
-        val SOYBEAN = REG.block("soybean") { FallacyCropBlock(it, NPK(1, 1, 1)) }.properties { defaultProperties }
-            .blockstate(FallacyCropBlock::withBlockState)
-            .loot(FallacyCropBlock.withNoSeedsLoot(FallacyItems.Crop.SOYBEAN, (2..8)))
-            .tag(*defaultTags).formattedLang().register()
+        val TOMATO: BlockEntry<FallacyCropBlock> = crop("tomato", NPK(0, 0, 0), { FallacyItems.Crop.TOMATO })
 
-        val TOMATO = REG.block("tomato") { FallacyCropBlock(it, NPK(0, 0, 0)) }.properties { defaultProperties }
-            .blockstate(FallacyCropBlock::withBlockState)
-            .loot(FallacyCropBlock.withLoot(FallacyItems.Crop.TOMATO, (1..3), (1..3)))
-            .tag(*defaultTags).formattedLang().register()
+        val SPINACH: BlockEntry<FallacyCropBlock> = crop("spinach", NPK(0, 0, 0), { FallacyItems.Crop.SPINACH })
 
-        val SPINACH = REG.block("spinach") { FallacyCropBlock(it, NPK(0, 0, 0)) }.properties { defaultProperties }
-            .blockstate(FallacyCropBlock::withBlockState)
-            .loot(FallacyCropBlock.withLoot(FallacyItems.Crop.SPINACH, (1..3), (1..3)))
-            .tag(*defaultTags).formattedLang().register()
+        val CHILE_PEPPER: BlockEntry<FallacyCropBlock> =
+            crop("chile_pepper", NPK(0, 0, 0), { FallacyItems.Crop.CHILE_PEPPER })
+
+        val CORN: BlockEntry<FallacyCropBlock> = crop("corn", NPK(0, 0, 0), { FallacyItems.Crop.CORN })
+
+        val EGGPLANT: BlockEntry<FallacyCropBlock> = crop("eggplant", NPK(0, 0, 0), { FallacyItems.Crop.EGGPLANT })
+
+        val ASPARAGUS: BlockEntry<FallacyCropBlock> = crop("asparagus", NPK(0, 0, 0), { FallacyItems.Crop.ASPARAGUS })
+
+        val CELERY: BlockEntry<FallacyCropBlock> = crop("celery", NPK(0, 0, 0), { FallacyItems.Crop.CELERY })
+
+        val CABBAGE: BlockEntry<FallacyCropBlock> = crop("cabbage", NPK(0, 0, 0), { FallacyItems.Crop.CABBAGE })
+
+        private fun crop(
+            name: String,
+            npkRequire: NPK,
+            gain: () -> Holder<Item>,
+            gainRange: IntRange = 1..3,
+            seedsRange: IntRange = 1..3
+        ): BlockEntry<FallacyCropBlock> =
+            REG.block(name) { FallacyCropBlock(it, npkRequire) }.properties { defaultProperties }
+                .blockstate(FallacyCropBlock::withBlockState)
+                .loot(FallacyCropBlock.withLoot(gain(), gainRange, seedsRange))
+                .tag(*defaultTags).formattedLang().register()
+
+        private fun seedCrop(
+            name: String,
+            npkRequire: NPK,
+            gain: () -> Holder<Item>,
+            gainRange: IntRange
+        ): BlockEntry<FallacyCropBlock> =
+            REG.block(name) { FallacyCropBlock(it, npkRequire) }.properties { defaultProperties }
+                .blockstate(FallacyCropBlock::withBlockState)
+                .loot(FallacyCropBlock.withNoSeedsLoot(gain(), gainRange))
+                .tag(*defaultTags).formattedLang().register()
     }
 }
