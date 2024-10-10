@@ -2,6 +2,7 @@ package dev.deepslate.fallacy.thermodynamics.data
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import dev.deepslate.fallacy.thermodynamics.ThermodynamicsEngine
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
@@ -19,7 +20,7 @@ class HeatLayer(private var data: ByteArray? = null) {
 
         const val SIZE = UNIT_COUNT * UNIT_COUNT * UNIT_COUNT * UNIT_SIZE / 8
 
-        const val HEAT_MAX = 0xffffu
+        const val MAX_HEAT = 0xffffu
 
         const val FREEZING_POINT = 273u
 
@@ -63,7 +64,7 @@ class HeatLayer(private var data: ByteArray? = null) {
     fun setHeat(x: Int, y: Int, z: Int, heat: UInt) {
         if (data == null) init()
 
-        require(heat <= HEAT_MAX)
+        require(heat <= MAX_HEAT)
         val index = getRawIndex(x, y, z)
         val (high, low) = split(heat)
         data!![2 * index] = high
