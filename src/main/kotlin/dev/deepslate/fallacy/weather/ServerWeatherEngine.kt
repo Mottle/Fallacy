@@ -19,6 +19,7 @@ class ServerWeatherEngine(
         get() = weatherList.toList()
 
     override fun tick() {
+        weathers.forEach { weather -> weather.tick(level) }
     }
 
     @EventBusSubscriber(modid = Fallacy.MOD_ID)
