@@ -5,6 +5,7 @@ import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.data.player.FoodHistory
 import dev.deepslate.fallacy.common.data.player.NutritionState
 import dev.deepslate.fallacy.race.impl.Unknown
+import dev.deepslate.fallacy.weather.WeatherInstance
 import net.minecraft.resources.ResourceLocation
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.neoforge.attachment.AttachmentType
@@ -42,6 +43,17 @@ object FallacyAttachments {
 
     val BONE = REGISTRY.register("bone") { _ ->
         AttachmentType.builder { _ -> 10f }.serialize(Codec.FLOAT).build()
+    }
+
+    object Level {
+        val WEATHERS = REGISTRY.register("weathers") { _ ->
+            AttachmentType.builder { _ -> emptyList<WeatherInstance>() }.serialize(Codec.list(WeatherInstance.CODEC))
+                .build()
+        }
+    }
+
+    init {
+        Level
     }
 
     fun register(bus: IEventBus) {

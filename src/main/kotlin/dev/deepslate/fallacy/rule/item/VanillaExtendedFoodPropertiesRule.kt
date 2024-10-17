@@ -3,7 +3,7 @@ package dev.deepslate.fallacy.rule.item
 import dev.deepslate.fallacy.common.item.component.NutritionData
 import dev.deepslate.fallacy.common.item.data.ExtendedFoodProperties
 import dev.deepslate.fallacy.common.item.data.ExtendedProperties
-import dev.deepslate.fallacy.util.internalExtendedProperties
+import dev.deepslate.fallacy.util.extension.internalExtendedProperties
 import net.minecraft.world.item.Items
 
 object VanillaExtendedFoodPropertiesRule {

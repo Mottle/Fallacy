@@ -5,7 +5,7 @@ import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.capability.FallacyCapabilities
 import dev.deepslate.fallacy.common.data.player.FoodHistory
 import dev.deepslate.fallacy.common.item.component.FallacyDataComponents
-import dev.deepslate.fallacy.util.extendedProperties
+import dev.deepslate.fallacy.util.extension.extendedProperties
 import net.minecraft.ChatFormatting
 import net.minecraft.client.Minecraft
 import net.minecraft.core.component.DataComponents

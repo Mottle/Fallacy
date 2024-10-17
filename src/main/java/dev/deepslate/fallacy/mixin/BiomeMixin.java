@@ -1,7 +1,7 @@
 package dev.deepslate.fallacy.mixin;
 
 import dev.deepslate.fallacy.common.biome.data.BiomeSetting;
-import dev.deepslate.fallacy.inject.item.FallacyBiomeExtension;
+import dev.deepslate.fallacy.inject.FallacyBiomeExtension;
 import net.minecraft.world.level.biome.Biome;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;

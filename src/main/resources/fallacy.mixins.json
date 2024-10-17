@@ -20,7 +20,8 @@
     ],
     "client": [
         "client.ItemStackMixin",
-        "client.PlayerRenderMixin"
+        "client.PlayerRenderMixin",
+        "client.ClientLevelMixin"
     ],
     "injectors": {
         "defaultRequire": 1

@@ -1,8 +1,5 @@
 package dev.deepslate.fallacy.common.item.data
 
-import dev.deepslate.fallacy.util.internalExtendedProperties
-import net.minecraft.world.item.ItemStack
-
 data class ExtendedProperties(val rank: Int, val foodProperties: ExtendedFoodProperties?, val isDeprecated: Boolean) {
 
     class Builder() {

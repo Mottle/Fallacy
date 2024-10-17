@@ -1,7 +1,7 @@
 package dev.deepslate.fallacy.client
 
 import dev.deepslate.fallacy.Fallacy
-import dev.deepslate.fallacy.util.extendedProperties
+import dev.deepslate.fallacy.util.extension.extendedProperties
 import net.minecraft.world.item.CreativeModeTab
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber

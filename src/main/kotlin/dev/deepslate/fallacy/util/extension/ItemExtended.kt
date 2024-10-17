@@ -1,4 +1,4 @@
-package dev.deepslate.fallacy.util
+package dev.deepslate.fallacy.util.extension
 
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.item.data.ExtendedProperties
