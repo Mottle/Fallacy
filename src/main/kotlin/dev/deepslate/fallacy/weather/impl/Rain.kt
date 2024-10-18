@@ -29,5 +29,7 @@ class Rain : Weather() {
     ) {
     }
 
+    override val isWet: Boolean = true
+
     override val namespaceId: ResourceLocation = ID
 }

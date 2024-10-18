@@ -27,6 +27,10 @@ abstract class Weather {
 
     open fun isValidIn(level: Level, pos: BlockPos): Boolean = true
 
+    open val isWet: Boolean = false
+
+    open val isDry: Boolean = false
+
     abstract val namespaceId: ResourceLocation
 
     //0..7, 7 is the highest priority
@@ -34,9 +38,10 @@ abstract class Weather {
 
     init {
         //天气的tick以秒为单位
-        require(tickInterval % 20 == 0) { "tickInterval must be a multiple of 20" }
-        require(tickEntityInterval % 20 == 0) { "tickEntityInterval must be a multiple of 20" }
-        require(tickWeatherEntityInterval % 20 == 0) { "tickWeatherEntityInterval must be a multiple of 20" }
-        require(priority in 0..7) { "priority must be between 0 and 7" }
+        require(tickInterval % 20 == 0) { "tickInterval must be a multiple of 20." }
+        require(tickEntityInterval % 20 == 0) { "tickEntityInterval must be a multiple of 20." }
+        require(tickWeatherEntityInterval % 20 == 0) { "tickWeatherEntityInterval must be a multiple of 20." }
+        require(priority in 0..7) { "priority must be between 0 and 7." }
+        require(isWet xor isDry) { "isWet and isDry must be different." }
     }
 }
