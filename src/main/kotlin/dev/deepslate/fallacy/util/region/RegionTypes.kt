@@ -14,4 +14,6 @@ object RegionTypes {
     val CUBE: RegionType<CubeRegion> = register("cube", RegionType(CubeRegion.CODEC))
 
     val SPHERE: RegionType<SphereRegion> = register("sphere", RegionType(SphereRegion.CODEC))
+
+    val UNIVERSAL: RegionType<UniversalRegion> = register("universal", RegionType(UniversalRegion.CODEC))
 }

@@ -4,22 +4,39 @@ import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.data.FallacyAttachments
 import dev.deepslate.fallacy.util.extension.internalWeatherEngine
 import dev.deepslate.fallacy.util.extension.weatherEngine
+import dev.deepslate.fallacy.util.region.UniversalRegion
+import dev.deepslate.fallacy.weather.impl.Clear
+import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.Level
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.event.level.LevelEvent
+import java.util.PriorityQueue
 
 class ServerWeatherEngine(
     val level: ServerLevel,
-    private var weatherList: MutableList<WeatherInstance> = mutableListOf<WeatherInstance>()
+    inputWeathers: List<WeatherInstance> = emptyList()
 ) : WeatherEngine {
+    val weatherPriorityQueue: PriorityQueue<WeatherInstance> = PriorityQueue(compareByDescending { it.priority })
+
+    init {
+        weatherPriorityQueue.addAll(inputWeathers)
+    }
 
     val weathers: List<WeatherInstance>
-        get() = weatherList.toList()
+        get() = weatherPriorityQueue.toList()
+
+    val size: Int
+        get() = weatherPriorityQueue.size
 
     override fun tick() {
-        weathers.forEach { weather -> weather.tick(level) }
+        weatherPriorityQueue.forEach { weather -> weather.tick(level) }
+    }
+
+    fun getWeatherAt(pos: BlockPos): WeatherInstance {
+        val weather = weatherPriorityQueue.find { w -> w.isIn(pos) && w.isValidIn(level, pos) }
+        return weather ?: WeatherInstance(Clear, region = UniversalRegion)
     }
 
     @EventBusSubscriber(modid = Fallacy.MOD_ID)
