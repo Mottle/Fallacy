@@ -34,10 +34,12 @@ class ServerWeatherEngine(
         weatherPriorityQueue.forEach { weather -> weather.tick(level) }
     }
 
-    fun getWeatherAt(pos: BlockPos): WeatherInstance {
+    override fun getWeatherAt(pos: BlockPos): WeatherInstance {
         val weather = weatherPriorityQueue.find { w -> w.isIn(pos) && w.isValidIn(level, pos) }
         return weather ?: WeatherInstance(Clear, region = UniversalRegion)
     }
+
+    override fun isWet(pos: BlockPos): Boolean = getWeatherAt(pos).isWet
 
     @EventBusSubscriber(modid = Fallacy.MOD_ID)
     object Handler {

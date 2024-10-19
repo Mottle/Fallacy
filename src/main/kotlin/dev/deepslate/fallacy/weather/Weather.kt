@@ -17,19 +17,17 @@ abstract class Weather {
 
     open val tickWeatherEntityInterval: Int = TickHelper.second(4)
 
-    abstract fun tick(level: Level, region: Region)
+    open fun tick(level: Level, region: Region) {}
 
-    abstract fun tickEntity(entity: Entity, level: Level, pos: BlockPos)
+    open fun tickEntity(entity: Entity, level: Level, pos: BlockPos) {}
 
     open fun createWeatherEntity(): Entity? = null
 
-    abstract fun tickWeatherEntity(entity: Entity, level: Level, pos: BlockPos)
+    open fun tickWeatherEntity(entity: Entity, level: Level, pos: BlockPos) {}
 
     open fun isValidIn(level: Level, pos: BlockPos): Boolean = true
 
     open val isWet: Boolean = false
-
-    open val isDry: Boolean = false
 
     abstract val namespaceId: ResourceLocation
 
@@ -42,6 +40,5 @@ abstract class Weather {
         require(tickEntityInterval % 20 == 0) { "tickEntityInterval must be a multiple of 20." }
         require(tickWeatherEntityInterval % 20 == 0) { "tickWeatherEntityInterval must be a multiple of 20." }
         require(priority in 0..7) { "priority must be between 0 and 7." }
-        require(isWet xor isDry) { "isWet and isDry must be different." }
     }
 }

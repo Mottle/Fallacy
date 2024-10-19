@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.deepslate.fallacy.util.TickHelper
 import dev.deepslate.fallacy.util.region.Region
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Holder
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.Level
@@ -44,6 +45,8 @@ class WeatherInstance(
         require(priority in 0..7) { "Priority must be between 0 and 7" }
     }
 
+    fun `is`(holder: Holder<Weather>): Boolean = holder.value().namespaceId == weather.namespaceId
+
     fun isValidIn(level: Level, pos: BlockPos): Boolean = weather.isValidIn(level, pos)
 
     fun isIn(pos: BlockPos) = region.isIn(pos)
@@ -52,6 +55,8 @@ class WeatherInstance(
         get() = remainingTicks <= 0
 
     val weatherEntity = weather.createWeatherEntity()
+
+    val isWet: Boolean = weather.isWet
 
     init {
         if (weatherEntityPos != null && weatherEntity != null) weatherEntity.setPos(weatherEntityPos)

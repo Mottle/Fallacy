@@ -3,6 +3,7 @@ package dev.deepslate.fallacy.weather
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.weather.impl.Clear
 import dev.deepslate.fallacy.weather.impl.Rain
+import dev.deepslate.fallacy.weather.impl.Thunder
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
 import net.neoforged.bus.api.IEventBus
@@ -28,6 +29,8 @@ object FallacyWeathers {
     val CLEAR = registry.register(Clear.namespaceId.path) { _ -> Clear }
 
     val RAIN = registry.register(Rain.ID.path) { _ -> Rain() }
+
+    val THUNDER = registry.register(Thunder.ID.path) { _ -> Thunder() }
 
     fun init(bus: IEventBus) {
         registry.register(bus)

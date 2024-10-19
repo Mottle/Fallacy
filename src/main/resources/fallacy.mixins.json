@@ -16,7 +16,8 @@
         "item.ItemStackMixin",
         "player.PlayerMixin",
         "BiomeMixin",
-        "ServerLevelMixin"
+        "ServerLevelMixin",
+        "LevelMixin"
     ],
     "client": [
         "client.ItemStackMixin",

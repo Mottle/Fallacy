@@ -2,17 +2,17 @@ package dev.deepslate.fallacy.weather
 
 import dev.deepslate.fallacy.util.TickHelper
 import dev.deepslate.fallacy.util.extension.weatherEngine
+import net.minecraft.core.BlockPos
 import net.minecraft.world.level.Level
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.neoforge.event.tick.LevelTickEvent
-import java.util.UUID
 
 interface WeatherEngine {
     fun tick()
 
-    companion object {
-        private var weatherEngineMap = mutableMapOf<UUID, WeatherEngine>()
-    }
+    fun getWeatherAt(pos: BlockPos): WeatherInstance
+
+    fun isWet(pos: BlockPos): Boolean
 
     object Handler {
 
