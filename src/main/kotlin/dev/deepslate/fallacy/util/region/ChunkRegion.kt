@@ -47,5 +47,5 @@ data class ChunkRegion(val chunkStart: ChunkPos, val chunkEnd: ChunkPos) : Regio
         return Triple(randomX, randomY, randomZ)
     }
 
-    override val type: RegionType<out Region> = RegionTypes.CHUNK
+    override val type: RegionType<out Region> = RegionTypes.CHUNK.get()
 }

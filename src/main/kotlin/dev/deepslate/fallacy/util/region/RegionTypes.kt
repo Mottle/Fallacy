@@ -1,27 +1,36 @@
 package dev.deepslate.fallacy.util.region
 
 import dev.deepslate.fallacy.Fallacy
-import jdk.internal.org.jline.reader.LineReader
-import net.minecraft.core.Registry
+import net.neoforged.bus.api.IEventBus
+import net.neoforged.neoforge.registries.DeferredHolder
+import net.neoforged.neoforge.registries.DeferredRegister
 
 object RegionTypes {
-    private fun <R : Region> register(id: String, type: RegionType<R>): RegionType<R> =
-        Registry.register(RegionType.CODEC_REGISTRY, Fallacy.id(id), type)
+    private val typeRegistry = DeferredRegister.create(RegionType.REGISTRY, Fallacy.MOD_ID)
 
-    val CHUNK: RegionType<ChunkRegion> = register("chunk", RegionType(ChunkRegion.CODEC, ChunkRegion.STREAM_CODEC))
+    fun init(bus: IEventBus) {
+        typeRegistry.register(bus)
+    }
 
-    val CIRCLE_CHUNK: RegionType<CircleChunkRegion> = register(
+    private fun <R : Region> register(
+        id: String,
+        type: RegionType<R>
+    ): DeferredHolder<RegionType<out Region>, RegionType<R>> = typeRegistry.register(id) { _ -> type }
+
+    val CHUNK = register("chunk", RegionType(ChunkRegion.CODEC, ChunkRegion.STREAM_CODEC))
+
+    val CIRCLE_CHUNK = register(
         "circle_chunk", RegionType(
             CircleChunkRegion.CODEC,
             CircleChunkRegion.STREAM_CODEC
         )
     )
 
-    val CUBE: RegionType<CubeRegion> = register("cube", RegionType(CubeRegion.CODEC, CubeRegion.STREAM_CODEC))
+    val CUBE = register("cube", RegionType(CubeRegion.CODEC, CubeRegion.STREAM_CODEC))
 
-    val SPHERE: RegionType<SphereRegion> = register("sphere", RegionType(SphereRegion.CODEC, SphereRegion.STREAM_CODEC))
+    val SPHERE = register("sphere", RegionType(SphereRegion.CODEC, SphereRegion.STREAM_CODEC))
 
-    val UNIVERSAL: RegionType<UniversalRegion> = register(
+    val UNIVERSAL = register(
         "universal", RegionType(
             UniversalRegion.CODEC,
             UniversalRegion.STREAM_CODEC

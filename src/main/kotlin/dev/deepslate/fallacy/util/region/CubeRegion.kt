@@ -42,5 +42,5 @@ data class CubeRegion(val xStart: Int, val yStart: Int, val zStart: Int, val xEn
         return Triple(randomX, randomY, randomZ)
     }
 
-    override val type: RegionType<out Region> = RegionTypes.CUBE
+    override val type: RegionType<out Region> = RegionTypes.CUBE.get()
 }

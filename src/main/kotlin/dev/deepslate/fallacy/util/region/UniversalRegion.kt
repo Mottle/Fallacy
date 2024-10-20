@@ -26,5 +26,7 @@ object UniversalRegion : Region() {
         source.nextIntBetweenInclusive(-20000, 20000)
     )
 
-    override val type: RegionType<out Region> = RegionTypes.UNIVERSAL
+    //非常隐蔽的坑点，UniversalRegion是一个object单例，在被引用前其变量不会初始化，故此处type若不为访问器则会在StreamCodec中为null -- 2024/10/21
+    override val type: RegionType<out Region>
+        get() = RegionTypes.UNIVERSAL.get()
 }

@@ -44,5 +44,5 @@ data class CircleChunkRegion(val centerX: Int, val centerZ: Int, val radius: Int
         return Triple(randomX, randomY, randomZ)
     }
 
-    override val type: RegionType<out Region> = RegionTypes.CIRCLE_CHUNK
+    override val type: RegionType<out Region> = RegionTypes.CIRCLE_CHUNK.get()
 }

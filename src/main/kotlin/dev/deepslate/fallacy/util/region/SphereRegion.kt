@@ -54,5 +54,5 @@ data class SphereRegion(val centerX: Int, val centerY: Int, val centerZ: Int, va
         return Triple(x, y, z)
     }
 
-    override val type: RegionType<out Region> = RegionTypes.SPHERE
+    override val type: RegionType<out Region> = RegionTypes.SPHERE.get()
 }
