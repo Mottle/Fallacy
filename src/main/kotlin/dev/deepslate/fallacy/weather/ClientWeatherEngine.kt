@@ -1,7 +1,9 @@
 package dev.deepslate.fallacy.weather
 
 import dev.deepslate.fallacy.Fallacy
+import dev.deepslate.fallacy.common.network.packet.WeatherSyncPacket
 import dev.deepslate.fallacy.util.extension.internalWeatherEngine
+import dev.deepslate.fallacy.util.extension.weatherEngine
 import dev.deepslate.fallacy.util.region.UniversalRegion
 import dev.deepslate.fallacy.weather.impl.Clear
 import net.minecraft.client.multiplayer.ClientLevel
@@ -10,6 +12,7 @@ import net.minecraft.world.level.Level
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.event.level.LevelEvent
+import net.neoforged.neoforge.network.handling.IPayloadContext
 import java.util.PriorityQueue
 
 class ClientWeatherEngine(val level: ClientLevel) : WeatherEngine {
@@ -30,6 +33,15 @@ class ClientWeatherEngine(val level: ClientLevel) : WeatherEngine {
             if ((event.level as ClientLevel).dimension() != Level.OVERWORLD) return
             val level = event.level as ClientLevel
             level.internalWeatherEngine = ClientWeatherEngine(level)
+        }
+
+        fun handleWeatherSync(data: WeatherSyncPacket, context: IPayloadContext) {
+            val engine = context.player().level().weatherEngine ?: return
+            val clientEngine = engine as ClientWeatherEngine
+
+            clientEngine.setWeathers(data.weathers)
+
+            Fallacy.LOGGER.info("Syncing weather.")
         }
     }
 

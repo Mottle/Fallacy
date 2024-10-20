@@ -3,6 +3,9 @@ package dev.deepslate.fallacy.util.region
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.util.RandomSource
 import kotlin.math.cos
 import kotlin.math.sin
@@ -16,6 +19,13 @@ data class CircleChunkRegion(val centerX: Int, val centerZ: Int, val radius: Int
                 Codec.INT.fieldOf("radius").forGetter(CircleChunkRegion::radius)
             ).apply(instance, ::CircleChunkRegion)
         }
+
+        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, CircleChunkRegion> = StreamCodec.composite(
+            ByteBufCodecs.INT, CircleChunkRegion::centerX,
+            ByteBufCodecs.INT, CircleChunkRegion::centerZ,
+            ByteBufCodecs.INT, CircleChunkRegion::radius,
+            ::CircleChunkRegion
+        )
     }
 
     override fun isIn(x: Int, y: Int, z: Int): Boolean {

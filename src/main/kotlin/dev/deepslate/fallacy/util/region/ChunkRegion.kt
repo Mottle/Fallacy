@@ -3,6 +3,9 @@ package dev.deepslate.fallacy.util.region
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.util.RandomSource
 import net.minecraft.world.level.ChunkPos
 
@@ -17,6 +20,12 @@ data class ChunkRegion(val chunkStart: ChunkPos, val chunkEnd: ChunkPos) : Regio
                     ChunkRegion(ChunkPos(chunkStart), ChunkPos(chunkEnd))
                 }
         }
+
+        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, ChunkRegion> = StreamCodec.composite(
+            ByteBufCodecs.VAR_LONG, { region -> region.chunkStart.toLong() },
+            ByteBufCodecs.VAR_LONG, { region -> region.chunkEnd.toLong() },
+            { chunkStart, chunkEnd -> ChunkRegion(ChunkPos(chunkStart), ChunkPos(chunkEnd)) }
+        )
     }
 
     override fun isIn(x: Int, y: Int, z: Int): Boolean =

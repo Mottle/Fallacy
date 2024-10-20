@@ -3,6 +3,9 @@ package dev.deepslate.fallacy.util.region
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.util.RandomSource
 
 data class CubeRegion(val xStart: Int, val yStart: Int, val zStart: Int, val xEnd: Int, val yEnd: Int, val zEnd: Int) :
@@ -19,15 +22,15 @@ data class CubeRegion(val xStart: Int, val yStart: Int, val zStart: Int, val xEn
             ).apply(instance, ::CubeRegion)
         }
 
-//        val STREAM_CODEC = StreamCodec.composite(
-//            ByteBufCodecs.INT, CubeRegion::xStart,
-//            ByteBufCodecs.INT, CubeRegion::yStart,
-//            ByteBufCodecs.INT, CubeRegion::zStart,
-//            ByteBufCodecs.INT, CubeRegion::xEnd,
-//            ByteBufCodecs.INT, CubeRegion::yEnd,
-//            ByteBufCodecs.INT, CubeRegion::zEnd,
-//            ::CubeRegion
-//        )
+        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, CubeRegion> = StreamCodec.composite(
+            ByteBufCodecs.INT, CubeRegion::xStart,
+            ByteBufCodecs.INT, CubeRegion::yStart,
+            ByteBufCodecs.INT, CubeRegion::zStart,
+            ByteBufCodecs.INT, CubeRegion::xEnd,
+            ByteBufCodecs.INT, CubeRegion::yEnd,
+            ByteBufCodecs.INT, CubeRegion::zEnd,
+            ::CubeRegion
+        )
     }
 
     override fun isIn(x: Int, y: Int, z: Int): Boolean = x in xStart..xEnd && y in yStart..yEnd && z in zStart..zEnd

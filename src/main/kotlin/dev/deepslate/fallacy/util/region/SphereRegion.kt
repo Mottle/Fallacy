@@ -3,6 +3,9 @@ package dev.deepslate.fallacy.util.region
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.util.RandomSource
 import kotlin.math.PI
 import kotlin.math.acos
@@ -20,6 +23,14 @@ data class SphereRegion(val centerX: Int, val centerY: Int, val centerZ: Int, va
                 Codec.INT.fieldOf("radius").forGetter(SphereRegion::radius)
             ).apply(instance, ::SphereRegion)
         }
+
+        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, SphereRegion> = StreamCodec.composite(
+            ByteBufCodecs.INT, SphereRegion::centerX,
+            ByteBufCodecs.INT, SphereRegion::centerY,
+            ByteBufCodecs.INT, SphereRegion::centerZ,
+            ByteBufCodecs.INT, SphereRegion::radius,
+            ::SphereRegion
+        )
     }
 
     override fun isIn(x: Int, y: Int, z: Int): Boolean {

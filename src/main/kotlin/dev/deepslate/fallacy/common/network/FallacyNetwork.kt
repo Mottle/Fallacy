@@ -10,8 +10,10 @@ import dev.deepslate.fallacy.common.network.packet.FoodHistorySyncPacket
 import dev.deepslate.fallacy.common.network.packet.NutritionStateSyncPacket
 import dev.deepslate.fallacy.common.network.packet.RaceIdSyncPacket
 import dev.deepslate.fallacy.common.network.packet.ThirstSyncPacket
+import dev.deepslate.fallacy.common.network.packet.WeatherSyncPacket
 import dev.deepslate.fallacy.race.impl.Rock
 import dev.deepslate.fallacy.race.impl.Skeleton
+import dev.deepslate.fallacy.weather.ClientWeatherEngine
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent
@@ -67,6 +69,12 @@ object FallacyNetwork {
             BoneSyncPacket.TYPE,
             BoneSyncPacket.STREAM_CODEC,
             Skeleton.Handler::handleBoneSync
+        )
+
+        registrar.playToClient(
+            WeatherSyncPacket.TYPE,
+            WeatherSyncPacket.STREAM_CODEC,
+            ClientWeatherEngine.Handler::handleWeatherSync
         )
     }
 }

@@ -2,6 +2,9 @@ package dev.deepslate.fallacy.util.region
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.util.RandomSource
 
 object UniversalRegion : Region() {
@@ -10,6 +13,10 @@ object UniversalRegion : Region() {
             UniversalRegion
         }
     }
+
+    val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, UniversalRegion> = StreamCodec.composite(
+        ByteBufCodecs.INT, { 0 }, { UniversalRegion }
+    )
 
     override fun isIn(x: Int, y: Int, z: Int): Boolean = true
 

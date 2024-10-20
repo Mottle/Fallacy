@@ -1,10 +1,12 @@
 package dev.deepslate.fallacy.weather
 
+import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.util.TickHelper
 import dev.deepslate.fallacy.util.extension.weatherEngine
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.Level
 import net.neoforged.bus.api.SubscribeEvent
+import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.event.tick.LevelTickEvent
 
 interface WeatherEngine {
@@ -14,6 +16,7 @@ interface WeatherEngine {
 
     fun isWet(pos: BlockPos): Boolean
 
+    @EventBusSubscriber(modid = Fallacy.MOD_ID)
     object Handler {
 
         const val SEC = 20

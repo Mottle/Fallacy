@@ -6,6 +6,9 @@ import dev.deepslate.fallacy.util.TickHelper
 import dev.deepslate.fallacy.util.region.Region
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.Level
@@ -15,7 +18,7 @@ import kotlin.jvm.optionals.getOrNull
 
 class WeatherInstance(
     val weather: Weather,
-    private var remainingTicks: Int = TickHelper.minute(10),
+    remainingTime: Int = TickHelper.minute(10),
     val region: Region,
     weatherEntityPos: Vec3? = null,
     val priority: Int = weather.priority
@@ -40,6 +43,21 @@ class WeatherInstance(
             }
         }
 
+        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, WeatherInstance> = StreamCodec.composite(
+            ResourceLocation.STREAM_CODEC, { w -> w.weather.namespaceId },
+            ByteBufCodecs.INT, WeatherInstance::remaining,
+            Region.STREAM_CODEC, WeatherInstance::region,
+            ByteBufCodecs.INT, WeatherInstance::priority,
+            { id, ticks, region, priority ->
+                WeatherInstance(
+                    FallacyWeathers.REGISTRY.get(id)!!,
+                    ticks,
+                    region,
+                    priority = priority
+                )
+            }
+        )
+
         fun create(weather: Holder<Weather>, durationTick: Int, region: Region) =
             WeatherInstance(weather.value(), durationTick, region)
     }
@@ -47,6 +65,11 @@ class WeatherInstance(
     init {
         require(priority in 0..7) { "Priority must be between 0 and 7" }
     }
+
+    private var remainingTicks: Int = remainingTime
+
+    val remaining: Int
+        get() = remainingTicks
 
     fun `is`(holder: Holder<Weather>): Boolean = holder.value().namespaceId == weather.namespaceId
 
@@ -68,7 +91,7 @@ class WeatherInstance(
     fun tick(level: ServerLevel) {
         if (remainingTicks <= 0) return
 
-        remainingTicks--
+        remainingTicks -= 20
 
         if (TickHelper.checkServerTickRate(weather.tickInterval)) weather.tick(level, region)
 

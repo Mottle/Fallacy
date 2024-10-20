@@ -2,6 +2,7 @@ package dev.deepslate.fallacy.weather
 
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.data.FallacyAttachments
+import dev.deepslate.fallacy.common.network.packet.WeatherSyncPacket
 import dev.deepslate.fallacy.util.TickHelper
 import dev.deepslate.fallacy.util.extension.internalWeatherEngine
 import dev.deepslate.fallacy.util.extension.weatherEngine
@@ -13,6 +14,7 @@ import net.minecraft.world.level.Level
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.event.level.LevelEvent
+import net.neoforged.neoforge.network.PacketDistributor
 import java.util.PriorityQueue
 
 class ServerWeatherEngine(
@@ -33,8 +35,17 @@ class ServerWeatherEngine(
 
     override fun tick() {
         weatherPriorityQueue.forEach { weather -> weather.tick(level) }
-        clean()
-        if (TickHelper.checkServerSecondRate(30)) schedule()
+        val hasCleaned = clean()
+        val hasScheduled = if (TickHelper.checkServerSecondRate(30)) schedule() else false
+
+        //若天气发生变化则向客户端同步
+        if (hasCleaned || hasScheduled) {
+            sync()
+        }
+    }
+
+    private fun sync() {
+        PacketDistributor.sendToAllPlayers(WeatherSyncPacket(weathers))
     }
 
     override fun getWeatherAt(pos: BlockPos): WeatherInstance {
@@ -44,17 +55,21 @@ class ServerWeatherEngine(
 
     override fun isWet(pos: BlockPos): Boolean = getWeatherAt(pos).isWet
 
-    private fun clean() {
-        weatherPriorityQueue.forEachIndexed { index, weather ->
-            if (weather.isEnded) {
-                weatherPriorityQueue.remove(weather)
-            }
+    private fun clean(): Boolean {
+        val removed = weatherPriorityQueue.filter { it.isEnded }
+
+        if (removed.isEmpty()) return false
+
+        removed.forEach {
+            weatherPriorityQueue.remove(it)
         }
+        return true
     }
 
-    fun schedule() {
+    fun schedule(): Boolean {
         val weather = WeatherInstance.create(FallacyWeathers.RAIN, TickHelper.minute(10), UniversalRegion)
         weatherPriorityQueue.add(weather)
+        return true
     }
 
     @EventBusSubscriber(modid = Fallacy.MOD_ID)
