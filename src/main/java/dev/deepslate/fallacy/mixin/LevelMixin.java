@@ -3,6 +3,7 @@ package dev.deepslate.fallacy.mixin;
 import dev.deepslate.fallacy.inject.FallacyLevelWeatherExtension;
 import dev.deepslate.fallacy.weather.FallacyWeathers;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
@@ -35,16 +36,24 @@ public abstract class LevelMixin {
     void injectIsRainAt(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         var self = (Level) (Object) this;
         var engine = ((FallacyLevelWeatherExtension) self).fallacy$getWeatherEngine();
+        if (engine == null) {
+            cir.setReturnValue(false);
+            return;
+        }
         if (!engine.isWet(pos)) {
             cir.setReturnValue(false);
+            return;
         }
         if (!self.canSeeSky(pos)) {
             cir.setReturnValue(false);
+            return;
         } else if (self.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, pos).getY() > pos.getY()) {
             cir.setReturnValue(false);
+            return;
         } else {
             Biome biome = self.getBiome(pos).value();
             cir.setReturnValue(biome.getPrecipitationAt(pos) == Biome.Precipitation.RAIN);
+            return;
         }
     }
 
@@ -63,9 +72,17 @@ public abstract class LevelMixin {
         //在客户端时，若玩家处于下雨区域则返回1f用于渲染下雨效果
         if (FMLEnvironment.dist.isClient()) {
             var player = Minecraft.getInstance().player;
-            if (player == null) cir.setReturnValue(0f);
+            if (player == null) {
+                cir.setReturnValue(0f);
+                return;
+            }
             var engine = ((FallacyLevelWeatherExtension) this).fallacy$getWeatherEngine();
+            if (engine == null) {
+                cir.setReturnValue(0f);
+                return;
+            }
             if (engine.isWet(player.blockPosition())) cir.setReturnValue(1f);
+            return;
         }
         cir.setReturnValue(0f);
     }
@@ -80,11 +97,19 @@ public abstract class LevelMixin {
     @Inject(method = "getThunderLevel", at = @At("HEAD"), cancellable = true)
     void injectGetThunderLevel(float partialTicks, CallbackInfoReturnable<Float> cir) {
         if (FMLEnvironment.dist.isClient()) {
-            var player = Minecraft.getInstance().player;
-            if (player == null) cir.setReturnValue(0f);
+            LocalPlayer player = Minecraft.getInstance().player;
+            if (player == null) {
+                cir.setReturnValue(0f);
+                return;
+            }
             var engine = ((FallacyLevelWeatherExtension) this).fallacy$getWeatherEngine();
+            if (engine == null) {
+                cir.setReturnValue(0f);
+                return;
+            }
             var weather = engine.getWeatherAt(player.blockPosition());
             if (weather.is(FallacyWeathers.INSTANCE.getTHUNDER())) cir.setReturnValue(1f);
+            return;
         }
         cir.setReturnValue(0f);
     }

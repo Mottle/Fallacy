@@ -2,6 +2,7 @@ package dev.deepslate.fallacy.weather
 
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.data.FallacyAttachments
+import dev.deepslate.fallacy.util.TickHelper
 import dev.deepslate.fallacy.util.extension.internalWeatherEngine
 import dev.deepslate.fallacy.util.extension.weatherEngine
 import dev.deepslate.fallacy.util.region.UniversalRegion
@@ -32,6 +33,8 @@ class ServerWeatherEngine(
 
     override fun tick() {
         weatherPriorityQueue.forEach { weather -> weather.tick(level) }
+        clean()
+        if (TickHelper.checkServerSecondRate(30)) schedule()
     }
 
     override fun getWeatherAt(pos: BlockPos): WeatherInstance {
@@ -40,6 +43,19 @@ class ServerWeatherEngine(
     }
 
     override fun isWet(pos: BlockPos): Boolean = getWeatherAt(pos).isWet
+
+    private fun clean() {
+        weatherPriorityQueue.forEachIndexed { index, weather ->
+            if (weather.isEnded) {
+                weatherPriorityQueue.remove(weather)
+            }
+        }
+    }
+
+    fun schedule() {
+        val weather = WeatherInstance.create(FallacyWeathers.RAIN, TickHelper.minute(10), UniversalRegion)
+        weatherPriorityQueue.add(weather)
+    }
 
     @EventBusSubscriber(modid = Fallacy.MOD_ID)
     object Handler {

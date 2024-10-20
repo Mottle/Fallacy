@@ -1,5 +1,6 @@
 package dev.deepslate.fallacy.weather
 
+import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.util.extension.internalWeatherEngine
 import dev.deepslate.fallacy.util.region.UniversalRegion
 import dev.deepslate.fallacy.weather.impl.Clear
@@ -7,6 +8,7 @@ import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.Level
 import net.neoforged.bus.api.SubscribeEvent
+import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.event.level.LevelEvent
 import java.util.PriorityQueue
 
@@ -20,6 +22,7 @@ class ClientWeatherEngine(val level: ClientLevel) : WeatherEngine {
 
     override fun tick() {}
 
+    @EventBusSubscriber(modid = Fallacy.MOD_ID)
     object Handler {
         @SubscribeEvent
         fun onLevelLoad(event: LevelEvent.Load) {

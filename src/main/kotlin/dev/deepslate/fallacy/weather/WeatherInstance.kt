@@ -39,6 +39,9 @@ class WeatherInstance(
                 )
             }
         }
+
+        fun create(weather: Holder<Weather>, durationTick: Int, region: Region) =
+            WeatherInstance(weather.value(), durationTick, region)
     }
 
     init {
