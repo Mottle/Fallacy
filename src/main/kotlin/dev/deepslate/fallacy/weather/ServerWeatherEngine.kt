@@ -33,43 +33,43 @@ class ServerWeatherEngine(
     val size: Int
         get() = weatherPriorityQueue.size
 
+    var isDirt: Boolean = false
+
     override fun tick() {
         weatherPriorityQueue.forEach { weather -> weather.tick(level) }
-        val hasCleaned = clean()
-        val hasScheduled = if (TickHelper.checkServerSecondRate(30)) schedule() else false
+        clean()
+        if (TickHelper.checkServerSecondRate(30)) schedule()
 
         //若天气发生变化则向客户端同步
-        if (hasCleaned || hasScheduled) {
-            sync()
-        }
+        if(isDirt) syncAll()
     }
 
-    private fun sync() {
+    private fun syncAll() {
         PacketDistributor.sendToAllPlayers(WeatherSyncPacket(weathers))
     }
 
     override fun getWeatherAt(pos: BlockPos): WeatherInstance {
-        val weather = weatherPriorityQueue.find { w -> w.isIn(pos) && w.isValidIn(level, pos) }
+        val weather = weatherPriorityQueue.find { w -> w.isIn(pos) && w.isValidIn(level, pos) && !w.isEnded }
         return weather ?: WeatherInstance(Clear, region = UniversalRegion)
     }
 
     override fun isWet(pos: BlockPos): Boolean = getWeatherAt(pos).isWet
 
-    private fun clean(): Boolean {
+    private fun clean() {
         val removed = weatherPriorityQueue.filter { it.isEnded }
 
-        if (removed.isEmpty()) return false
+        if (removed.isEmpty()) return
 
         removed.forEach {
             weatherPriorityQueue.remove(it)
         }
-        return true
+        isDirt = true
     }
 
-    fun schedule(): Boolean {
+    fun schedule() {
         val weather = WeatherInstance.create(FallacyWeathers.RAIN, TickHelper.minute(10), UniversalRegion)
         weatherPriorityQueue.add(weather)
-        return true
+        isDirt = true
     }
 
     @EventBusSubscriber(modid = Fallacy.MOD_ID)

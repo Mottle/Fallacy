@@ -46,7 +46,7 @@ class ClientWeatherEngine(val level: ClientLevel) : WeatherEngine {
     }
 
     override fun getWeatherAt(pos: BlockPos): WeatherInstance {
-        val weather = weatherQueue.find { w -> w.isIn(pos) && w.isValidIn(level, pos) }
+        val weather = weatherQueue.find { w -> w.isIn(pos) && w.isValidIn(level, pos) && !w.isEnded }
         return weather ?: WeatherInstance(Clear, region = UniversalRegion)
     }
 
