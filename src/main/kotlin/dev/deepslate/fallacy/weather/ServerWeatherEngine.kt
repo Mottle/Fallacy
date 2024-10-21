@@ -21,19 +21,24 @@ class ServerWeatherEngine(
     val level: ServerLevel,
     inputWeathers: List<WeatherInstance> = emptyList()
 ) : WeatherEngine {
-    val weatherPriorityQueue: PriorityQueue<WeatherInstance> = PriorityQueue(compareByDescending { it.priority })
+    private val weatherPriorityQueue: PriorityQueue<WeatherInstance> =
+        PriorityQueue(compareByDescending { it.priority })
 
     init {
         weatherPriorityQueue.addAll(inputWeathers)
     }
 
-    val weathers: List<WeatherInstance>
+    val sortedWeathers: List<WeatherInstance>
         get() = weatherPriorityQueue.toList()
 
     val size: Int
         get() = weatherPriorityQueue.size
 
-    var isDirt: Boolean = false
+    var isDirty: Boolean = false
+
+    fun markDirty() {
+        isDirty = true
+    }
 
     override fun tick() {
         weatherPriorityQueue.forEach { weather -> weather.tick(level) }
@@ -41,11 +46,11 @@ class ServerWeatherEngine(
         if (TickHelper.checkServerSecondRate(30)) schedule()
 
         //若天气发生变化则向客户端同步
-        if (isDirt) syncAll()
+        if (isDirty) syncAll()
     }
 
-    private fun syncAll() {
-        PacketDistributor.sendToAllPlayers(WeatherSyncPacket(weathers))
+    fun syncAll() {
+        PacketDistributor.sendToAllPlayers(WeatherSyncPacket(sortedWeathers))
     }
 
     override fun getWeatherAt(pos: BlockPos): WeatherInstance {
@@ -63,13 +68,13 @@ class ServerWeatherEngine(
         removed.forEach {
             weatherPriorityQueue.remove(it)
         }
-        isDirt = true
+        isDirty = true
     }
 
     fun schedule() {
         val weather = WeatherInstance.create(FallacyWeathers.RAIN, TickHelper.minute(10), UniversalRegion)
         weatherPriorityQueue.add(weather)
-        isDirt = true
+        isDirty = true
     }
 
     @EventBusSubscriber(modid = Fallacy.MOD_ID)
@@ -96,7 +101,7 @@ class ServerWeatherEngine(
 
             val serverLevel = event.level as ServerLevel
             val engine = (serverLevel.weatherEngine as? ServerWeatherEngine) ?: return
-            val data = engine.weathers
+            val data = engine.sortedWeathers
 
             serverLevel.setData(FallacyAttachments.Level.WEATHERS, data)
         }

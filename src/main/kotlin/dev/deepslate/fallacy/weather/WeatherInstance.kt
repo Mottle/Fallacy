@@ -11,6 +11,7 @@ import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3
 import java.util.Optional
@@ -102,7 +103,8 @@ class WeatherInstance(
         )
 
         if (weather.shouldTickEntities(level, region) && TickHelper.checkServerTickRate(weather.tickEntityInterval)) {
-            val entitiesInRegion = level.entities.all.filter { region.isIn(it.blockPosition()) }
+            val entitiesInRegion = level.entities.all.filter { it is LivingEntity && it.isAlive }
+                .filter { region.isIn(it.blockPosition()) }
             entitiesInRegion.forEach { weather.tickEntity(it, level, it.blockPosition()) }
         }
     }
