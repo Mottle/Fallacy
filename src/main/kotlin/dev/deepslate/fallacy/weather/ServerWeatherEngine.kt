@@ -10,9 +10,12 @@ import dev.deepslate.fallacy.util.region.UniversalRegion
 import dev.deepslate.fallacy.weather.impl.Clear
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
+import net.neoforged.neoforge.event.entity.player.PlayerEvent
 import net.neoforged.neoforge.event.level.LevelEvent
 import net.neoforged.neoforge.network.PacketDistributor
 import java.util.PriorityQueue
@@ -46,11 +49,18 @@ class ServerWeatherEngine(
         if (TickHelper.checkServerSecondRate(30)) schedule()
 
         //若天气发生变化则向客户端同步
-        if (isDirty) syncAll()
+        if (isDirty) {
+            syncAll()
+            isDirty = false
+        }
     }
 
-    fun syncAll() {
+    private fun syncAll() {
         PacketDistributor.sendToAllPlayers(WeatherSyncPacket(sortedWeathers))
+    }
+
+    fun sync(player: ServerPlayer) {
+        PacketDistributor.sendToPlayer(player, WeatherSyncPacket(sortedWeathers))
     }
 
     override fun getWeatherAt(pos: BlockPos): WeatherInstance {
@@ -72,7 +82,7 @@ class ServerWeatherEngine(
     }
 
     fun schedule() {
-        val weather = WeatherInstance.create(FallacyWeathers.RAIN, TickHelper.minute(10), UniversalRegion)
+        val weather = WeatherInstance.create(FallacyWeathers.THUNDER, TickHelper.minute(10), UniversalRegion)
         weatherPriorityQueue.add(weather)
         isDirty = true
     }
@@ -104,6 +114,13 @@ class ServerWeatherEngine(
             val data = engine.sortedWeathers
 
             serverLevel.setData(FallacyAttachments.Level.WEATHERS, data)
+        }
+
+        @SubscribeEvent
+        fun onPlayerJoin(event: PlayerEvent.PlayerLoggedInEvent) {
+            val level = event.entity.level() as ServerLevel
+            val engine = (level.weatherEngine as? ServerWeatherEngine) ?: return
+            engine.sync(event.entity as ServerPlayer)
         }
     }
 }

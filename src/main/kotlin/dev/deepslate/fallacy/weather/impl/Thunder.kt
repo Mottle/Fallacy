@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.phys.Vec3
 
@@ -17,21 +18,27 @@ class Thunder : Weather() {
         val ID = Fallacy.id("thunder")
     }
 
+    override val priority: Int = 2
+
     override fun shouldTickEntities(level: ServerLevel, region: Region): Boolean = true
 
     override fun tickEntity(entity: Entity, level: ServerLevel, pos: BlockPos) {
-        trySpawnLightningBolt(level, entity.chunkPosition())
+        if (entity is Player) trySpawnLightningBolt(level, entity.chunkPosition())
     }
 
     private fun trySpawnLightningBolt(level: ServerLevel, chunkPos: ChunkPos) {
-        if (level.random.nextInt(20) != 1) return
+        val random = level.random
+        if (random.nextInt(40) != 1) return
 
-        val count = level.random.nextInt(9) + 1
+        val count = random.nextInt(2) + 1
+        val randomChunks = ChunkPos.rangeClosed(chunkPos, 3).toList()
 
         for (i in 0 until count) {
-            val randomX = chunkPos.x - level.random.nextIntBetweenInclusive(-15, 15)
-            val randomZ = chunkPos.z - level.random.nextIntBetweenInclusive(-15, 15)
-            val randomPos = level.getBlockRandomPos(randomX, 0, randomZ, 15)
+            if (i != 0 && random.nextInt(5) != 0) break
+
+            val randomIndex = random.nextIntBetweenInclusive(0, randomChunks.size - 1)
+            val randomChunkPos = randomChunks[randomIndex]
+            val randomPos = level.getBlockRandomPos(randomChunkPos.minBlockX, 0, randomChunkPos.minBlockZ, 15)
             val pos = level.findLightningTargetAround(randomPos)
 
             if (level.isRainingAt(pos)) {
