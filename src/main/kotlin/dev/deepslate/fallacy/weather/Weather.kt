@@ -4,6 +4,7 @@ import dev.deepslate.fallacy.util.TickHelper
 import dev.deepslate.fallacy.util.region.Region
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.Level
 
@@ -17,13 +18,15 @@ abstract class Weather {
 
     open val tickWeatherEntityInterval: Int = TickHelper.second(4)
 
-    open fun tick(level: Level, region: Region) {}
+    open fun tick(level: ServerLevel, region: Region) {}
 
-    open fun tickEntity(entity: Entity, level: Level, pos: BlockPos) {}
+    open fun shouldTickEntities(level: ServerLevel, region: Region): Boolean = false
+
+    open fun tickEntity(entity: Entity, level: ServerLevel, pos: BlockPos) {}
 
     open fun createWeatherEntity(): Entity? = null
 
-    open fun tickWeatherEntity(entity: Entity, level: Level, pos: BlockPos) {}
+    open fun tickWeatherEntity(entity: Entity, level: ServerLevel, pos: BlockPos) {}
 
     open fun isValidIn(level: Level, pos: BlockPos): Boolean = true
 

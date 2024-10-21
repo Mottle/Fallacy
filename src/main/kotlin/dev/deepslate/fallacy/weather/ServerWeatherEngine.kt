@@ -41,7 +41,7 @@ class ServerWeatherEngine(
         if (TickHelper.checkServerSecondRate(30)) schedule()
 
         //若天气发生变化则向客户端同步
-        if(isDirt) syncAll()
+        if (isDirt) syncAll()
     }
 
     private fun syncAll() {

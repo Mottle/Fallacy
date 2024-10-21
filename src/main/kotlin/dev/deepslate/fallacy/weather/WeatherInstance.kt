@@ -101,7 +101,7 @@ class WeatherInstance(
             weatherEntity.blockPosition()
         )
 
-        if (TickHelper.checkServerTickRate(weather.tickEntityInterval)) {
+        if (weather.shouldTickEntities(level, region) && TickHelper.checkServerTickRate(weather.tickEntityInterval)) {
             val entitiesInRegion = level.entities.all.filter { region.isIn(it.blockPosition()) }
             entitiesInRegion.forEach { weather.tickEntity(it, level, it.blockPosition()) }
         }
