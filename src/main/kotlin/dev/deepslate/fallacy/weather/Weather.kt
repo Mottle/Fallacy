@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.level.Level
 
 /*
@@ -22,7 +23,7 @@ abstract class Weather {
 
     open fun shouldTickEntities(level: ServerLevel, region: Region): Boolean = false
 
-    open fun tickEntity(entity: Entity, level: ServerLevel, pos: BlockPos) {}
+    open fun tickEntity(entity: LivingEntity, level: ServerLevel, pos: BlockPos) {}
 
     open fun createWeatherEntity(): Entity? = null
 

@@ -11,7 +11,6 @@ import dev.deepslate.fallacy.weather.impl.Clear
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
@@ -78,13 +77,13 @@ class ServerWeatherEngine(
         removed.forEach {
             weatherPriorityQueue.remove(it)
         }
-        isDirty = true
+        markDirty()
     }
 
     fun schedule() {
         val weather = WeatherInstance.create(FallacyWeathers.THUNDER, TickHelper.minute(10), UniversalRegion)
         weatherPriorityQueue.add(weather)
-        isDirty = true
+        markDirty()
     }
 
     @EventBusSubscriber(modid = Fallacy.MOD_ID)

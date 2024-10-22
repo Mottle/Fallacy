@@ -3,6 +3,7 @@ package dev.deepslate.fallacy.weather
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.deepslate.fallacy.util.TickHelper
+import dev.deepslate.fallacy.util.extension.weatherEngine
 import dev.deepslate.fallacy.util.region.Region
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
@@ -105,7 +106,8 @@ class WeatherInstance(
         if (weather.shouldTickEntities(level, region) && TickHelper.checkServerTickRate(weather.tickEntityInterval)) {
             val entitiesInRegion = level.entities.all.filter { it is LivingEntity && it.isAlive }
                 .filter { region.isIn(it.blockPosition()) }
-            entitiesInRegion.forEach { weather.tickEntity(it, level, it.blockPosition()) }
+                .filter { level.weatherEngine?.getWeatherAt(it.blockPosition())?.weather == weather }
+            entitiesInRegion.forEach { weather.tickEntity(it as LivingEntity, level, it.blockPosition()) }
         }
     }
 }

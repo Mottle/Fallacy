@@ -3,6 +3,7 @@ package dev.deepslate.fallacy.weather
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.weather.impl.Clear
 import dev.deepslate.fallacy.weather.impl.Rain
+import dev.deepslate.fallacy.weather.impl.Sandstorm
 import dev.deepslate.fallacy.weather.impl.Thunder
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
@@ -31,6 +32,8 @@ object FallacyWeathers {
     val RAIN = registry.register(Rain.ID.path) { _ -> Rain() }
 
     val THUNDER = registry.register(Thunder.ID.path) { _ -> Thunder() }
+
+    val SANDSTORM = registry.register(Sandstorm.ID.path) { _ -> Sandstorm() }
 
     fun init(bus: IEventBus) {
         registry.register(bus)

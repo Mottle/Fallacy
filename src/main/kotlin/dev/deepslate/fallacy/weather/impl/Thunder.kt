@@ -6,8 +6,8 @@ import dev.deepslate.fallacy.weather.Weather
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.phys.Vec3
@@ -22,7 +22,7 @@ class Thunder : Weather() {
 
     override fun shouldTickEntities(level: ServerLevel, region: Region): Boolean = true
 
-    override fun tickEntity(entity: Entity, level: ServerLevel, pos: BlockPos) {
+    override fun tickEntity(entity: LivingEntity, level: ServerLevel, pos: BlockPos) {
         if (entity is Player) trySpawnLightningBolt(level, entity.chunkPosition())
     }
 
