@@ -5,16 +5,18 @@ import net.minecraft.core.BlockPos
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
-import net.minecraft.util.RandomSource
+import net.minecraft.world.level.Level
 
 sealed class Region {
     abstract fun isIn(x: Int, y: Int, z: Int): Boolean
 
     fun isIn(pos: BlockPos): Boolean = isIn(pos.x, pos.y, pos.z)
 
-    abstract fun random(source: RandomSource): Triple<Int, Int, Int>
+    abstract fun random(level: Level): Triple<Int, Int, Int>
 
-    fun randomPos(source: RandomSource): BlockPos = random(source).let { BlockPos(it.first, it.second, it.third) }
+    fun randomPos(level: Level): BlockPos = random(level).let { BlockPos(it.first, it.second, it.third) }
+
+    abstract fun calculateVolume(level: Level): ULong
 
     abstract val type: RegionType<out Region>
 

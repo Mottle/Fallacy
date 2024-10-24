@@ -6,8 +6,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
-import net.minecraft.util.RandomSource
 import net.minecraft.world.level.ChunkPos
+import net.minecraft.world.level.Level
+import kotlin.math.absoluteValue
 
 data class ChunkRegion(val chunkStart: ChunkPos, val chunkEnd: ChunkPos) : Region() {
 
@@ -39,12 +40,20 @@ data class ChunkRegion(val chunkStart: ChunkPos, val chunkEnd: ChunkPos) : Regio
 
     private val zEnd = chunkStart.maxBlockZ
 
-    override fun random(source: RandomSource): Triple<Int, Int, Int> {
+    override fun random(level: Level): Triple<Int, Int, Int> {
+        val source = level.random
         val randomX = source.nextInt(xStart, xEnd + 1)
         val randomZ = source.nextInt(zStart, zEnd + 1)
-        val randomY = source.nextInt(-64, 320)
+        val randomY = source.nextIntBetweenInclusive(level.minBuildHeight, level.maxBuildHeight)
 
         return Triple(randomX, randomY, randomZ)
+    }
+
+    override fun calculateVolume(level: Level): ULong {
+        val dx = (chunkEnd.x - chunkStart.x).absoluteValue.toULong() + 1uL
+        val dz = (chunkEnd.z - chunkStart.z).absoluteValue.toULong() + 1uL
+        val dy = level.height.toULong()
+        return dx * dy * dz
     }
 
     override val type: RegionType<out Region> = RegionTypes.CHUNK.get()

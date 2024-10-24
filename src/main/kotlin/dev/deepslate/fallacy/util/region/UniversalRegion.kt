@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
-import net.minecraft.util.RandomSource
+import net.minecraft.world.level.Level
 
 object UniversalRegion : Region() {
     val CODEC = RecordCodecBuilder.mapCodec<UniversalRegion> { instance ->
@@ -20,11 +20,18 @@ object UniversalRegion : Region() {
 
     override fun isIn(x: Int, y: Int, z: Int): Boolean = true
 
-    override fun random(source: RandomSource): Triple<Int, Int, Int> = Triple(
-        source.nextIntBetweenInclusive(-20000, 20000),
-        source.nextIntBetweenInclusive(-20000, 20000),
-        source.nextIntBetweenInclusive(-20000, 20000)
-    )
+    override fun random(level: Level): Triple<Int, Int, Int> {
+        val source = level.random
+        val y = source.nextIntBetweenInclusive(level.minBuildHeight, level.maxBuildHeight)
+
+        return Triple(
+            source.nextIntBetweenInclusive(-20000, 20000),
+            y,
+            source.nextIntBetweenInclusive(-20000, 20000)
+        )
+    }
+
+    override fun calculateVolume(level: Level): ULong = ULong.MAX_VALUE
 
     //非常隐蔽的坑点，UniversalRegion是一个object单例，在被引用前其变量不会初始化，故此处type若不为访问器则会在StreamCodec中为null -- 2024/10/21
     override val type: RegionType<out Region>

@@ -6,7 +6,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
-import net.minecraft.util.RandomSource
+import net.minecraft.world.level.Level
+import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -28,20 +29,31 @@ data class CircleChunkRegion(val centerX: Int, val centerZ: Int, val radius: Int
         )
     }
 
+    init {
+        require(radius > 0) { "radius must be greater than 0." }
+    }
+
     override fun isIn(x: Int, y: Int, z: Int): Boolean {
         val dx = x - centerX
         val dz = z - centerZ
         return dx * dx + dz * dz <= radius * radius
     }
 
-    override fun random(source: RandomSource): Triple<Int, Int, Int> {
+    override fun random(level: Level): Triple<Int, Int, Int> {
+        val source = level.random
         val randomRadius = source.nextInt(radius)
         val radian = source.nextDouble() * 2 * Math.PI
         val randomX = centerX + randomRadius * cos(radian).toInt()
         val randomZ = centerZ + randomRadius * sin(radian).toInt()
-        val randomY = source.nextIntBetweenInclusive(-64, 320)
+        val randomY = source.nextIntBetweenInclusive(level.minBuildHeight, level.maxBuildHeight)
 
         return Triple(randomX, randomY, randomZ)
+    }
+
+    override fun calculateVolume(level: Level): ULong {
+        val dy = level.height.toULong()
+        val area = (0.5 * PI * radius * radius).toULong()
+        return dy * area
     }
 
     override val type: RegionType<out Region> = RegionTypes.CIRCLE_CHUNK.get()

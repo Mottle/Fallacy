@@ -36,4 +36,6 @@ object RegionTypes {
             UniversalRegion.STREAM_CODEC
         )
     )
+
+    val UNION = register("union", RegionType(UnionRegion.CODEC, UnionRegion.STREAM_CODEC))
 }

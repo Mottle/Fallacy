@@ -6,7 +6,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
-import net.minecraft.util.RandomSource
+import net.minecraft.world.level.Level
+import kotlin.math.absoluteValue
 
 data class CubeRegion(val xStart: Int, val yStart: Int, val zStart: Int, val xEnd: Int, val yEnd: Int, val zEnd: Int) :
     Region() {
@@ -35,11 +36,23 @@ data class CubeRegion(val xStart: Int, val yStart: Int, val zStart: Int, val xEn
 
     override fun isIn(x: Int, y: Int, z: Int): Boolean = x in xStart..xEnd && y in yStart..yEnd && z in zStart..zEnd
 
-    override fun random(source: RandomSource): Triple<Int, Int, Int> {
+    override fun random(level: Level): Triple<Int, Int, Int> {
+        val source = level.random
         val randomX = source.nextInt(xStart, xEnd + 1)
         val randomY = source.nextInt(yStart, yEnd + 1)
         val randomZ = source.nextInt(zStart, zEnd + 1)
-        return Triple(randomX, randomY, randomZ)
+        val fixedY = randomY.coerceIn(level.minBuildHeight, level.maxBuildHeight)
+
+        return Triple(randomX, fixedY, randomZ)
+    }
+
+    override fun calculateVolume(level: Level): ULong {
+        val dx = (xEnd - xStart).absoluteValue.toULong() + 1uL
+        val dy = (yEnd - yStart).absoluteValue + 1
+        val dz = (zEnd - zStart).absoluteValue.toULong() + 1uL
+        val fixedDy = dy.coerceIn(level.minBuildHeight, level.maxBuildHeight).toULong()
+
+        return dx * fixedDy * dz
     }
 
     override val type: RegionType<out Region> = RegionTypes.CUBE.get()
