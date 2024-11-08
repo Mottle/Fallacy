@@ -21,6 +21,8 @@ class Sandstorm : Weather() {
     override fun shouldTickEntities(level: ServerLevel, region: Region): Boolean = true
 
     override fun tickEntity(entity: LivingEntity, level: ServerLevel, pos: BlockPos) {
+        if(!level.canSeeSky(pos)) return
+
         val effect = MobEffects.MOVEMENT_SLOWDOWN
         val effectInstance = MobEffectInstance(effect, TickHelper.second(5), 0)
         entity.addEffect(effectInstance)

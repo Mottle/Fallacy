@@ -81,7 +81,7 @@ class ServerWeatherEngine(
     }
 
     fun schedule() {
-        val weather = WeatherInstance.create(FallacyWeathers.THUNDER, TickHelper.minute(10), UniversalRegion)
+        val weather = WeatherInstance.create(FallacyWeathers.SANDSTORM, TickHelper.minute(10), UniversalRegion)
         weatherPriorityQueue.add(weather)
         markDirty()
     }
