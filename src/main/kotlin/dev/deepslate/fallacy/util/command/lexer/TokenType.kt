@@ -12,4 +12,6 @@ internal sealed interface TokenType {
     data class FloatArg(override val word: String) : Arg(word)
 
     data class BoolArg(override val word: String) : Arg(word)
+
+    data class ResourceLocationArg(override val word: String) : Arg(word)
 }

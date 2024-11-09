@@ -22,19 +22,13 @@ import java.util.PriorityQueue
 class ServerWeatherEngine(
     val level: ServerLevel,
     inputWeathers: List<WeatherInstance> = emptyList()
-) : WeatherEngine {
-    private val weatherPriorityQueue: PriorityQueue<WeatherInstance> =
+) : WeatherEngine, WeatherStorage {
+    override val weatherStorage: PriorityQueue<WeatherInstance> =
         PriorityQueue(compareByDescending { it.priority })
 
     init {
-        weatherPriorityQueue.addAll(inputWeathers)
+        weatherStorage.addAll(inputWeathers)
     }
-
-    val sortedWeathers: List<WeatherInstance>
-        get() = weatherPriorityQueue.toList()
-
-    val size: Int
-        get() = weatherPriorityQueue.size
 
     var isDirty: Boolean = false
 
@@ -43,7 +37,7 @@ class ServerWeatherEngine(
     }
 
     override fun tick() {
-        weatherPriorityQueue.forEach { weather -> weather.tick(level) }
+        weatherStorage.forEach { weather -> weather.tick(level) }
         clean()
         if (TickHelper.checkServerSecondRate(30)) schedule()
 
@@ -63,27 +57,35 @@ class ServerWeatherEngine(
     }
 
     override fun getWeatherAt(pos: BlockPos): WeatherInstance {
-        val weather = weatherPriorityQueue.find { w -> w.isIn(pos) && w.isValidIn(level, pos) && !w.isEnded }
+        val weather = weatherStorage.find { w -> w.isIn(pos) && w.isValidIn(level, pos) && !w.isEnded }
         return weather ?: WeatherInstance(Clear, region = UniversalRegion)
     }
 
     override fun isWet(pos: BlockPos): Boolean = getWeatherAt(pos).isWet
 
     private fun clean() {
-        val removed = weatherPriorityQueue.filter { it.isEnded }
+        val removed = weatherStorage.filter { it.isEnded }
 
         if (removed.isEmpty()) return
 
         removed.forEach {
-            weatherPriorityQueue.remove(it)
+            weatherStorage.remove(it)
         }
         markDirty()
     }
 
+    fun removeAll() {
+        weatherStorage.clear()
+    }
+
     fun schedule() {
-        val weather = WeatherInstance.create(FallacyWeathers.SANDSTORM, TickHelper.minute(10), UniversalRegion)
-        weatherPriorityQueue.add(weather)
-        markDirty()
+//        val weather = WeatherInstance.create(FallacyWeathers.SANDSTORM, TickHelper.minute(10), UniversalRegion)
+//        weatherStorage.add(weather)
+//        markDirty()
+    }
+
+    fun addWeather(weatherInstance: WeatherInstance) {
+        weatherStorage.add(weatherInstance)
     }
 
     @EventBusSubscriber(modid = Fallacy.MOD_ID)

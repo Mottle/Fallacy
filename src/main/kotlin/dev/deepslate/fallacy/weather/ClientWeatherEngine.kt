@@ -15,12 +15,12 @@ import net.neoforged.neoforge.event.level.LevelEvent
 import net.neoforged.neoforge.network.handling.IPayloadContext
 import java.util.PriorityQueue
 
-class ClientWeatherEngine(val level: ClientLevel) : WeatherEngine {
-    private val weatherQueue = PriorityQueue<WeatherInstance>(compareByDescending { w -> w.priority })
+class ClientWeatherEngine(val level: ClientLevel) : WeatherEngine, WeatherStorage {
+    override val weatherStorage = PriorityQueue<WeatherInstance>(compareByDescending { w -> w.priority })
 
     fun setWeathers(weather: List<WeatherInstance>) {
-        weatherQueue.clear()
-        weatherQueue.addAll(weather)
+        weatherStorage.clear()
+        weatherStorage.addAll(weather)
     }
 
     override fun tick() {}
@@ -46,7 +46,7 @@ class ClientWeatherEngine(val level: ClientLevel) : WeatherEngine {
     }
 
     override fun getWeatherAt(pos: BlockPos): WeatherInstance {
-        val weather = weatherQueue.find { w -> w.isIn(pos) && w.isValidIn(level, pos) && !w.isEnded }
+        val weather = weatherStorage.find { w -> w.isIn(pos) && w.isValidIn(level, pos) && !w.isEnded }
         return weather ?: WeatherInstance(Clear, region = UniversalRegion)
     }
 

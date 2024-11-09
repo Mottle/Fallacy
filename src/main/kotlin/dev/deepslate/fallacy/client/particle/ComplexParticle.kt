@@ -19,7 +19,7 @@ open class ComplexParticle(
 ) : TextureSheetParticle(clientLevel, x, y, z, xSpeed, ySpeed, zSpeed) {
     val particleId: Int = clientLevel.random.nextInt(100000)
 
-    open var sprite: TextureAtlasSprite
+    open var particleSprite: TextureAtlasSprite
         get() = super.sprite
         set(value) {
             super.sprite = value

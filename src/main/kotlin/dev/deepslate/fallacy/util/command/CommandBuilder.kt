@@ -11,6 +11,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider
 import dev.deepslate.fallacy.util.command.lexer.TokenType
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
+import net.minecraft.commands.arguments.ResourceLocationArgument
 
 internal class CommandBuilder {
 
@@ -52,6 +53,9 @@ internal class CommandBuilder {
                 .suggests(suggestionMap.getOrDefault(c.word, null))
 
             is TokenType.BoolArg -> Commands.argument(c.word, BoolArgumentType.bool())
+                .suggests(suggestionMap.getOrDefault(c.word, null))
+
+            is TokenType.ResourceLocationArg -> Commands.argument(c.word, ResourceLocationArgument.id())
                 .suggests(suggestionMap.getOrDefault(c.word, null))
         }
         if (rest.isEmpty()) return cmd.executes(callback)
