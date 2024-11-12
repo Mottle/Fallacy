@@ -6,6 +6,8 @@ import dev.deepslate.fallacy.util.extension.internalWeatherEngine
 import dev.deepslate.fallacy.util.extension.weatherEngine
 import dev.deepslate.fallacy.util.region.UniversalRegion
 import dev.deepslate.fallacy.weather.impl.Clear
+import dev.deepslate.fallacy.weather.wind.ClientWindEngine
+import dev.deepslate.fallacy.weather.wind.WindEngine
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.Level
@@ -17,6 +19,8 @@ import java.util.PriorityQueue
 
 class ClientWeatherEngine(val level: ClientLevel) : WeatherEngine, WeatherStorage {
     override val weatherStorage = PriorityQueue<WeatherInstance>(compareByDescending { w -> w.priority })
+
+    override val windEngine: WindEngine = ClientWindEngine()
 
     fun setWeathers(weather: List<WeatherInstance>) {
         weatherStorage.clear()

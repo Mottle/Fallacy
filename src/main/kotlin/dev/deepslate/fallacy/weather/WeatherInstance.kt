@@ -65,7 +65,7 @@ class WeatherInstance(
     }
 
     init {
-        require(priority in 0..7) { "Priority must be between 0 and 7" }
+        require(priority in 0..7) { "Priority must be between 0 and 7." }
     }
 
     private var remainingTicks: Int = remainingTime
@@ -107,6 +107,7 @@ class WeatherInstance(
             val entitiesInRegion = level.entities.all.filter { it is LivingEntity && it.isAlive }
                 .filter { region.isIn(it.blockPosition()) }
                 .filter { level.weatherEngine?.getWeatherAt(it.blockPosition())?.weather == weather }
+
             entitiesInRegion.forEach { weather.tickEntity(it as LivingEntity, level, it.blockPosition()) }
         }
     }

@@ -8,6 +8,7 @@ import dev.deepslate.fallacy.util.extension.internalWeatherEngine
 import dev.deepslate.fallacy.util.extension.weatherEngine
 import dev.deepslate.fallacy.util.region.UniversalRegion
 import dev.deepslate.fallacy.weather.impl.Clear
+import dev.deepslate.fallacy.weather.wind.ServerWindEngine
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
@@ -36,10 +37,12 @@ class ServerWeatherEngine(
         isDirty = true
     }
 
+    override val windEngine: ServerWindEngine = ServerWindEngine(level)
+
     override fun tick() {
         weatherStorage.forEach { weather -> weather.tick(level) }
         clean()
-        if (TickHelper.checkServerSecondRate(30)) schedule()
+//        if (TickHelper.checkServerSecondRate(30)) schedule()
 
         //若天气发生变化则向客户端同步
         if (isDirty) {
@@ -63,7 +66,7 @@ class ServerWeatherEngine(
 
     override fun isWet(pos: BlockPos): Boolean = getWeatherAt(pos).isWet
 
-    private fun clean() {
+    fun clean() {
         val removed = weatherStorage.filter { it.isEnded }
 
         if (removed.isEmpty()) return
@@ -78,11 +81,12 @@ class ServerWeatherEngine(
         weatherStorage.clear()
     }
 
-    fun schedule() {
+    //天气的调度由CurrentSimulator完成
+//    fun schedule() {
 //        val weather = WeatherInstance.create(FallacyWeathers.SANDSTORM, TickHelper.minute(10), UniversalRegion)
 //        weatherStorage.add(weather)
 //        markDirty()
-    }
+//    }
 
     fun addWeather(weatherInstance: WeatherInstance) {
         weatherStorage.add(weatherInstance)

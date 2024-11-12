@@ -3,6 +3,7 @@ package dev.deepslate.fallacy.weather
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.util.TickHelper
 import dev.deepslate.fallacy.util.extension.weatherEngine
+import dev.deepslate.fallacy.weather.wind.WindEngine
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.Level
 import net.neoforged.bus.api.SubscribeEvent
@@ -15,6 +16,8 @@ interface WeatherEngine {
     fun getWeatherAt(pos: BlockPos): WeatherInstance
 
     fun isWet(pos: BlockPos): Boolean
+
+    val windEngine: WindEngine
 
     @EventBusSubscriber(modid = Fallacy.MOD_ID)
     object Handler {
@@ -29,6 +32,7 @@ interface WeatherEngine {
             if (level.dimension() != Level.OVERWORLD) return
 
             level.weatherEngine?.tick()
+            level.weatherEngine?.windEngine?.tick()
         }
     }
 }

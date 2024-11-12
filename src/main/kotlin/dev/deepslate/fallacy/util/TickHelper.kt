@@ -24,6 +24,8 @@ object TickHelper {
 
     fun checkServerSecondRate(second: Int): Boolean = checkServerTickRate(second * 20)
 
+    fun checkServerMinuteRate(minute: Int): Boolean = checkServerSecondRate(minute * 60)
+
     fun second(sec: Int) = sec * 20
 
     fun minute(min: Int) = second(60 * min)
