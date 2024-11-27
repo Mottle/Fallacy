@@ -1,11 +1,22 @@
 package dev.deepslate.fallacy.weather.wind
 
+import dev.deepslate.fallacy.Fallacy
+import dev.deepslate.fallacy.util.extension.internalWindEngine
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3
+import net.neoforged.bus.api.SubscribeEvent
+import net.neoforged.fml.common.EventBusSubscriber
+import net.neoforged.neoforge.event.level.LevelEvent
 
 class ServerWindEngine(val level: ServerLevel) : WindEngine {
+
+    companion object {
+        const val BOUND_WIND_STRENGTH = 0.1
+    }
+
     override fun tick() {
 //        val entities = level.allEntities.filter { it is LivingEntity || it is ItemEntity }
 //        entities.forEach(::tickEntity)
@@ -21,8 +32,22 @@ class ServerWindEngine(val level: ServerLevel) : WindEngine {
         val pos = entity.blockPosition()
         val wind = getWindAt(pos)
 
-        if (wind.length() > 0.1 && level.canSeeSky(pos)) {
+        if (wind.length() > BOUND_WIND_STRENGTH && level.canSeeSky(pos)) {
             entity.addDeltaMovement(wind)
+        }
+    }
+
+    @EventBusSubscriber(modid = Fallacy.MOD_ID)
+    object Handler {
+        @SubscribeEvent
+        fun onServerLevelLoad(event: LevelEvent.Load) {
+            val level = event.level as Level
+
+            if (level.isClientSide) return
+            if (level.dimension() != Level.OVERWORLD) return
+
+            val serverLevel = level as ServerLevel
+            serverLevel.internalWindEngine = ServerWindEngine(serverLevel)
         }
     }
 }

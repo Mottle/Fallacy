@@ -3,12 +3,10 @@ package dev.deepslate.fallacy.weather
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.data.FallacyAttachments
 import dev.deepslate.fallacy.common.network.packet.WeatherSyncPacket
-import dev.deepslate.fallacy.util.TickHelper
 import dev.deepslate.fallacy.util.extension.internalWeatherEngine
 import dev.deepslate.fallacy.util.extension.weatherEngine
 import dev.deepslate.fallacy.util.region.UniversalRegion
 import dev.deepslate.fallacy.weather.impl.Clear
-import dev.deepslate.fallacy.weather.wind.ServerWindEngine
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
@@ -18,7 +16,7 @@ import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.event.entity.player.PlayerEvent
 import net.neoforged.neoforge.event.level.LevelEvent
 import net.neoforged.neoforge.network.PacketDistributor
-import java.util.PriorityQueue
+import java.util.*
 
 class ServerWeatherEngine(
     val level: ServerLevel,
@@ -36,8 +34,6 @@ class ServerWeatherEngine(
     fun markDirty() {
         isDirty = true
     }
-
-    override val windEngine: ServerWindEngine = ServerWindEngine(level)
 
     override fun tick() {
         weatherStorage.forEach { weather -> weather.tick(level) }

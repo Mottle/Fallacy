@@ -2,7 +2,7 @@ package dev.deepslate.fallacy.weather.current
 
 //用于模拟天气的环流
 //strength: 0.0 ~ 1.0
-class Current<P>(val type: Type, val strength: Float, val position: P) {
+open class Current<P>(val type: Type, val strength: Float, val position: P) {
 
     enum class Type {
         WARM, COLD

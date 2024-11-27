@@ -1,6 +1,6 @@
 package dev.deepslate.fallacy.mixin;
 
-import dev.deepslate.fallacy.inject.FallacyLevelWeatherExtension;
+import dev.deepslate.fallacy.inject.FallacyWeatherExtension;
 import dev.deepslate.fallacy.weather.FallacyWeathers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -35,7 +35,7 @@ public abstract class LevelMixin {
     @Inject(method = "isRainingAt", at = @At("HEAD"), cancellable = true)
     void injectIsRainAt(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         var self = (Level) (Object) this;
-        var engine = ((FallacyLevelWeatherExtension) self).fallacy$getWeatherEngine();
+        var engine = ((FallacyWeatherExtension) self).fallacy$getWeatherEngine();
         if (engine == null) {
             cir.setReturnValue(false);
             return;
@@ -76,7 +76,7 @@ public abstract class LevelMixin {
                 cir.setReturnValue(0f);
                 return;
             }
-            var engine = ((FallacyLevelWeatherExtension) this).fallacy$getWeatherEngine();
+            var engine = ((FallacyWeatherExtension) this).fallacy$getWeatherEngine();
             if (engine == null) {
                 cir.setReturnValue(0f);
                 return;
@@ -102,7 +102,7 @@ public abstract class LevelMixin {
                 cir.setReturnValue(0f);
                 return;
             }
-            var engine = ((FallacyLevelWeatherExtension) this).fallacy$getWeatherEngine();
+            var engine = ((FallacyWeatherExtension) this).fallacy$getWeatherEngine();
             if (engine == null) {
                 cir.setReturnValue(0f);
                 return;

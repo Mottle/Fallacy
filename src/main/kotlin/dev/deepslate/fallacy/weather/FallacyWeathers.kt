@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceKey
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
+import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredRegister
 import net.neoforged.neoforge.registries.NewRegistryEvent
 import net.neoforged.neoforge.registries.RegistryBuilder
@@ -27,13 +28,13 @@ object FallacyWeathers {
 
     private val registry = DeferredRegister.create(REGISTRY, Fallacy.MOD_ID)
 
-    val CLEAR = registry.register(Clear.namespaceId.path) { _ -> Clear }
+    val CLEAR: DeferredHolder<Weather, Clear> = registry.register(Clear.namespaceId.path) { _ -> Clear }
 
-    val RAIN = registry.register(Rain.ID.path) { _ -> Rain() }
+    val RAIN: DeferredHolder<Weather, Rain> = registry.register(Rain.ID.path) { _ -> Rain() }
 
-    val THUNDER = registry.register(Thunder.ID.path) { _ -> Thunder() }
+    val THUNDER: DeferredHolder<Weather, Thunder> = registry.register(Thunder.ID.path) { _ -> Thunder() }
 
-    val SANDSTORM = registry.register(Sandstorm.ID.path) { _ -> Sandstorm() }
+    val SANDSTORM: DeferredHolder<Weather, Sandstorm> = registry.register(Sandstorm.ID.path) { _ -> Sandstorm() }
 
     fun init(bus: IEventBus) {
         registry.register(bus)
