@@ -2,23 +2,22 @@ package dev.deepslate.fallacy.thermodynamics.data
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import dev.deepslate.fallacy.thermodynamics.ThermodynamicsEngine
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
-import java.util.Optional
+import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
-class HeatLayer(private var data: ByteArray? = null) {
+internal class HeatLayer(private var data: ByteArray? = null) {
 
     companion object {
-        //16 units
-        const val UNIT_COUNT = 16
+        //16 units per layer
+        const val LAYER_UNIT_COUNT = 16
 
-        //unit 16 bit
+        //16 bit per unit
         const val UNIT_SIZE = 16
 
-        const val SIZE = UNIT_COUNT * UNIT_COUNT * UNIT_COUNT * UNIT_SIZE / 8
+        const val STORAGE_SIZE = LAYER_UNIT_COUNT * LAYER_UNIT_COUNT * LAYER_UNIT_COUNT * UNIT_SIZE / 8
 
         const val MAX_HEAT = 0xffffu
 
@@ -42,7 +41,7 @@ class HeatLayer(private var data: ByteArray? = null) {
     }
 
     fun init() {
-        data = ByteArray(SIZE)
+        data = ByteArray(STORAGE_SIZE)
     }
 
     private fun getRawIndex(x: Int, y: Int, z: Int): Int {

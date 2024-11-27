@@ -7,13 +7,13 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 
-data class LayerStack(private val data: MutableList<HeatLayer> = mutableListOf()) {
+internal data class LayerStack constructor(private val data: MutableList<HeatLayer> = mutableListOf()) {
     companion object {
         const val WORLD_DEEPEST = -64
 
         const val WORLD_HIGHEST = 320
 
-        const val SIZE = (WORLD_HIGHEST - WORLD_DEEPEST) / HeatLayer.UNIT_COUNT
+        const val SIZE = (WORLD_HIGHEST - WORLD_DEEPEST) / HeatLayer.LAYER_UNIT_COUNT
 
         private val eitherCodec: Codec<Either<Int, HeatLayer>> = Codec.either(Codec.INT, HeatLayer.CODEC)
 
@@ -44,7 +44,7 @@ data class LayerStack(private val data: MutableList<HeatLayer> = mutableListOf()
 
     val layers: List<HeatLayer> get() = data
 
-    private fun getIndex(y: Int) = (y - WORLD_DEEPEST) % HeatLayer.UNIT_COUNT
+    private fun getIndex(y: Int) = (y - WORLD_DEEPEST) % HeatLayer.LAYER_UNIT_COUNT
 
     fun getLayer(y: Int): HeatLayer = data[getIndex(y)]
 

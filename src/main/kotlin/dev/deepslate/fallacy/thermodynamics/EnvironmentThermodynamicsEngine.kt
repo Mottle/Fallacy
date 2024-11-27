@@ -1,5 +1,6 @@
 package dev.deepslate.fallacy.thermodynamics
 
+import dev.deepslate.fallacy.thermodynamics.data.Temperature
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.biome.Biomes
@@ -7,15 +8,15 @@ import net.minecraft.world.level.biome.Biomes
 open class EnvironmentThermodynamicsEngine(private val level: Level) : ThermodynamicsEngine {
 
     companion object {
-        const val BIOME_BASE_HEAT = 30
+        const val BIOME_BASE_CELSIUS: Int = 15
     }
 
-    override fun getEpitaxialHeat(pos: BlockPos): Int = 0
+    override fun getEpitaxialTemperature(pos: BlockPos): Temperature = Temperature.Celsius(0)
 
-    override fun getIntrinsicHeat(pos: BlockPos): Int =
-        getBiomeHeat(pos) + getSunlightHeat(pos) + getWeatherHeat(pos) + dimensionHeat
+    override fun getIntrinsicTemperature(pos: BlockPos): Temperature =
+        Temperature.Celsius(getBiomeHeat(pos) + getSunlightHeat(pos) + getWeatherHeat(pos) + dimensionHeat)
 
-    override fun checkBlock(pos: BlockPos) {
+    override fun doCheck(pos: BlockPos) {
         /* DO NOTHING */
     }
 
@@ -27,7 +28,7 @@ open class EnvironmentThermodynamicsEngine(private val level: Level) : Thermodyn
         return if (level.isDay) 5 else 0
     }
 
-    protected open fun getBiomeHeat(pos: BlockPos): Int = (BIOME_BASE_HEAT * level.getBiome(pos)
+    protected open fun getBiomeHeat(pos: BlockPos): Int = (BIOME_BASE_CELSIUS * level.getBiome(pos)
         .value().baseTemperature).toInt()
 
     protected open fun getWeatherHeat(pos: BlockPos): Int = 0

@@ -1,21 +1,14 @@
 package dev.deepslate.fallacy.thermodynamics
 
-import dev.deepslate.fallacy.thermodynamics.data.HeatLayer
+import dev.deepslate.fallacy.thermodynamics.data.Temperature
 import net.minecraft.core.BlockPos
 
 interface ThermodynamicsEngine {
+    //外延热量
+    fun getEpitaxialTemperature(pos: BlockPos): Temperature
 
-    companion object {
-        const val MIN_HEAT = -273
+    //内秉热量
+    fun getIntrinsicTemperature(pos: BlockPos): Temperature
 
-        const val MAX_HEAT = 0xffff + MIN_HEAT
-
-        fun convert(heat: Int): UInt = (heat + MIN_HEAT).toUInt().coerceIn(0u, HeatLayer.MAX_HEAT)
-    }
-
-    fun getEpitaxialHeat(pos: BlockPos): Int
-
-    fun getIntrinsicHeat(pos: BlockPos): Int
-
-    fun checkBlock(pos: BlockPos)
+    fun doCheck(pos: BlockPos)
 }
