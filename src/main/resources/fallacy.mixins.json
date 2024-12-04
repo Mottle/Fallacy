@@ -6,13 +6,15 @@
     "refmap": "Fallacy.refmap.json",
     "mixins": [
         "ArmorSlotMixin",
+        "BiomeMixin",
         "CombatRulesMixin",
         "CreeperMixin",
         "EnchantmentMixin",
         "EquipableMixin",
         "LivingEntityMixin",
         "NearestAttackableTargetGoalMixin",
-        "item.ItemMixin",
+        "ServerLevelHeatMixin",
+        "item.ItemExtensionMixin",
         "item.ItemStackMixin",
         "player.PlayerMixin"
     ],
