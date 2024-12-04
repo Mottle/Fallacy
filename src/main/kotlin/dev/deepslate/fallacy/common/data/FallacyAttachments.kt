@@ -5,8 +5,10 @@ import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.data.player.FoodHistory
 import dev.deepslate.fallacy.common.data.player.NutritionState
 import dev.deepslate.fallacy.race.impl.Unknown
+import dev.deepslate.fallacy.thermodynamics.data.ChunkHeatTarget
 import dev.deepslate.fallacy.thermodynamics.data.LayerStack
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.level.chunk.ChunkAccess
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.neoforge.attachment.AttachmentType
 import net.neoforged.neoforge.registries.DeferredRegister
@@ -17,6 +19,10 @@ object FallacyAttachments {
 
     internal val CHUNK_HEAT = REGISTRY.register("heat") { _ ->
         AttachmentType.builder { _ -> LayerStack() }.serialize(LayerStack.CODEC).build()
+    }
+
+    internal val CHUNK_HEAT_TARGET = REGISTRY.register("heat_target") { _ ->
+        AttachmentType.builder { p -> ChunkHeatTarget(p as ChunkAccess) }.build()
     }
 
     val THIRST = REGISTRY.register("thirst") { _ ->

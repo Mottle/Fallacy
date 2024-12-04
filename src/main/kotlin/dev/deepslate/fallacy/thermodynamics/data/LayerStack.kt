@@ -7,13 +7,14 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 
-internal data class LayerStack constructor(private val data: MutableList<HeatLayer> = mutableListOf()) {
+//Chunk持有的数据结构，用于存储此Chunk中对应位置的当前温度
+internal class LayerStack(private val data: MutableList<HeatLayer> = mutableListOf()) {
     companion object {
-        const val WORLD_DEEPEST = -64
+//        const val WORLD_DEEPEST = -64
+//
+//        const val WORLD_HIGHEST = 320
 
-        const val WORLD_HIGHEST = 320
-
-        const val SIZE = (WORLD_HIGHEST - WORLD_DEEPEST) / HeatLayer.LAYER_UNIT_COUNT
+//        const val SIZE = (WORLD_HIGHEST - WORLD_DEEPEST) / HeatLayer.LAYER_UNIT_COUNT
 
         private val eitherCodec: Codec<Either<Int, HeatLayer>> = Codec.either(Codec.INT, HeatLayer.CODEC)
 
@@ -26,7 +27,7 @@ internal data class LayerStack constructor(private val data: MutableList<HeatLay
         private val fixedHeatLayerCodec: Codec<HeatLayer> = eitherCodec.xmap(::to, ::from)
 
         val CODEC: Codec<LayerStack> = RecordCodecBuilder.create { instance ->
-            instance.group(fixedHeatLayerCodec.listOf().fieldOf("layers").forGetter(LayerStack::layers))
+            instance.group(fixedHeatLayerCodec.listOf().fieldOf("layers").forGetter(LayerStack::data))
                 .apply(instance, ::LayerStack)
         }
 
@@ -38,17 +39,13 @@ internal data class LayerStack constructor(private val data: MutableList<HeatLay
         val STREAM_CODEC: StreamCodec<ByteBuf, LayerStack> =
             StreamCodec.composite(
                 fixedHeatLayerStreamCodec.apply(ByteBufCodecs.list()),
-                LayerStack::layers,
+                LayerStack::data,
             ) { LayerStack(it) }
     }
 
-    val layers: List<HeatLayer> get() = data
+    fun getLayer(index: Int): HeatLayer = data[index]
 
-    private fun getIndex(y: Int) = (y - WORLD_DEEPEST) % HeatLayer.LAYER_UNIT_COUNT
-
-    fun getLayer(y: Int): HeatLayer = data[getIndex(y)]
-
-    fun setLayer(y: Int, layer: HeatLayer) {
-        data[getIndex(y)] = layer
+    fun setLayer(index: Int, layer: HeatLayer) {
+        data[index] = layer
     }
 }

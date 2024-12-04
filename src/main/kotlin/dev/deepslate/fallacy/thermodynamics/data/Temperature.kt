@@ -26,4 +26,8 @@ sealed interface Temperature : Comparable<Temperature> {
 
         fun toKelvins(): Kelvins = Kelvins(heat)
     }
+
+    fun celsius(heat: UInt): Celsius = Celsius(heat.toInt() - HeatLayer.FREEZING_POINT.toInt())
+
+    fun kelvins(heat: UInt): Kelvins = Kelvins(heat)
 }
