@@ -2,13 +2,16 @@ package dev.deepslate.fallacy.util
 
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.item.data.ExtendedProperties
-import dev.deepslate.fallacy.inject.item.FallacyExtendedItem
+import dev.deepslate.fallacy.inject.item.FallacyItemExtension
 import net.minecraft.world.item.Item
 
-var Item.extendedProperties: ExtendedProperties?
-    get() = (this as? FallacyExtendedItem)?.`fallacy$getExtendedProperties`()
+internal var Item.internalExtendedProperties: ExtendedProperties?
+    get() = (this as? FallacyItemExtension)?.`fallacy$getExtendedProperties`()
     set(value) {
-        (this as? FallacyExtendedItem)?.`fallacy$setExtendedProperties`(value) ?: {
+        (this as? FallacyItemExtension)?.`fallacy$setExtendedProperties`(value) ?: {
             Fallacy.LOGGER.info("Item $this does not implement FallacyExtendedItem")
         }
     }
+
+val Item.extendedProperties: ExtendedProperties?
+    get() = internalExtendedProperties

@@ -17,8 +17,8 @@ public abstract class ItemStackMixin {
         return (ItemStack) (Object) this;
     }
 
-    @Inject(method = "<init>(Lnet/minecraft/world/level/ItemLike;ILnet/minecraft/core/component/PatchedDataComponentMap;)V", at = @At("TAIL"))
-    void mixinInit(ItemLike item, int count, PatchedDataComponentMap components, CallbackInfo ci) {
-        ExtendedProperties.Companion.onItemStack(fallacy$self());
-    }
+//    @Inject(method = "<init>(Lnet/minecraft/world/level/ItemLike;ILnet/minecraft/core/component/PatchedDataComponentMap;)V", at = @At("TAIL"))
+//    void mixinInit(ItemLike item, int count, PatchedDataComponentMap components, CallbackInfo ci) {
+//        ExtendedProperties.Companion.onItemStack(fallacy$self());
+//    }
 }
