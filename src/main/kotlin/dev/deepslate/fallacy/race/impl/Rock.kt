@@ -54,9 +54,6 @@ import net.neoforged.neoforge.event.entity.living.LivingDamageEvent
 import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent
 import net.neoforged.neoforge.network.PacketDistributor
 import net.neoforged.neoforge.network.handling.IPayloadContext
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.map
 import kotlin.jvm.optionals.getOrNull
 import kotlin.math.pow
 

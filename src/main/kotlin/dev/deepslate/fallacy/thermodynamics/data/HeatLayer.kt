@@ -48,8 +48,7 @@ internal class HeatLayer(private var data: ByteArray? = null) {
         return (y shl 8) or (z shl 4) or x
     }
 
-    val isEmpty: Boolean
-        get() = data?.all { it == 0.toByte() } != false
+    fun isEmpty() = data?.all { it == 0.toByte() } != false
 
     fun getHeat(x: Int, y: Int, z: Int): UInt {
         if (data == null) return FREEZING_POINT

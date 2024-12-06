@@ -3,13 +3,7 @@ package dev.deepslate.fallacy.common.network
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.data.player.FoodHistory
 import dev.deepslate.fallacy.common.data.player.NutritionState
-import dev.deepslate.fallacy.common.network.packet.BoneSyncPacket
-import dev.deepslate.fallacy.common.network.packet.CladdingPacket
-import dev.deepslate.fallacy.common.network.packet.DrinkInWorldPacket
-import dev.deepslate.fallacy.common.network.packet.FoodHistorySyncPacket
-import dev.deepslate.fallacy.common.network.packet.NutritionStateSyncPacket
-import dev.deepslate.fallacy.common.network.packet.RaceIdSyncPacket
-import dev.deepslate.fallacy.common.network.packet.ThirstSyncPacket
+import dev.deepslate.fallacy.common.network.packet.*
 import dev.deepslate.fallacy.race.impl.Rock
 import dev.deepslate.fallacy.race.impl.Skeleton
 import net.neoforged.bus.api.SubscribeEvent

@@ -4,8 +4,10 @@ import com.mojang.datafixers.util.Either
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import io.netty.buffer.ByteBuf
+import net.minecraft.core.BlockPos
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.world.level.LevelHeightAccessor
 
 //Chunk持有的数据结构，用于存储此Chunk中对应位置的当前温度
 internal class LayerStack(private val data: MutableList<HeatLayer> = mutableListOf()) {
@@ -22,7 +24,7 @@ internal class LayerStack(private val data: MutableList<HeatLayer> = mutableList
             if (either.left().isPresent) HeatLayer() else either.right().get()
 
         private fun from(layer: HeatLayer): Either<Int, HeatLayer> =
-            if (layer.isEmpty) Either.left(0) else Either.right(layer)
+            if (layer.isEmpty()) Either.left(0) else Either.right(layer)
 
         private val fixedHeatLayerCodec: Codec<HeatLayer> = eitherCodec.xmap(::to, ::from)
 
@@ -48,4 +50,14 @@ internal class LayerStack(private val data: MutableList<HeatLayer> = mutableList
     fun setLayer(index: Int, layer: HeatLayer) {
         data[index] = layer
     }
+
+    operator fun get(access: LevelHeightAccessor, x: Int, y: Int, z: Int): UInt {
+        require(y in access.minBuildHeight..access.maxBuildHeight) { "y out of bounds" }
+        val realY = y - access.minBuildHeight
+        val index = (realY + 1) / HeatLayer.LAYER_UNIT_COUNT
+        val layer = getLayer(index)
+        return layer[x, realY % 16, z]
+    }
+
+    operator fun get(access: LevelHeightAccessor, pos: BlockPos): UInt = this[access, pos.x, pos.y, pos.z]
 }
