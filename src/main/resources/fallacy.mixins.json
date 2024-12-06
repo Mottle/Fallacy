@@ -11,6 +11,7 @@
         "CreeperMixin",
         "EnchantmentMixin",
         "EquipableMixin",
+        "LevelChunkMixin",
         "LivingEntityMixin",
         "NearestAttackableTargetGoalMixin",
         "ServerLevelHeatMixin",

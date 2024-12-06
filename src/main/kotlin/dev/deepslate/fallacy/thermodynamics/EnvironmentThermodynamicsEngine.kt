@@ -7,6 +7,7 @@ import dev.deepslate.fallacy.thermodynamics.data.ChunkHeatTarget
 import dev.deepslate.fallacy.util.TickHelper
 import dev.deepslate.fallacy.util.getEpitaxialHeat
 import dev.deepslate.fallacy.util.hasHeat
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.longs.LongArrayFIFOQueue
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet
 import net.minecraft.core.BlockPos
@@ -18,13 +19,14 @@ import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.biome.Biomes
 import net.minecraft.world.level.block.LiquidBlock
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.chunk.ChunkAccess
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.event.level.ChunkEvent
 import net.neoforged.neoforge.event.tick.LevelTickEvent
 import net.neoforged.neoforge.event.tick.PlayerTickEvent
-import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentSkipListSet
 import java.util.concurrent.Executors
 import kotlin.math.absoluteValue
 import kotlin.math.pow
@@ -37,6 +39,12 @@ open class EnvironmentThermodynamicsEngine(private val level: Level) : Thermodyn
         private val decayRate = Array(15) { i ->
             1f / (i.toFloat() * 1.2f.pow(i))
         }
+
+        private fun getEngine(level: ServerLevel): ThermodynamicsEngine =
+            (level as FallacyThermodynamicsExtension).`fallacy$getThermodynamicsEngine`()
+
+        fun getEnvironmentEngineOrNull(level: ServerLevel): EnvironmentThermodynamicsEngine? =
+            (level as? FallacyThermodynamicsExtension)?.`fallacy$getThermodynamicsEngine`() as? EnvironmentThermodynamicsEngine
     }
 
     override fun getHeat(pos: BlockPos): UInt =
@@ -45,26 +53,40 @@ open class EnvironmentThermodynamicsEngine(private val level: Level) : Thermodyn
 
     //用于应用方块修改后的热量影响
     override fun doCheck(pos: BlockPos) {
-        addUpdateTask {
-            val state = level.getBlockState(pos)
-            if (state.hasHeat()) {
-                checkSet.add(pos.asLong())
-            } else if (VanillaHeat.hasHeat(state)) {
-                checkSet.add(pos.asLong())
+        addScanTask {
+            if (!level.isLoaded(pos)) return@addScanTask
+
+            val centerChunkPos = ChunkPos(pos)
+            val packedCenterChunkPos = centerChunkPos.toLong()
+            val (index, maxSize) = with(chunkThermodynamicsMap[packedCenterChunkPos]!!) {
+                getIndex(pos.y).toLong() to getMaxSize()
+            }
+            synchronized(partiallyScanSet) {
+                for (dx in -1..1) for (dz in -1..1) for (dy in -1..1) {
+                    val checkedChunkX = centerChunkPos.x + dx
+                    val checkedChunkZ = centerChunkPos.z + dz
+                    val checkedChunkPos = ChunkPos(checkedChunkX, checkedChunkZ)
+                    val packedCheckedChunkPos = checkedChunkPos.toLong()
+                    val checkedIndex = index + dy
+
+                    if (checkedIndex < 0 || checkedIndex >= maxSize) continue
+
+                    partiallyScanSet.add(packedCheckedChunkPos)
+                    partiallyScanSet.add(checkedIndex)
+                }
             }
         }
     }
 
-    private fun doCheck(poses: List<Long>) {
+    fun hasHeat(state: BlockState): Boolean = state.hasHeat() || VanillaHeat.hasHeat(state)
+
+    fun hasHeat(pos: BlockPos): Boolean = level.getBlockState(pos).let(::hasHeat)
+
+    //将需要进行热量计算操作的位置添加进任务
+    private fun doHeatUpdate(poses: List<Long>) {
         addUpdateTask {
             poses.forEach { packedPos ->
-                val pos = BlockPos.of(packedPos)
-                val state = level.getBlockState(pos)
-                if (state.hasHeat()) {
-                    checkSet.add(packedPos)
-                } else if (VanillaHeat.hasHeat(state)) {
-                    checkSet.add(packedPos)
-                }
+                checkSet.add(packedPos)
             }
         }
     }
@@ -85,19 +107,6 @@ open class EnvironmentThermodynamicsEngine(private val level: Level) : Thermodyn
 
     @EventBusSubscriber(modid = Fallacy.MOD_ID)
     object Handler {
-//        @SubscribeEvent
-//        fun onChunkLoad(event: ChunkEvent.Load) {
-//            if (event.level.isClientSide) return
-//
-//            val chunk = event.chunk
-//            val level = event.level as ServerLevel
-//            val engine = getEngine(level)
-//
-//            if (engine !is EnvironmentThermodynamicsEngine) return
-//
-////            load(engine, chunk)
-//            engine.scanChunk(chunk.pos)
-//        }
 
         @SubscribeEvent
         fun onChunkUnload(event: ChunkEvent.Unload) {
@@ -128,9 +137,8 @@ open class EnvironmentThermodynamicsEngine(private val level: Level) : Thermodyn
                 val aroundChunkPos = ChunkPos(centerChunkPos.x + dx, centerChunkPos.z + dz)
 
                 if (getDistance(aroundChunkPos, centerChunkPos) > 2) continue
-                if (!engine.chunkThermodynamicsMap.contains(aroundChunkPos.toLong())
-                    || !engine.chunkThermodynamicsMap[aroundChunkPos.toLong()]!!.loadFinished.get()
-                ) {
+                if (!engine.hasLoaded(aroundChunkPos)) {
+                    engine.scannedSet.add(aroundChunkPos.toLong())
                     engine.scanChunk(aroundChunkPos)
                 }
             }
@@ -151,125 +159,126 @@ open class EnvironmentThermodynamicsEngine(private val level: Level) : Thermodyn
             if (engine !is EnvironmentThermodynamicsEngine) return
 
             engine.scanChunks()
+//            engine.partiallyScan()
             engine.runHeatUpdates()
         }
 
-        private fun getEngine(level: ServerLevel): ThermodynamicsEngine =
-            (level as FallacyThermodynamicsExtension).`fallacy$getThermodynamicsEngine`()
-
-//        private fun load(engine: EnvironmentThermodynamicsEngine, chunk: ChunkAccess) {
-//            engine.addScanTask {
-//                engine.chunkThermodynamicsMap[chunk.pos.toLong()] = ChunkHeatTarget(chunk)
-//                Fallacy.LOGGER.debug("Loaded chunk {} to thermodynamics engine", chunk.pos)
-////                Fallacy.LOGGER.debug("Map size: ${engine.chunkThermodynamicsMap.size}")
-//            }
-//        }
-
         private fun unload(engine: EnvironmentThermodynamicsEngine, chunk: ChunkAccess) {
-            engine.addScanTask {
-                engine.chunkThermodynamicsMap.remove(chunk.pos.toLong())
+            val packed = chunk.pos.toLong()
+
+            engine.addUpdateTask {
+                engine.chunkThermodynamicsMap.remove(packed)
+                engine.scannedSet.remove(packed)
             }
         }
     }
 
     fun scanChunk(chunkPos: ChunkPos) {
         addScanTask {
-            scanSet.add(chunkPos.toLong())
+            synchronized(scanSet) {
+                scanSet.add(chunkPos.toLong())
+            }
         }
     }
 
+    //扫描区块，寻找需要进行温度计算的方块
     private fun scanChunks() {
         addScanTask {
-
-            val copiedSet = synchronized(scanSet) {
-                val copiedSet = scanSet.clone()
-                scanSet.clear()
+            val copied = synchronized(scanSet) {
+                val copied = scanSet.take(32)
+                scanSet.removeAll(copied)
                 scanSet.trim(512)
-                copiedSet
+                copied
             }
 
-            val iterator = copiedSet.iterator()
-            val checkPackedPoses = LongOpenHashSet()
+            val iterator = copied.iterator()
+            val checkPackedPositions = LongOpenHashSet()
 
             while (iterator.hasNext()) {
-                val packedChunkPos = iterator.nextLong()
+                val packedChunkPos = iterator.next()
                 val chunkPos = ChunkPos(packedChunkPos)
-                if (chunkThermodynamicsMap[packedChunkPos]?.loadFinished?.get() == true) return@addScanTask
-
-                val chunkTarget = ChunkHeatTarget(level)
                 val yRange = with(level) { minBuildHeight..maxBuildHeight }
                 val xRange = (0..15)
                 val zRange = (0..15)
 
                 for (x in xRange) for (y in yRange) for (z in zRange) {
-                    val localBlockPos = BlockPos(x, y, z)
                     val fullBlockPos = BlockPos(chunkPos.minBlockX + x, y, chunkPos.minBlockZ + z)
+                    val state = level.getBlockState(fullBlockPos)
 
-                    applyBaseHeat(localBlockPos, chunkTarget)
-                    checkPackedPoses.add(fullBlockPos.asLong())
+                    if (hasHeat(state)) checkPackedPositions.add(fullBlockPos.asLong())
                 }
 
-                chunkTarget.loadFinished.set(true)
-                chunkThermodynamicsMap[packedChunkPos] = chunkTarget
                 Fallacy.LOGGER.info("chunk ${ChunkPos(packedChunkPos)} scan finished.")
             }
-            doCheck(checkPackedPoses.toList())
+            doHeatUpdate(checkPackedPositions.toList())
         }
     }
 
-    private fun applyBaseHeat(pos: BlockPos, target: ChunkHeatTarget) {
-        val baseHeat = getBiomeHeat(pos).toUShort()
-        target[pos] = ChunkHeatTarget.HeatCounter(baseHeat, 1u)
+    private fun partiallyScan() {
+        addScanTask {
+            val copied = synchronized(partiallyScanSet) {
+                val copied = partiallyScanSet.take(256)
+                partiallyScanSet.removeAll(copied)
+                partiallyScanSet.trim(512)
+                copied
+            }
+
+            val iterator = copied.iterator()
+            val checkedSet = LongOpenHashSet()
+
+            while (iterator.hasNext()) {
+                val packedChunkPos = iterator.next()
+                val chunkPos = ChunkPos(packedChunkPos)
+                if (!iterator.hasNext()) break
+                val index = iterator.next().toInt()
+                val mixY = (index - 1) * 16 + level.minBuildHeight
+                val maxY = index * 16 + level.minBuildHeight
+                val minX = chunkPos.minBlockX
+                val maxX = chunkPos.maxBlockX
+                val minZ = chunkPos.minBlockZ
+                val maxZ = chunkPos.maxBlockZ
+                for (x in minX..maxX) for (y in mixY..maxY) for (z in minZ..maxZ) {
+                    val pos = BlockPos(x, y, z)
+                    val state = level.getBlockState(pos)
+                    if (hasHeat(state)) checkedSet.add(pos.asLong())
+                }
+                Fallacy.LOGGER.info("partially scan ${ChunkPos(packedChunkPos)}, $index finished.")
+            }
+            doHeatUpdate(checkedSet.toList())
+        }
     }
+
+//    private fun applyBaseHeat(pos: BlockPos, target: ChunkHeatTarget) {
+//        val baseHeat = getBiomeHeat(pos).toUShort()
+//        target[pos] = ChunkHeatTarget.HeatCounter(baseHeat, 1u)
+//    }
 
     private fun runHeatUpdates() {
         if (checkSet.isEmpty()) return
         addUpdateTask {
             val iterator = checkSet.iterator()
             val relativeChunks = LongOpenHashSet()
-            val waitTask = LongOpenHashSet()
+            var count = 0
+            val checkedSet = LongOpenHashSet()
 
-            var count = 1
-            while (iterator.hasNext()) {
+            while (iterator.hasNext() && count <= 512) {
                 val packedPos = iterator.nextLong()
                 val pos = BlockPos.of(packedPos)
 
-                if (!checkChunkLoaded(pos)) {
-                    waitTask.add(packedPos)
-                    continue
-                }
-
                 update(packedPos)
                 relativeChunks.add(ChunkPos.asLong(pos))
-                if (count % 100 == 0) Fallacy.LOGGER.info("heat update: $count/${checkSet.size}.")
+                checkedSet.add(packedPos)
                 ++count
             }
 
-            checkSet.clear()
+            checkSet.removeAll(checkedSet)
             checkSet.trim(512)
-            checkSet.addAll(waitTask)
 
             relativeChunks.forEach { packedPos ->
                 applyHeatTarget(packedPos)
                 Fallacy.LOGGER.info("apply chunk {}", ChunkPos(packedPos))
             }
         }
-    }
-
-    private fun checkChunkLoaded(pos: BlockPos): Boolean {
-        val centerChunkPos = ChunkPos(pos)
-        for (dx in -1..1) for (dz in -1..1) {
-            val aroundChunkPos = ChunkPos(centerChunkPos.x + dx, centerChunkPos.z + dz)
-            val packedAroundChunkPos = aroundChunkPos.toLong()
-            val data = chunkThermodynamicsMap[packedAroundChunkPos]
-            if (data == null) {
-                scanChunk(aroundChunkPos)
-                return false
-            }
-            if (!data.loadFinished.get()) return false
-        }
-
-        return true
     }
 
     private fun update(packedPos: Long) {
@@ -285,10 +294,12 @@ open class EnvironmentThermodynamicsEngine(private val level: Level) : Thermodyn
         queue.enqueue(packedPos)
         queue.enqueue(startHeat.toLong())
         usedSet.add(packedPos)
+
         while (!queue.isEmpty) {
             val packed = queue.dequeueLong()
             val pos = BlockPos.of(packed)
             val posHeat = queue.dequeueLong().toUInt()
+
             Direction.entries.forEach { direction ->
                 val nextPos = pos.relative(direction)
                 val packedNextPos = nextPos.asLong()
@@ -296,9 +307,10 @@ open class EnvironmentThermodynamicsEngine(private val level: Level) : Thermodyn
                 val biomeHeat = getBiomeHeat(nextPos)
 
                 if (packedNextPos in usedSet) return@forEach
-                if (dis > 15) return@forEach
+                if (dis > 15) return@forEach //the max bfs steps
 
                 val nextHeat = (decayHeat(posHeat, biomeHeat, dis) * getThermalConductivity(nextPos)).toUInt()
+
                 if ((nextHeat.toInt() - startHeat.toInt()).absoluteValue < 5) return@forEach
 
                 updateHeatTarget(nextPos, nextHeat)
@@ -330,8 +342,7 @@ open class EnvironmentThermodynamicsEngine(private val level: Level) : Thermodyn
 
     private fun updateHeatTarget(pos: BlockPos, heat: UInt) {
         val packedChunkPos = ChunkPos.asLong(pos)
-
-        val target = chunkThermodynamicsMap[packedChunkPos] ?: return
+        val target = chunkThermodynamicsMap.computeIfAbsent(packedChunkPos) { ChunkHeatTarget(level) }
         val heatCounter = target[pos]
         val newHeat =
             ((heatCounter.heat.toFloat() * heatCounter.sourceCount.toFloat() + heat.toFloat()) / (heatCounter.sourceCount.toFloat() + 1f)).toUInt()
@@ -342,28 +353,38 @@ open class EnvironmentThermodynamicsEngine(private val level: Level) : Thermodyn
 
     private fun applyHeatTarget(packedChunkPos: Long) {
         val chunkPos = ChunkPos(packedChunkPos)
-        val target = chunkThermodynamicsMap[packedChunkPos] ?: return
+        val target = chunkThermodynamicsMap.computeIfAbsent(packedChunkPos) { ChunkHeatTarget(level) }
         val layerStack = target.toLayerStack()
         val chunk = level.getChunk(chunkPos.x, chunkPos.z)
 
-        chunk.setData(FallacyAttachments.CHUNK_HEAT, layerStack)
-        chunk.isUnsaved = true
+        ////
+        synchronized(chunk) {
+            chunk.setData(FallacyAttachments.CHUNK_HEAT, layerStack)
+            chunk.isUnsaved = true
+        }
     }
 
-    //threaded!!!
-    private val chunkThermodynamicsMap: ConcurrentHashMap<Long, ChunkHeatTarget> = ConcurrentHashMap(1024)
+    fun hasLoaded(chunkPos: ChunkPos): Boolean = scannedSet.contains(chunkPos.toLong())
 
-    //scan chunk
+    //存储区块内部温度，仅允许update线程访问
+    private val chunkThermodynamicsMap: Long2ObjectOpenHashMap<ChunkHeatTarget> = Long2ObjectOpenHashMap(512, 0.5f)
+
+    //需要扫描的区块
     private val scanSet: LongOpenHashSet = LongOpenHashSet(512, 0.5f)
 
-    //block to check, only on update thread
+    //已经扫描过的区块
+    private val scannedSet: ConcurrentSkipListSet<Long> = ConcurrentSkipListSet()
+
+    private val partiallyScanSet: LongOpenHashSet = LongOpenHashSet(512, 0.5f)
+
+    //需要计算温度传播的方块，仅允许update线程访问
     private val checkSet: LongOpenHashSet = LongOpenHashSet(512, 0.5f)
 
     private val updateMailBox =
         ProcessorMailbox.create(Executors.newSingleThreadExecutor(), "fallacy-thermodynamics-update")
 
     private val chunkScanMailbox =
-        ProcessorMailbox.create(Executors.newFixedThreadPool(2), "fallacy-thermodynamics-scan")
+        ProcessorMailbox.create(Executors.newFixedThreadPool(3), "fallacy-thermodynamics-scan")
 
     fun addScanTask(task: Runnable) {
         chunkScanMailbox.tell(task)

@@ -43,19 +43,23 @@ internal class ChunkHeatTarget(val heightAccessor: LevelHeightAccessor) {
         layers = Array(size) { null }
     }
 
+    fun getIndex(y: Int) = (y - heightAccessor.minBuildHeight + 1) / 16
+
+    fun getMaxSize() = heightAccessor.height / 16 + 1
+
     private fun initLayer(index: Int) {
         layers[index] = LayerTarget(0u)
     }
 
     operator fun get(x: Int, y: Int, z: Int): HeatCounter {
-        val index = (y - heightAccessor.minBuildHeight + 1) / 16
+        val index = getIndex(y)
         if (layers[index] == null) initLayer(index)
         val layer = layers[index]!!
         return layer[fixInput(x), fixInput(y), fixInput(z)]
     }
 
     operator fun set(x: Int, y: Int, z: Int, value: HeatCounter) {
-        val index = (y - heightAccessor.minBuildHeight + 1) / 16
+        val index = getIndex(y)
         if (layers[index] == null) initLayer(index)
         val layer = layers[index]!!
         layer[fixInput(x), fixInput(y), fixInput(z)] = value
