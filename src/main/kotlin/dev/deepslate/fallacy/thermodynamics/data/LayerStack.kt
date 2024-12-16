@@ -16,7 +16,8 @@ internal class LayerStack(private val data: MutableList<HeatLayer> = mutableList
 //
 //        const val WORLD_HIGHEST = 320
 
-//        const val SIZE = (WORLD_HIGHEST - WORLD_DEEPEST) / HeatLayer.LAYER_UNIT_COUNT
+        //        const val SIZE = (WORLD_HIGHEST - WORLD_DEEPEST) / HeatLayer.LAYER_UNIT_COUNT
+        fun from(data: List<HeatLayer>): LayerStack = LayerStack(data.toMutableList())
 
         private val eitherCodec: Codec<Either<Int, HeatLayer>> = Codec.either(Codec.INT, HeatLayer.CODEC)
 

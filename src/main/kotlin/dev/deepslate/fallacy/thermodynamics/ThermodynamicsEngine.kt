@@ -12,5 +12,7 @@ interface ThermodynamicsEngine {
         private val FREEZING_POINT = HeatLayer.FREEZING_POINT.toInt()
 
         fun fromFreezingPoint(heat: Int): UInt = (heat + FREEZING_POINT).toUInt()
+
+        fun isUnchecked(heat: UInt): Boolean = heat == HeatLayer.UNCHECKED_HEAT
     }
 }

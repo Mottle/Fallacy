@@ -19,7 +19,10 @@ internal class HeatLayer(private var data: ByteArray? = null) {
 
         const val STORAGE_SIZE = LAYER_UNIT_COUNT * LAYER_UNIT_COUNT * LAYER_UNIT_COUNT * UNIT_SIZE / 8
 
-        const val MAX_HEAT = 0xffffu
+        const val MAX_HEAT = 0xfffeu
+
+        //代表此处的温度没有被计算
+        const val UNCHECKED_HEAT = 0xffffu
 
         const val FREEZING_POINT = 273u
 
@@ -41,14 +44,16 @@ internal class HeatLayer(private var data: ByteArray? = null) {
     }
 
     fun init() {
-        data = ByteArray(STORAGE_SIZE)
+        data = ByteArray(STORAGE_SIZE) { _ -> 0xffu.toByte() }
     }
 
     private fun getRawIndex(x: Int, y: Int, z: Int): Int {
         return (y shl 8) or (z shl 4) or x
     }
 
-    fun isEmpty() = data?.all { it == 0.toByte() } != false
+    fun isEmpty() = data?.all { it == 0xffu.toByte() } != false
+
+    fun isUncheckedAt(x: Int, y: Int, z: Int) = getHeat(x, y, z) == UNCHECKED_HEAT
 
     fun getHeat(x: Int, y: Int, z: Int): UInt {
         if (data == null) return FREEZING_POINT

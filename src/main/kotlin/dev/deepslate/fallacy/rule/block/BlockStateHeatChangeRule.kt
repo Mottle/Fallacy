@@ -1,6 +1,6 @@
 package dev.deepslate.fallacy.rule.block
 
-import dev.deepslate.fallacy.thermodynamics.EnvironmentThermodynamicsEngine
+import dev.deepslate.fallacy.thermodynamics.impl.EnvironmentThermodynamicsEngine
 import dev.deepslate.fallacy.thermodynamics.VanillaHeat
 import dev.deepslate.fallacy.util.getEpitaxialHeat
 import dev.deepslate.fallacy.util.hasHeat
@@ -29,6 +29,7 @@ object BlockStateHeatChangeRule {
             if (oldHeat != newHeat) engine.scanChunk(ChunkPos(pos))
         } else {
             engine.scanChunk(ChunkPos(pos))
+            ////应该先清空 再重新计算
         }
     }
 }
