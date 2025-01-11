@@ -14,22 +14,7 @@ object BlockStateHeatChangeRule {
     fun rule(new: BlockState, old: BlockState, level: Level, pos: BlockPos) {
         if (level.isClientSide) return
 
-        val oldHeatExisted = old.hasHeat() || VanillaHeat.hasHeat(old)
-        val newHeatExisted = new.hasHeat() || VanillaHeat.hasHeat(new)
-
-        if (!oldHeatExisted && !newHeatExisted) return
-
-        val engine = EnvironmentThermodynamicsEngine.getEnvironmentEngineOrNull(level as ServerLevel) ?: return
-
-        if (!engine.hasLoaded(ChunkPos(pos))) return
-        if (oldHeatExisted && newHeatExisted) {
-            val oldHeat = if (old.hasHeat()) old.getEpitaxialHeat(level, pos) else VanillaHeat.getHeat(old)
-            val newHeat = if (new.hasHeat()) new.getEpitaxialHeat(level, pos) else VanillaHeat.getHeat(new)
-
-            if (oldHeat != newHeat) engine.scanChunk(ChunkPos(pos))
-        } else {
-            engine.scanChunk(ChunkPos(pos))
-            ////应该先清空 再重新计算
-        }
+        val engine = EnvironmentThermodynamicsEngine.getEngine(level as ServerLevel)
+        engine.updateHeat(old, new, pos)
     }
 }

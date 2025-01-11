@@ -1,63 +1,35 @@
 package dev.deepslate.fallacy.thermodynamics.impl
 
 import dev.deepslate.fallacy.Fallacy
+import dev.deepslate.fallacy.common.data.FallacyAttachments
+import dev.deepslate.fallacy.thermodynamics.ThermodynamicsEngine
 import it.unimi.dsi.fastutil.longs.LongArrayList
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet
 import net.minecraft.core.BlockPos
 import net.minecraft.util.thread.ProcessorMailbox
 import net.minecraft.world.level.ChunkPos
 import java.util.concurrent.ConcurrentLinkedQueue
-import java.util.concurrent.ConcurrentSkipListSet
 import java.util.concurrent.Executors
 
 class ChunkScanner(val threadAmount: Int = 3, val engine: EnvironmentThermodynamicsEngine) {
     private val scanQueue: ConcurrentLinkedQueue<Long> = ConcurrentLinkedQueue()
 
-    //经过初始扫描的区块
-    private val scannedSet: ConcurrentSkipListSet<Long> = ConcurrentSkipListSet()
-
     private val mailbox =
         ProcessorMailbox.create(Executors.newFixedThreadPool(threadAmount), "fallacy-thermodynamics-scan")
 
-    fun enqueue(packedPos: Long) {
-        if (hasScanned(packedPos)) return
-        scanQueue.offer(packedPos)
-    }
-
     fun enqueue(chunkPos: ChunkPos) {
-        enqueue(chunkPos.toLong())
+        if(hasScanned(chunkPos)) return
+        scanQueue.offer(chunkPos.toLong())
     }
 
-    fun markScanned(packedPos: Long) {
-        scannedSet.add(packedPos)
+    fun forceEnqueue(chunkPos: ChunkPos) {
+        scanQueue.offer(chunkPos.toLong())
     }
+
+    fun hasScanned(chunkPos: ChunkPos): Boolean = engine.level.getChunk(chunkPos.x, chunkPos.z).getData(FallacyAttachments.CHUNK_HEAT_SCANNED)
 
     fun markScanned(chunkPos: ChunkPos) {
-        markScanned(chunkPos.toLong())
-    }
-
-    fun markUnscanned(packedPos: Long) {
-        scannedSet.remove(packedPos)
-    }
-
-    fun markUnscanned(chunkPos: ChunkPos) {
-        markUnscanned(chunkPos.toLong())
-    }
-
-    fun hasScanned(packedPos: Long): Boolean {
-        return scannedSet.contains(packedPos)
-    }
-
-    fun hasScanned(chunkPos: ChunkPos): Boolean {
-        return hasScanned(chunkPos.toLong())
-    }
-
-    fun unload(packedChunkPos: Long) {
-        scannedSet.remove(packedChunkPos)
-    }
-
-    fun unload(chunkPos: ChunkPos) {
-        unload(chunkPos.toLong())
+        engine.level.getChunk(chunkPos.x, chunkPos.z).setData(FallacyAttachments.CHUNK_HEAT_SCANNED, true)
     }
 
 //    fun scan() {
@@ -94,10 +66,16 @@ class ChunkScanner(val threadAmount: Int = 3, val engine: EnvironmentThermodynam
             val fullBlockPos = BlockPos(chunkPos.minBlockX + x, y, chunkPos.minBlockZ + z)
             val state = level.getBlockState(fullBlockPos)
 
-            if (engine.hasHeat(state)) record.add(fullBlockPos.asLong())
+            if (ThermodynamicsEngine.hasHeat(state)) record.add(fullBlockPos.asLong())
         }
 
-        markScanned(packedChunkPos)
         Fallacy.Companion.LOGGER.info("chunk ${ChunkPos(packedChunkPos)} scan finished.")
+        markScanned(chunkPos)
+    }
+
+    fun forceStop() = mailbox.close()
+
+    fun tryWakeUp() {
+        if (scanQueue.isNotEmpty() || scanQueue.size <= 128) addScanTask()
     }
 }

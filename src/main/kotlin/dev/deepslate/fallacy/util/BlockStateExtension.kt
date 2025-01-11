@@ -8,15 +8,15 @@ import net.minecraft.world.level.block.state.BlockState
 
 fun BlockState.hasHeat(): Boolean = this.block is BlockWithHeat
 
-fun BlockState.getEpitaxialHeat(level: Level, pos: BlockPos) =
-    if (!hasHeat()) ThermodynamicsEngine.fromFreezingPoint(0) else (block as BlockWithHeat).getEpitaxialHeat(
+fun BlockState.getEpitaxialHeat(level: Level, pos: BlockPos): Float =
+    if (!hasHeat()) ThermodynamicsEngine.fromFreezingPoint(0f) else (block as BlockWithHeat).getEpitaxialHeat(
         this,
         level,
         pos
     )
 
-fun BlockState.getIntrinsicHeat(level: Level, pos: BlockPos) =
-    if (!hasHeat()) ThermodynamicsEngine.fromFreezingPoint(0) else (block as BlockWithHeat).getIntrinsicHeat(
+fun BlockState.getIntrinsicHeat(level: Level, pos: BlockPos): Float =
+    if (!hasHeat()) ThermodynamicsEngine.fromFreezingPoint(0f) else (block as BlockWithHeat).getIntrinsicHeat(
         this,
         level,
         pos

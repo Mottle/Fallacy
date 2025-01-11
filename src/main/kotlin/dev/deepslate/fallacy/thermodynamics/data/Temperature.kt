@@ -1,33 +1,40 @@
 package dev.deepslate.fallacy.thermodynamics.data
 
+import dev.deepslate.fallacy.thermodynamics.ThermodynamicsEngine
+
 sealed interface Temperature : Comparable<Temperature> {
-    val heat: UInt
+    val heat: Float
 
     override fun compareTo(other: Temperature): Int = heat.compareTo(other.heat)
 
-    data class Kelvins(val value: UInt) : Temperature {
-        override val heat: UInt get() = value.coerceIn(MIN_VALUE, MAX_VALUE)
+    data class Kelvins(val value: Float) : Temperature {
+        override val heat: Float get() = value.coerceIn(MIN_VALUE, MAX_VALUE)
 
         companion object {
-            const val MIN_VALUE: UInt = 0U
-            const val MAX_VALUE: UInt = HeatLayer.MAX_HEAT
+            const val MIN_VALUE = ThermodynamicsEngine.MIN_HEAT
+
+            const val MAX_VALUE = ThermodynamicsEngine.MAX_HEAT
         }
 
-        fun toCelsius(): Celsius = Celsius((value - HeatLayer.FREEZING_POINT).toInt())
+        fun toCelsius(): Celsius = Celsius(value - ThermodynamicsEngine.FREEZING_POINT)
+
+        override fun toString(): String = "${value}K"
     }
 
-    data class Celsius(val value: Int) : Temperature {
-        override val heat: UInt get() = (value.coerceIn(MIN_VALUE, MAX_VALUE) + 273).toUInt()
+    data class Celsius(val value: Float) : Temperature {
+        override val heat: Float get() = value.coerceIn(MIN_VALUE, MAX_VALUE) + ThermodynamicsEngine.FREEZING_POINT
 
         companion object {
-            const val MIN_VALUE: Int = -273
-            const val MAX_VALUE: Int = 0xffff + MIN_VALUE
+            const val MIN_VALUE = -ThermodynamicsEngine.FREEZING_POINT
+            const val MAX_VALUE = ThermodynamicsEngine.MAX_HEAT - ThermodynamicsEngine.FREEZING_POINT
         }
 
         fun toKelvins(): Kelvins = Kelvins(heat)
+
+        override fun toString(): String = "${value}°C"
     }
 
-    fun celsius(heat: UInt): Celsius = Celsius(heat.toInt() - HeatLayer.FREEZING_POINT.toInt())
+    fun celsius(heat: Float): Celsius = Celsius(heat - ThermodynamicsEngine.FREEZING_POINT)
 
-    fun kelvins(heat: UInt): Kelvins = Kelvins(heat)
+    fun kelvins(heat: Float): Kelvins = Kelvins(heat)
 }

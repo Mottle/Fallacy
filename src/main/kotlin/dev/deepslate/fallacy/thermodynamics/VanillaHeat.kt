@@ -1,6 +1,5 @@
 package dev.deepslate.fallacy.thermodynamics
 
-import dev.deepslate.fallacy.thermodynamics.data.HeatLayer
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.CampfireBlock
 import net.minecraft.world.level.block.state.BlockState
@@ -31,27 +30,27 @@ object VanillaHeat {
         return true
     }
 
-    fun getHeat(state: BlockState): UInt {
+    fun getHeat(state: BlockState): Float {
         val block = state.block
-        if (block == Blocks.LAVA) return ThermodynamicsEngine.fromFreezingPoint(1300)
-        if (block == Blocks.MAGMA_BLOCK) return ThermodynamicsEngine.fromFreezingPoint(600)
-        if (block == Blocks.FIRE) return ThermodynamicsEngine.fromFreezingPoint(340)
-        if (block == Blocks.SOUL_FIRE) return ThermodynamicsEngine.fromFreezingPoint(680)
+        if (block == Blocks.LAVA) return ThermodynamicsEngine.fromFreezingPoint(1300f)
+        if (block == Blocks.MAGMA_BLOCK) return ThermodynamicsEngine.fromFreezingPoint(600f)
+        if (block == Blocks.FIRE) return ThermodynamicsEngine.fromFreezingPoint(340f)
+        if (block == Blocks.SOUL_FIRE) return ThermodynamicsEngine.fromFreezingPoint(680f)
         if (block == Blocks.CAMPFIRE && state.getValue(CampfireBlock.LIT)) return ThermodynamicsEngine.fromFreezingPoint(
-            340
+            340f
         )
         if (block == Blocks.SOUL_CAMPFIRE && state.getValue(CampfireBlock.LIT)) return ThermodynamicsEngine.fromFreezingPoint(
-            680
+            680f
         )
 
-        if (block == Blocks.SNOW) return ThermodynamicsEngine.fromFreezingPoint(-10)
-        if (block == Blocks.SNOW_BLOCK) return ThermodynamicsEngine.fromFreezingPoint(-10)
-        if (block == Blocks.ICE) return ThermodynamicsEngine.fromFreezingPoint(-20)
-        if (block == Blocks.BLUE_ICE) return ThermodynamicsEngine.fromFreezingPoint(-30)
-        if (block == Blocks.PACKED_ICE) return ThermodynamicsEngine.fromFreezingPoint(-40)
-        if (block == Blocks.POWDER_SNOW) return ThermodynamicsEngine.fromFreezingPoint(-10)
-        if (block == Blocks.POWDER_SNOW_CAULDRON) return ThermodynamicsEngine.fromFreezingPoint(-10)
+        if (block == Blocks.SNOW) return ThermodynamicsEngine.fromFreezingPoint(-10f)
+        if (block == Blocks.SNOW_BLOCK) return ThermodynamicsEngine.fromFreezingPoint(-10f)
+        if (block == Blocks.ICE) return ThermodynamicsEngine.fromFreezingPoint(-20f)
+        if (block == Blocks.BLUE_ICE) return ThermodynamicsEngine.fromFreezingPoint(-30f)
+        if (block == Blocks.PACKED_ICE) return ThermodynamicsEngine.fromFreezingPoint(-40f)
+        if (block == Blocks.POWDER_SNOW) return ThermodynamicsEngine.fromFreezingPoint(-10f)
+        if (block == Blocks.POWDER_SNOW_CAULDRON) return ThermodynamicsEngine.fromFreezingPoint(-10f)
 
-        return HeatLayer.FREEZING_POINT
+        return ThermodynamicsEngine.FREEZING_POINT
     }
 }
