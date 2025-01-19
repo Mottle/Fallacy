@@ -1,4 +1,4 @@
-package dev.deepslate.fallacy.inject.item;
+package dev.deepslate.fallacy.inject;
 
 import dev.deepslate.fallacy.common.biome.data.BiomeSetting;
 import kotlin.NotImplementedError;

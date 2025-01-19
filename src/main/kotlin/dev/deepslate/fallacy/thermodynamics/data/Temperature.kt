@@ -3,12 +3,12 @@ package dev.deepslate.fallacy.thermodynamics.data
 import dev.deepslate.fallacy.thermodynamics.ThermodynamicsEngine
 
 sealed interface Temperature : Comparable<Temperature> {
-    val heat: Float
+    val heat: Int
 
     override fun compareTo(other: Temperature): Int = heat.compareTo(other.heat)
 
-    data class Kelvins(val value: Float) : Temperature {
-        override val heat: Float get() = value.coerceIn(MIN_VALUE, MAX_VALUE)
+    data class Kelvins(val value: Int) : Temperature {
+        override val heat: Int get() = value.coerceIn(MIN_VALUE, MAX_VALUE)
 
         companion object {
             const val MIN_VALUE = ThermodynamicsEngine.MIN_HEAT
@@ -21,8 +21,8 @@ sealed interface Temperature : Comparable<Temperature> {
         override fun toString(): String = "${value}K"
     }
 
-    data class Celsius(val value: Float) : Temperature {
-        override val heat: Float get() = value.coerceIn(MIN_VALUE, MAX_VALUE) + ThermodynamicsEngine.FREEZING_POINT
+    data class Celsius(val value: Int) : Temperature {
+        override val heat: Int get() = value.coerceIn(MIN_VALUE, MAX_VALUE) + ThermodynamicsEngine.FREEZING_POINT
 
         companion object {
             const val MIN_VALUE = -ThermodynamicsEngine.FREEZING_POINT
@@ -34,7 +34,9 @@ sealed interface Temperature : Comparable<Temperature> {
         override fun toString(): String = "${value}°C"
     }
 
-    fun celsius(heat: Float): Celsius = Celsius(heat - ThermodynamicsEngine.FREEZING_POINT)
+    companion object {
+        fun celsius(heat: Int): Celsius = Celsius(heat - ThermodynamicsEngine.FREEZING_POINT)
 
-    fun kelvins(heat: Float): Kelvins = Kelvins(heat)
+        fun kelvins(heat: Int): Kelvins = Kelvins(heat)
+    }
 }

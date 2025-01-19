@@ -18,15 +18,18 @@ class ChunkScanner(val threadAmount: Int = 3, val engine: EnvironmentThermodynam
         ProcessorMailbox.create(Executors.newFixedThreadPool(threadAmount), "fallacy-thermodynamics-scan")
 
     fun enqueue(chunkPos: ChunkPos) {
-        if(hasScanned(chunkPos)) return
+        if (hasScanned(chunkPos)) return
         scanQueue.offer(chunkPos.toLong())
+        addScanTask()
     }
 
     fun forceEnqueue(chunkPos: ChunkPos) {
         scanQueue.offer(chunkPos.toLong())
+        addScanTask()
     }
 
-    fun hasScanned(chunkPos: ChunkPos): Boolean = engine.level.getChunk(chunkPos.x, chunkPos.z).getData(FallacyAttachments.CHUNK_HEAT_SCANNED)
+    fun hasScanned(chunkPos: ChunkPos): Boolean =
+        engine.level.getChunk(chunkPos.x, chunkPos.z).getData(FallacyAttachments.CHUNK_HEAT_SCANNED)
 
     fun markScanned(chunkPos: ChunkPos) {
         engine.level.getChunk(chunkPos.x, chunkPos.z).setData(FallacyAttachments.CHUNK_HEAT_SCANNED, true)
@@ -66,16 +69,10 @@ class ChunkScanner(val threadAmount: Int = 3, val engine: EnvironmentThermodynam
             val fullBlockPos = BlockPos(chunkPos.minBlockX + x, y, chunkPos.minBlockZ + z)
             val state = level.getBlockState(fullBlockPos)
 
-            if (ThermodynamicsEngine.hasHeat(state)) record.add(fullBlockPos.asLong())
+            if (ThermodynamicsEngine.isHeatSource(state)) record.add(fullBlockPos.asLong())
         }
 
         Fallacy.Companion.LOGGER.info("chunk ${ChunkPos(packedChunkPos)} scan finished.")
         markScanned(chunkPos)
-    }
-
-    fun forceStop() = mailbox.close()
-
-    fun tryWakeUp() {
-        if (scanQueue.isNotEmpty() || scanQueue.size <= 128) addScanTask()
     }
 }

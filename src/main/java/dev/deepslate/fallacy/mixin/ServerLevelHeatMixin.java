@@ -1,6 +1,6 @@
 package dev.deepslate.fallacy.mixin;
 
-import dev.deepslate.fallacy.inject.item.FallacyThermodynamicsExtension;
+import dev.deepslate.fallacy.inject.FallacyThermodynamicsExtension;
 import dev.deepslate.fallacy.thermodynamics.impl.EnvironmentThermodynamicsEngine;
 import dev.deepslate.fallacy.thermodynamics.ThermodynamicsEngine;
 import net.minecraft.server.level.ServerLevel;

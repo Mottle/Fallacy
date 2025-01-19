@@ -30,27 +30,34 @@ object VanillaHeat {
         return true
     }
 
-    fun getHeat(state: BlockState): Float {
+    fun getHeat(state: BlockState): Int {
         val block = state.block
-        if (block == Blocks.LAVA) return ThermodynamicsEngine.fromFreezingPoint(1300f)
-        if (block == Blocks.MAGMA_BLOCK) return ThermodynamicsEngine.fromFreezingPoint(600f)
-        if (block == Blocks.FIRE) return ThermodynamicsEngine.fromFreezingPoint(340f)
-        if (block == Blocks.SOUL_FIRE) return ThermodynamicsEngine.fromFreezingPoint(680f)
+        if (block == Blocks.LAVA) return ThermodynamicsEngine.fromFreezingPoint(1300)
+        if (block == Blocks.MAGMA_BLOCK) return ThermodynamicsEngine.fromFreezingPoint(600)
+        if (block == Blocks.FIRE) return ThermodynamicsEngine.fromFreezingPoint(340)
+        if (block == Blocks.SOUL_FIRE) return ThermodynamicsEngine.fromFreezingPoint(680)
         if (block == Blocks.CAMPFIRE && state.getValue(CampfireBlock.LIT)) return ThermodynamicsEngine.fromFreezingPoint(
-            340f
+            340
         )
         if (block == Blocks.SOUL_CAMPFIRE && state.getValue(CampfireBlock.LIT)) return ThermodynamicsEngine.fromFreezingPoint(
-            680f
+            680
         )
 
-        if (block == Blocks.SNOW) return ThermodynamicsEngine.fromFreezingPoint(-10f)
-        if (block == Blocks.SNOW_BLOCK) return ThermodynamicsEngine.fromFreezingPoint(-10f)
-        if (block == Blocks.ICE) return ThermodynamicsEngine.fromFreezingPoint(-20f)
-        if (block == Blocks.BLUE_ICE) return ThermodynamicsEngine.fromFreezingPoint(-30f)
-        if (block == Blocks.PACKED_ICE) return ThermodynamicsEngine.fromFreezingPoint(-40f)
-        if (block == Blocks.POWDER_SNOW) return ThermodynamicsEngine.fromFreezingPoint(-10f)
-        if (block == Blocks.POWDER_SNOW_CAULDRON) return ThermodynamicsEngine.fromFreezingPoint(-10f)
+        if (block == Blocks.SNOW) return ThermodynamicsEngine.fromFreezingPoint(-25)
+        if (block == Blocks.SNOW_BLOCK) return ThermodynamicsEngine.fromFreezingPoint(-25)
+        if (block == Blocks.FROSTED_ICE) return ThermodynamicsEngine.fromFreezingPoint(-25)
+        if (block == Blocks.ICE) return ThermodynamicsEngine.fromFreezingPoint(-25)
+        if (block == Blocks.PACKED_ICE) return ThermodynamicsEngine.fromFreezingPoint(-50)
+        if (block == Blocks.BLUE_ICE) return ThermodynamicsEngine.fromFreezingPoint(-75)
+        if (block == Blocks.POWDER_SNOW) return ThermodynamicsEngine.fromFreezingPoint(-25)
+        if (block == Blocks.POWDER_SNOW_CAULDRON) return ThermodynamicsEngine.fromFreezingPoint(-25)
 
-        return ThermodynamicsEngine.FREEZING_POINT
+        return 0
+    }
+
+    fun getThermalConductivity(state: BlockState): Float {
+        if (state.isAir) return 1f
+        if (state.fluidState.isEmpty) return 0.8f
+        return 0.6f
     }
 }

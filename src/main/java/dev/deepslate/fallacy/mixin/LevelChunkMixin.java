@@ -24,6 +24,7 @@ public abstract class LevelChunkMixin {
     @Inject(method = "setBlockState", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/lighting/LightEngine;hasDifferentLightProperties(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/BlockState;)Z"), locals = LocalCapture.CAPTURE_FAILSOFT)
     void injectSetBlockState(BlockPos pos, BlockState state, boolean isMoving, CallbackInfoReturnable<BlockState> cir, int i, LevelChunkSection levelchunksection, boolean flag, int j, int k, int l, BlockState blockstate, Block block, boolean flag1) {
         //state: newState, blockstate: oldState
-        BlockStateHeatChangeRule.INSTANCE.rule(state, blockstate, getLevel(), pos);
+        if(getLevel().isClientSide) return;
+        BlockStateHeatChangeRule.INSTANCE.rule(blockstate, state, getLevel(), pos);
     }
 }

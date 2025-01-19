@@ -5,18 +5,23 @@ import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.data.player.FoodHistory
 import dev.deepslate.fallacy.common.data.player.NutritionState
 import dev.deepslate.fallacy.race.impl.Unknown
-import dev.deepslate.fallacy.thermodynamics.data.ChunkHeat
+import dev.deepslate.fallacy.thermodynamics.data.HeatStorage
 import net.minecraft.resources.ResourceLocation
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.neoforge.attachment.AttachmentType
+import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredRegister
 import net.neoforged.neoforge.registries.NeoForgeRegistries
 
 object FallacyAttachments {
     private val REGISTRY = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, Fallacy.MOD_ID)
 
-    val CHUNK_HEAT = REGISTRY.register("chunk_heat") { _ ->
-        AttachmentType.builder { _ -> ChunkHeat() }.serialize(ChunkHeat.CODEC).build()
+    internal val POSITIVE_CHUNK_HEAT: DeferredHolder<AttachmentType<*>, AttachmentType<HeatStorage>> = REGISTRY.register("positive_chunk_heat") { _ ->
+        AttachmentType.builder(HeatStorage::of).serialize(HeatStorage.CODEC).build()
+    }
+
+    internal val NEGATIVE_CHUNK_HEAT: DeferredHolder<AttachmentType<*>, AttachmentType<HeatStorage>> = REGISTRY.register("negative_chunk_heat") { _ ->
+        AttachmentType.builder(HeatStorage::of).serialize(HeatStorage.CODEC).build()
     }
 
     val CHUNK_HEAT_SCANNED = REGISTRY.register("chunk_heat_scanned") { _ ->
