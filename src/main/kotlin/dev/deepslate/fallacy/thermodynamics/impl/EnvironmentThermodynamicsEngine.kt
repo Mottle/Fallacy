@@ -73,7 +73,7 @@ open class EnvironmentThermodynamicsEngine(override val level: Level) : Thermody
         val negativeHeatStorage = queryNegative(ChunkPos(packedChunkPos))
 
         val positiveHeat = positiveHeatStorage[index]?.getReadable(pos.x, pos.y, pos.z) ?: MIN_HEAT
-        val negativeHeat = negativeHeatStorage[index]?.getReadable(pos.x, pos.y, pos.z) ?: MIN_HEAT
+        val negativeHeat = negativeHeatStorage[index]?.getReadable(pos.x, pos.y, pos.z) ?: MAX_HEAT
 
         val environmentHeat = BiomeHeat.getBiomeHeat(level, pos) + getSunlightHeatDelta(pos) + getWeatherHeatDelta(pos)
         val positiveImpact = if (positiveHeat > environmentHeat) positiveHeat - environmentHeat else 0

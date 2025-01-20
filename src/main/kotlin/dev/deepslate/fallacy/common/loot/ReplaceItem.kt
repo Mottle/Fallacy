@@ -12,6 +12,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier
 import net.neoforged.neoforge.common.loot.LootModifier
 
+//替代其他loot的物品
 class ReplaceItem(
     conditions: Array<LootItemCondition>,
     val replaced: ResourceLocation,

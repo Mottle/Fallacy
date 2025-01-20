@@ -95,6 +95,10 @@ object BiomeHeat {
             put(Biomes.MANGROVE_SWAMP, 30)
             put(Biomes.SWAMP, 28)
         }
+
+        for(k in biomeMap.keys) {
+            biomeMap[k] = ThermodynamicsEngine.fromFreezingPoint(biomeMap[k]!!)
+        }
     }
 
     val DEFAULT = ThermodynamicsEngine.fromFreezingPoint(15)

@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
+import net.minecraft.world.level.block.state.properties.IntegerProperty
 
 //part start from 0
 open class TallFruitfulCropGainBlock(properties: Properties, cropItem: Holder<Item>) :
@@ -22,7 +23,7 @@ open class TallFruitfulCropGainBlock(properties: Properties, cropItem: Holder<It
 //
 //        fun part(count: Int) = PARTS[count - 2]
 
-        val PART = FallacyStateProperties.PART_2
+        val PART: IntegerProperty = FallacyStateProperties.PART_2
     }
 
     init {

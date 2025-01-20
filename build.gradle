@@ -55,6 +55,7 @@ minecraft.accessTransformers.file rootProject.file('src/main/resources/META-INF/
 // Default run configurations.
 // These can be tweaked, removed, or duplicated as needed.
 runs {
+
     // applies to all the run configs below
     configureEach {
         // Recommended logging data for a userdev environment
@@ -75,11 +76,15 @@ runs {
     client {
         // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
         systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+
+        jvmArguments '-Xmx8G'
     }
 
     server {
         systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
         programArgument '--nogui'
+
+        jvmArguments '-Xmx8G'
     }
 
     // This run config launches GameTestServer and runs all registered gametests, then exits.

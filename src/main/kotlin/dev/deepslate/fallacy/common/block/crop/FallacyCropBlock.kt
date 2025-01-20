@@ -59,7 +59,7 @@ open class FallacyCropBlock(
 
         val AGE: IntegerProperty = FallacyStateProperties.AGE
 
-        val DYING_COUNTER = FallacyStateProperties.DYING_COUNTER
+        val DYING_COUNTER: IntegerProperty = FallacyStateProperties.DYING_COUNTER
 
         fun withVanillaBlockStack(
             context: DataGenContext<Block, FallacyCropBlock>,

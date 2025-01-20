@@ -12,7 +12,7 @@ import net.minecraft.world.level.storage.loot.LootParams
 open class FruitfulCropGainBlock(properties: Properties, val cropItem: Holder<Item>) : Block(properties) {
 
     companion object {
-        val AMOUNT = IntegerProperty.create("amount", 0, 15)
+        val AMOUNT: IntegerProperty = IntegerProperty.create("amount", 0, 15)
     }
 
     init {
