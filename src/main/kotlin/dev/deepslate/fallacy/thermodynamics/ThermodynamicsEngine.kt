@@ -69,7 +69,7 @@ abstract class ThermodynamicsEngine {
             return engine.getHeat(pos)
         }
 
-        fun getHeat(entity: Entity): Int {
+        fun getHeatAt(entity: Entity): Int {
             val pos = entity.blockPosition()
             val level = entity.level()
 

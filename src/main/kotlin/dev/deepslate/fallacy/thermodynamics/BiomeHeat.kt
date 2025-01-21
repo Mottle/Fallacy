@@ -96,7 +96,7 @@ object BiomeHeat {
             put(Biomes.SWAMP, 28)
         }
 
-        for(k in biomeMap.keys) {
+        for (k in biomeMap.keys) {
             biomeMap[k] = ThermodynamicsEngine.fromFreezingPoint(biomeMap[k]!!)
         }
     }

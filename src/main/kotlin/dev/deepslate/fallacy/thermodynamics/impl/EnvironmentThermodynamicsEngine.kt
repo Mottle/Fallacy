@@ -90,7 +90,8 @@ open class EnvironmentThermodynamicsEngine(override val level: Level) : Thermody
     }
 
     override fun scanChunk(chunkPos: ChunkPos) {
-        chunkScanner.enqueue(chunkPos)
+        val chunk = level.getChunk(chunkPos.x, chunkPos.z)
+        chunkScanner.enqueue(chunk)
     }
 
     protected open fun getSunlightHeatDelta(pos: BlockPos): Int {
@@ -147,7 +148,7 @@ open class EnvironmentThermodynamicsEngine(override val level: Level) : Thermody
             val pos = player.blockPosition()
             if (playerPosMap[uuid] == pos) return
             playerPosMap[uuid] = pos
-            val heat = getHeat(player)
+            val heat = getHeatAt(player)
             val celsius = Temperature.celsius(heat)
             player.sendSystemMessage(Component.literal("heat: $celsius"))
         }
