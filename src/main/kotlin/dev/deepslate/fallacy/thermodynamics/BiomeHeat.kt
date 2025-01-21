@@ -54,15 +54,15 @@ object BiomeHeat {
 
             put(Biomes.CHERRY_GROVE, 20)
 
-            put(Biomes.DESERT, 60)
+            put(Biomes.DESERT, 45)
 
             put(Biomes.SAVANNA, 35)
             put(Biomes.SAVANNA_PLATEAU, 35)
             put(Biomes.WINDSWEPT_SAVANNA, 35)
 
-            put(Biomes.BADLANDS, 48)
-            put(Biomes.ERODED_BADLANDS, 45)
-            put(Biomes.WOODED_BADLANDS, 48)
+            put(Biomes.BADLANDS, 41)
+            put(Biomes.ERODED_BADLANDS, 41)
+            put(Biomes.WOODED_BADLANDS, 41)
 
             put(Biomes.FOREST, 20)
             put(Biomes.FLOWER_FOREST, 23)

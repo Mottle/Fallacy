@@ -75,7 +75,12 @@ open class EnvironmentThermodynamicsEngine(override val level: Level) : Thermody
         val positiveHeat = positiveHeatStorage[index]?.getReadable(pos.x, pos.y, pos.z) ?: MIN_HEAT
         val negativeHeat = negativeHeatStorage[index]?.getReadable(pos.x, pos.y, pos.z) ?: MAX_HEAT
 
-        val environmentHeat = BiomeHeat.getBiomeHeat(level, pos) + getSunlightHeatDelta(pos) + getWeatherHeatDelta(pos)
+        val biomeHeat = BiomeHeat.getBiomeHeat(level, pos)
+        val sunlightHeat = getSunlightHeatDelta(pos)
+        val weatherHeat = getWeatherHeatDelta(pos)
+        val dayNightCycleHeat = getDayNightCycleHeatDelta(pos)
+        val environmentHeat = biomeHeat + sunlightHeat + weatherHeat + dayNightCycleHeat
+
         val positiveImpact = if (positiveHeat > environmentHeat) positiveHeat - environmentHeat else 0
         val negativeImpact = if (negativeHeat < environmentHeat) negativeHeat - environmentHeat else 0
 
@@ -95,11 +100,23 @@ open class EnvironmentThermodynamicsEngine(override val level: Level) : Thermody
     }
 
     protected open fun getSunlightHeatDelta(pos: BlockPos): Int {
+        if (level.isNight) return 0
+        if (!level.canSeeSky(pos)) return 0
+
+        val biome = level.getBiome(pos)
+
+        if (biome.`is`(Biomes.DESERT)) return 25
+        if (biome.`is`(Biomes.BADLANDS) || biome.`is`(Biomes.ERODED_BADLANDS) || biome.`is`(Biomes.WOODED_BADLANDS)) return 15
+
+        return 5
+    }
+
+    protected open fun getDayNightCycleHeatDelta(pos: BlockPos): Int {
         if (level.getBiome(pos).`is`(Biomes.DESERT)) {
-            return if (level.isDay) 10 else -55
+            return if (level.isDay) 0 else -55
         }
 
-        return if (level.isDay) 5 else 0
+        return if (level.isDay) 0 else -3
     }
 
     protected open fun getWeatherHeatDelta(pos: BlockPos): Int = 0
