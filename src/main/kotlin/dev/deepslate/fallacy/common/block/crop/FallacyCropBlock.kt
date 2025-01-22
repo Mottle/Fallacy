@@ -6,7 +6,7 @@ import com.tterrag.registrate.providers.loot.RegistrateBlockLootTables
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.block.FallacyBlocks
 import dev.deepslate.fallacy.common.block.FallacyStateProperties
-import dev.deepslate.fallacy.common.block.NPKFarmBlock
+import dev.deepslate.fallacy.common.block.FertilityFarmBlock
 import dev.deepslate.fallacy.common.block.data.NPK
 import dev.deepslate.fallacy.common.item.FallacyItems
 import net.minecraft.advancements.critereon.StatePropertiesPredicate
@@ -59,7 +59,7 @@ open class FallacyCropBlock(
 
         val AGE: IntegerProperty = FallacyStateProperties.AGE
 
-        val DYING_COUNTER: IntegerProperty = FallacyStateProperties.DYING_COUNTER
+        val DYING_COUNTER: IntegerProperty = FallacyStateProperties.DYING
 
         fun withVanillaBlockStack(
             context: DataGenContext<Block, FallacyCropBlock>,
@@ -227,7 +227,7 @@ open class FallacyCropBlock(
         level: BlockGetter,
         pos: BlockPos
     ): Boolean {
-        return state.block is NPKFarmBlock
+        return state.block is FertilityFarmBlock
     }
 
     /**
@@ -251,7 +251,7 @@ open class FallacyCropBlock(
         }
 
         val farmland = level.getBlockState(pos.below())
-        if (farmland.block !is NPKFarmBlock) {
+        if (farmland.block !is FertilityFarmBlock) {
             setDying(level, pos)
             return
         }

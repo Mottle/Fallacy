@@ -74,7 +74,7 @@ object FallacyBlocks {
             BlockTags.SWORD_EFFICIENT
         ).formattedLang().register()
 
-    val FARMLAND: BlockEntry<NPKFarmBlock> = REG.block("farmland", ::NPKFarmBlock).properties {
+    val FARMLAND: BlockEntry<FertilityFarmBlock> = REG.block("farmland", ::FertilityFarmBlock).properties {
         Properties.ofFullCopy(Blocks.FARMLAND)
     }.blockstate { ctx, prov ->
         prov.getVariantBuilder(ctx.entry).forAllStates { state ->

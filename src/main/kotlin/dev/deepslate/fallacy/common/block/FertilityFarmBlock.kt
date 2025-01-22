@@ -18,19 +18,20 @@ import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.FarmBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
+import net.minecraft.world.level.block.state.properties.IntegerProperty
 import net.minecraft.world.level.gameevent.GameEvent
 import net.neoforged.neoforge.common.FarmlandWaterManager
 
-open class NPKFarmBlock(
+open class FertilityFarmBlock(
     properties: Properties,
     val baseDirt: Holder<Block> = BuiltInRegistries.BLOCK.getHolder(BuiltInRegistries.BLOCK.getKey(Blocks.DIRT)).get()
 ) : FarmBlock(properties) {
     companion object {
-        val N = FallacyStateProperties.N
+        val N: IntegerProperty = FallacyStateProperties.N
 
-        val P = FallacyStateProperties.P
+        val P: IntegerProperty = FallacyStateProperties.P
 
-        val K = FallacyStateProperties.K
+        val K: IntegerProperty = FallacyStateProperties.K
 
         /**
          * @see net.minecraft.world.level.block.FarmBlock.isNearWater
