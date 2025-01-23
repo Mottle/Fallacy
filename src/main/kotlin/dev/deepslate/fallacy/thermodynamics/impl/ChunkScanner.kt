@@ -2,12 +2,17 @@ package dev.deepslate.fallacy.thermodynamics.impl
 
 import dev.deepslate.fallacy.common.data.FallacyAttachments
 import dev.deepslate.fallacy.thermodynamics.ThermodynamicsEngine
+import dev.deepslate.fallacy.thermodynamics.data.HeatProcessQueue
 import net.minecraft.core.BlockPos
 import net.minecraft.util.thread.ProcessorMailbox
 import net.minecraft.world.level.chunk.ChunkAccess
 import java.util.concurrent.Executors
 
-class ChunkScanner(val threadAmount: Int = 3, val engine: EnvironmentThermodynamicsEngine) {
+class ChunkScanner(
+    val threadAmount: Int = 3,
+    val engine: EnvironmentThermodynamicsEngine,
+    val heatQueue: HeatProcessQueue
+) {
 
     private val mailbox =
         ProcessorMailbox.create(Executors.newFixedThreadPool(threadAmount), "fallacy-thermodynamics-scan")
@@ -36,6 +41,7 @@ class ChunkScanner(val threadAmount: Int = 3, val engine: EnvironmentThermodynam
     private fun scanSources(chunk: ChunkAccess) {
         val sections = chunk.sections
         val startPos = chunk.pos.worldPosition
+        val positions = mutableListOf<BlockPos>()
 
         for (sectionIdx in 0 until sections.size) {
             val section = sections[sectionIdx] ?: continue
@@ -52,10 +58,11 @@ class ChunkScanner(val threadAmount: Int = 3, val engine: EnvironmentThermodynam
 
                 val currentPos = BlockPos(startPos.x + x, sectionY + y, startPos.z + z)
 
-                engine.checkBlock(currentPos)
+                positions.add(currentPos)
             }
         }
 
+        heatQueue.enqueueAll(chunk.pos, positions)
         markScanned(chunk)
     }
 }

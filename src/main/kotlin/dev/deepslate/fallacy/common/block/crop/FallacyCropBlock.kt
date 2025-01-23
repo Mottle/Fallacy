@@ -7,11 +7,13 @@ import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.block.FallacyBlocks
 import dev.deepslate.fallacy.common.block.FallacyStateProperties
 import dev.deepslate.fallacy.common.block.FertilityFarmBlock
-import dev.deepslate.fallacy.common.block.data.NPK
+import dev.deepslate.fallacy.common.datapack.CropsConfiguration
+import dev.deepslate.fallacy.common.datapack.DataPacks
 import dev.deepslate.fallacy.common.item.FallacyItems
 import net.minecraft.advancements.critereon.StatePropertiesPredicate
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
@@ -37,12 +39,11 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel
 import net.neoforged.neoforge.common.CommonHooks
+import kotlin.jvm.optionals.getOrNull
 
 
 open class FallacyCropBlock(
-    properties: Properties,
-    val npkRequired: NPK,
-    val brightnessRange: IntRange = (9..Int.MAX_VALUE)
+    properties: Properties
 ) :
     CropBlock(properties) {
     companion object {
@@ -211,6 +212,16 @@ open class FallacyCropBlock(
 
     override fun getAgeProperty(): IntegerProperty = AGE
 
+    fun getConfiguration(level: Level, state: BlockState): CropsConfiguration.CropConfiguration {
+        val configurations =
+            level.registryAccess().lookup(DataPacks.CROP_REGISTRY_KEY).getOrNull()?.get(CropsConfiguration.CONFIG_KEY)
+                ?.getOrNull()?.value() ?: return CropsConfiguration.DEFAULT
+        val namespacedId = BuiltInRegistries.BLOCK.getKey(state.block)
+
+        return configurations.query(namespacedId)
+    }
+
+
     protected open val dead: Holder<Block>
         get() = FallacyBlocks.Crop.DYING_CROP
 
@@ -256,7 +267,8 @@ open class FallacyCropBlock(
             return
         }
 
-        val isFine = npkRequired.canGrowAt(farmland)
+        val configuration = getConfiguration(level, state)
+        val isFine = configuration.npkRequire.canGrowAt(farmland)
 
         if (!isFine && level.random.nextInt(0, 1) == 0) {
             increaseDyingCounter(state, level, pos)
@@ -273,7 +285,9 @@ open class FallacyCropBlock(
         random: RandomSource,
         isFine: Boolean
     ) {
-        if (level.getRawBrightness(pos, 0) in brightnessRange) {
+        val configuration = getConfiguration(level, state)
+
+        if (level.getRawBrightness(pos, 0) in configuration.brightnessRequire) {
             val age = this.getAge(state)
             if (age < this.maxAge) {
                 val growthSpeed = getGrowthSpeed(state, level, pos)

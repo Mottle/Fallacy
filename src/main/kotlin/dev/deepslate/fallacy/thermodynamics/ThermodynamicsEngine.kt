@@ -105,6 +105,15 @@ abstract class ThermodynamicsEngine {
             engine.runUpdates()
         }
 
+        //to lagged
+//        @SubscribeEvent(priority = EventPriority.LOWEST)
+//        fun onChunkLoad(event: ChunkEvent.Load) {
+//            if(event.level.isClientSide) return
+//            val chunk = event.chunk
+//            val engine = getEngine(event.level as ServerLevel)
+//            engine.scanChunk(chunk.pos)
+//        }
+
         private fun getDistance(p1: ChunkPos, p2: ChunkPos): Int =
             (p1.x - p2.x).absoluteValue + (p1.z - p2.z).absoluteValue
 

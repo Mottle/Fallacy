@@ -20,9 +20,21 @@ class HeatProcessQueue {
         val packed = chunkPos.toLong()
         val immutablePos = pos.immutable()
         synchronized(this) {
-            threadUnsafeLinkedMap.compute(packed) { k, task ->
-                if (task == null) return@compute HeatTask(chunkPos, setOf(immutablePos))
-                return@compute task.copy(changedPosition = task.changedPosition + immutablePos)
+            if (threadUnsafeLinkedMap.containsKey(packed)) {
+                threadUnsafeLinkedMap[packed].changedPosition + immutablePos
+            } else {
+                threadUnsafeLinkedMap[packed] = HeatTask(chunkPos, mutableSetOf(immutablePos))
+            }
+        }
+    }
+
+    fun enqueueAll(chunkPos: ChunkPos, positions: Iterable<BlockPos>) {
+        val packed = chunkPos.toLong()
+        synchronized(this) {
+            if (threadUnsafeLinkedMap.containsKey(packed)) {
+                threadUnsafeLinkedMap[packed].changedPosition += positions
+            } else {
+                threadUnsafeLinkedMap[packed] = HeatTask(chunkPos, positions.toMutableSet())
             }
         }
     }
@@ -35,6 +47,6 @@ class HeatProcessQueue {
 
     data class HeatTask(
         val chunkPos: ChunkPos,
-        val changedPosition: Set<BlockPos>,
+        val changedPosition: MutableSet<BlockPos>,
     )
 }

@@ -35,7 +35,7 @@ open class EnvironmentThermodynamicsEngine(override val level: Level) : Thermody
 
     private val heatQueue: HeatProcessQueue = HeatProcessQueue()
 
-    private val chunkScanner = ChunkScanner(engine = this)
+    private val chunkScanner = ChunkScanner(3, this, heatQueue)
 
     private val positiveHeatCache: Long2ObjectOpenHashMap<WeakReference<HeatStorage>> = Long2ObjectOpenHashMap()
 

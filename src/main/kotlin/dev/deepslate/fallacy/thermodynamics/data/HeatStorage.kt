@@ -46,7 +46,7 @@ class HeatStorage(data: Array<HeatNibble?> = arrayOf()) {
         return get(index)!!
     }
 
-    operator fun get(index: Int) = if(index < 0 || index >= size) null else heatStorage[index]
+    operator fun get(index: Int) = if (index < 0 || index >= size) null else heatStorage[index]
 
     fun freeEmpty() {
         for (idx in 0 until size) {

@@ -1,5 +1,7 @@
 package dev.deepslate.fallacy.common.block.data
 
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.deepslate.fallacy.common.block.FertilityFarmBlock
 import net.minecraft.world.level.block.state.BlockState
 
@@ -7,6 +9,14 @@ data class NPK(val n: Int, val p: Int, val k: Int) {
 
     companion object {
         fun zero() = NPK(0, 0, 0)
+
+        val CODEC: Codec<NPK> = RecordCodecBuilder.create { instance ->
+            instance.group(
+                Codec.INT.fieldOf("n").forGetter(NPK::n),
+                Codec.INT.fieldOf("p").forGetter(NPK::p),
+                Codec.INT.fieldOf("k").forGetter(NPK::k)
+            ).apply(instance, ::NPK)
+        }
     }
 
     init {
