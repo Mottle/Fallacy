@@ -2,8 +2,9 @@ package dev.deepslate.fallacy.thermodynamics.impl
 
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.data.FallacyAttachments
+import dev.deepslate.fallacy.common.datapack.BiomesConfiguration
+import dev.deepslate.fallacy.common.datapack.DataPack
 import dev.deepslate.fallacy.inject.FallacyThermodynamicsExtension
-import dev.deepslate.fallacy.thermodynamics.BiomeHeat
 import dev.deepslate.fallacy.thermodynamics.HeatStorageCache
 import dev.deepslate.fallacy.thermodynamics.ThermodynamicsEngine
 import dev.deepslate.fallacy.thermodynamics.data.HeatProcessQueue
@@ -65,6 +66,14 @@ open class EnvironmentThermodynamicsEngine(override val level: Level) : Thermody
         return data
     }
 
+    private var biomeHeatCache: BiomesConfiguration? = null
+
+    fun getBiomeHeat(pos: BlockPos): Int {
+        if (biomeHeatCache == null) biomeHeatCache = DataPack.biomes(level)
+        val biomeKey = level.getBiome(pos).key?.location() ?: return BiomesConfiguration.DEFAULT.heat
+        return biomeHeatCache!!.query(biomeKey).heat
+    }
+
     override fun getHeat(pos: BlockPos): Int {
         val packedChunkPos = ChunkPos.asLong(pos)
         val index = (pos.y - level.minBuildHeight) / 16
@@ -74,8 +83,7 @@ open class EnvironmentThermodynamicsEngine(override val level: Level) : Thermody
 
         val positiveHeat = positiveHeatStorage[index]?.getReadable(pos.x, pos.y, pos.z) ?: MIN_HEAT
         val negativeHeat = negativeHeatStorage[index]?.getReadable(pos.x, pos.y, pos.z) ?: MAX_HEAT
-
-        val biomeHeat = BiomeHeat.getBiomeHeat(level, pos)
+        val biomeHeat = getBiomeHeat(pos)
         val sunlightHeat = getSunlightHeatDelta(pos)
         val weatherHeat = getWeatherHeatDelta(pos)
         val dayNightCycleHeat = getDayNightCycleHeatDelta(pos)
@@ -89,15 +97,6 @@ open class EnvironmentThermodynamicsEngine(override val level: Level) : Thermody
         return finalHeat
     }
 
-    override fun checkBlock(pos: BlockPos) {
-        if (pos.y !in level.minBuildHeight..level.maxBuildHeight) return
-        heatQueue.enqueueBlockChange(pos)
-    }
-
-    override fun scanChunk(chunkPos: ChunkPos) {
-        val chunk = level.getChunk(chunkPos.x, chunkPos.z)
-        chunkScanner.enqueue(chunk)
-    }
 
     protected open fun getSunlightHeatDelta(pos: BlockPos): Int {
         if (level.isNight) return 0
@@ -120,6 +119,16 @@ open class EnvironmentThermodynamicsEngine(override val level: Level) : Thermody
     }
 
     protected open fun getWeatherHeatDelta(pos: BlockPos): Int = 0
+
+    override fun checkBlock(pos: BlockPos) {
+        if (pos.y !in level.minBuildHeight..level.maxBuildHeight) return
+        heatQueue.enqueueBlockChange(pos)
+    }
+
+    override fun scanChunk(chunkPos: ChunkPos) {
+        val chunk = level.getChunk(chunkPos.x, chunkPos.z)
+        chunkScanner.enqueue(chunk)
+    }
 
     override fun runUpdates() {
         propagateChanges()

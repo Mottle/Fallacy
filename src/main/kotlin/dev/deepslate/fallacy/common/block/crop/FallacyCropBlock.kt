@@ -7,13 +7,12 @@ import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.block.FallacyBlocks
 import dev.deepslate.fallacy.common.block.FallacyStateProperties
 import dev.deepslate.fallacy.common.block.FertilityFarmBlock
-import dev.deepslate.fallacy.common.datapack.CropsConfiguration
-import dev.deepslate.fallacy.common.datapack.DataPacks
+import dev.deepslate.fallacy.common.datapack.DataPack
 import dev.deepslate.fallacy.common.item.FallacyItems
+import dev.deepslate.fallacy.thermodynamics.ThermodynamicsEngine
 import net.minecraft.advancements.critereon.StatePropertiesPredicate
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
-import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
@@ -39,7 +38,6 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel
 import net.neoforged.neoforge.common.CommonHooks
-import kotlin.jvm.optionals.getOrNull
 
 
 open class FallacyCropBlock(
@@ -212,16 +210,6 @@ open class FallacyCropBlock(
 
     override fun getAgeProperty(): IntegerProperty = AGE
 
-    fun getConfiguration(level: Level, state: BlockState): CropsConfiguration.CropConfiguration {
-        val configurations =
-            level.registryAccess().lookup(DataPacks.CROP_REGISTRY_KEY).getOrNull()?.get(CropsConfiguration.CONFIG_KEY)
-                ?.getOrNull()?.value() ?: return CropsConfiguration.DEFAULT
-        val namespacedId = BuiltInRegistries.BLOCK.getKey(state.block)
-
-        return configurations.query(namespacedId)
-    }
-
-
     protected open val dead: Holder<Block>
         get() = FallacyBlocks.Crop.DYING_CROP
 
@@ -253,66 +241,85 @@ open class FallacyCropBlock(
         // Forge: prevent loading unloaded chunks when checking neighbor's light
         if (!level.isAreaLoaded(pos, 1)) return
         if (shouldDie(state)) {
-            setDying(level, pos)
+            turnDying(level, pos)
             return
         }
-        if (!level.canSeeSky(pos)) {
+
+        val configuration = DataPack.crop(level, state)
+        val needSeeSky = configuration.needSeeSky
+        val npkRequire = configuration.npkRequire
+        val heatRequire = configuration.heatRange
+
+        //看不到太阳，寄
+        if (needSeeSky && !level.canSeeSky(pos)) {
             increaseDyingCounter(state, level, pos)
             return
         }
 
         val farmland = level.getBlockState(pos.below())
+
         if (farmland.block !is FertilityFarmBlock) {
-            setDying(level, pos)
+            turnDying(level, pos)
             return
         }
 
-        val configuration = getConfiguration(level, state)
-        val isFine = configuration.npkRequire.canGrowAt(farmland)
-
-        if (!isFine && level.random.nextInt(0, 1) == 0) {
-            increaseDyingCounter(state, level, pos)
+        if (!npkRequire.canGrowAt(farmland)) {
+            if (level.random.nextInt(0, 1) == 0) increaseDyingCounter(state, level, pos)
             return
         }
 
-        tryGrow(state, level, pos, random, isFine)
+        if (ThermodynamicsEngine.getHeat(level, pos) !in heatRequire) {
+            if (level.random.nextInt(0, 1) == 0) increaseDyingCounter(state, level, pos)
+            return
+        }
+
+        tryGrow(state, level, pos, random)
     }
 
     protected open fun tryGrow(
         state: BlockState,
         level: ServerLevel,
         pos: BlockPos,
-        random: RandomSource,
-        isFine: Boolean
+        random: RandomSource
     ) {
-        val configuration = getConfiguration(level, state)
+        val configuration = DataPack.crop(level, state)
 
-        if (level.getRawBrightness(pos, 0) in configuration.brightnessRequire) {
-            val age = this.getAge(state)
-            if (age < this.maxAge) {
-                val growthSpeed = getGrowthSpeed(state, level, pos)
-                if (CommonHooks.canCropGrow(
-                        level,
-                        pos,
-                        state,
-                        random.nextInt((25.0F / growthSpeed).toInt() + 1) == 0
-                    )
-                ) {
-                    val dyingCount = state.getValue(DYING_COUNTER)
-                    val defaultGrowthState = getStateForAge(age + 1)
-                    val newState = if (isFine) defaultGrowthState.setValue(
-                        DYING_COUNTER,
-                        (dyingCount - 1).coerceAtLeast(0)
-                    ) else defaultGrowthState
+        if (level.getRawBrightness(pos, 0) !in configuration.brightnessRequire) return
 
-                    level.setBlock(pos, newState, 2)
-                    CommonHooks.fireCropGrowPost(level, pos, state)
-                }
+        val age = this.getAge(state)
+        val dyingCount = state.getValue(DYING_COUNTER)
+        val decreasedDyingCount = (dyingCount - 1).coerceAtLeast(0)
+
+        if (age < this.maxAge) {
+            val growthSpeed = getGrowthSpeed(state, level, pos)
+            //触发这个b事件看看有没有其他mod阻止
+            if (CommonHooks.canCropGrow(
+                    level,
+                    pos,
+                    state,
+                    random.nextInt((25.0F / growthSpeed).toInt() + 1) == 0
+                )
+            ) {
+                val defaultGrowthState = getStateForAge(age + 1)
+                val newState = defaultGrowthState.setValue(
+                    DYING_COUNTER,
+                    decreasedDyingCount
+                )
+
+                level.setBlock(pos, newState, 2)
+                CommonHooks.fireCropGrowPost(level, pos, state)
+                return
             }
         }
+
+        val newState = getStateForAge(age).setValue(
+            DYING_COUNTER,
+            decreasedDyingCount
+        )
+        level.setBlock(pos, newState, 2)
     }
 
-    protected open fun setDying(level: Level, pos: BlockPos) {
+    protected open fun turnDying(level: Level, pos: BlockPos) {
         level.setBlock(pos, dead.value().defaultBlockState(), 2)
     }
 

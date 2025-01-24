@@ -7,6 +7,9 @@ import dev.deepslate.fallacy.common.block.data.NPK
 import dev.deepslate.fallacy.thermodynamics.ThermodynamicsEngine
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
+import net.neoforged.bus.api.SubscribeEvent
+import net.neoforged.fml.common.EventBusSubscriber
+import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent
 
 data class CropsConfiguration(val cropMap: Map<ResourceLocation, CropConfiguration>) {
     companion object {
@@ -21,7 +24,8 @@ data class CropsConfiguration(val cropMap: Map<ResourceLocation, CropConfigurati
             instance.group(
                 NPK.CODEC.fieldOf("npk_require").forGetter(CropConfiguration::npkRequire),
                 rangeCodec.fieldOf("celsius_require").forGetter(CropConfiguration::celsiusRequire),
-                rangeCodec.fieldOf("brightness_require").forGetter(CropConfiguration::brightnessRequire)
+                rangeCodec.fieldOf("brightness_require").forGetter(CropConfiguration::brightnessRequire),
+                Codec.BOOL.fieldOf("need_see_sky").forGetter(CropConfiguration::needSeeSky),
             ).apply(instance, ::CropConfiguration)
         }
 
@@ -29,13 +33,14 @@ data class CropsConfiguration(val cropMap: Map<ResourceLocation, CropConfigurati
             Codec.unboundedMap(ResourceLocation.CODEC, configurationCodec)
                 .xmap(::CropsConfiguration, CropsConfiguration::cropMap)
 
-        val CONFIG_KEY: ResourceKey<CropsConfiguration> =
+        val CONFIGURATION_KEY: ResourceKey<CropsConfiguration> =
             ResourceKey.create(DataPacks.CROP_REGISTRY_KEY, Fallacy.id("configuration"))
 
         val DEFAULT: CropConfiguration = CropConfiguration(
             NPK(2, 2, 2),
             Range(10, 40),
-            Range(9, Int.MAX_VALUE)
+            Range(9, Int.MAX_VALUE),
+            true
         )
 
         private val defaultCropMap = mutableMapOf<ResourceLocation, CropConfiguration>()
@@ -70,14 +75,27 @@ data class CropsConfiguration(val cropMap: Map<ResourceLocation, CropConfigurati
             }
         }
 
-        internal fun generateDefaultDataPack(): CropsConfiguration {
+        fun generateDefaultPack(): CropsConfiguration {
             val generated = CropsConfiguration(defaultCropMap.toMap())
-            defaultCropMap.clear()
             return generated
         }
     }
 
-    data class CropConfiguration(val npkRequire: NPK, val celsiusRequire: Range, val brightnessRequire: Range) {
+    @EventBusSubscriber(modid = Fallacy.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+    object Handler {
+        @SubscribeEvent
+        fun onModLoadOver(event: FMLLoadCompleteEvent) {
+            defaultCropMap.clear()
+        }
+    }
+
+    //亮度不够只会不生长，温度不够会死亡
+    data class CropConfiguration(
+        val npkRequire: NPK,
+        val celsiusRequire: Range,
+        val brightnessRequire: Range,
+        val needSeeSky: Boolean
+    ) {
         val heatRange: IntRange
             get() = ThermodynamicsEngine.fromFreezingPoint(celsiusRequire.min)..
                     ThermodynamicsEngine.fromFreezingPoint(celsiusRequire.max)

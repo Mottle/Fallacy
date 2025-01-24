@@ -1,7 +1,7 @@
 package dev.deepslate.fallacy.common.block
 
 import dev.deepslate.fallacy.common.block.data.NPK
-import dev.deepslate.fallacy.util.setting
+import dev.deepslate.fallacy.common.datapack.DataPack
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
 import net.minecraft.core.registries.BuiltInRegistries
@@ -12,6 +12,7 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
@@ -51,7 +52,16 @@ open class FertilityFarmBlock(
          * @see net.minecraft.world.level.block.FarmBlock.shouldMaintainFarmland
          */
         protected fun shouldMaintainFarmland(level: BlockGetter, pos: BlockPos) =
-            level.getBlockState(pos.above()).`is`(BlockTags.MAINTAINS_FARMLAND);
+            level.getBlockState(pos.above()).`is`(BlockTags.MAINTAINS_FARMLAND)
+
+        protected fun applyNPK(state: BlockState, npk: NPK): BlockState =
+            state.setValue(N, npk.n).setValue(P, npk.p).setValue(K, npk.k)
+
+        fun tillDirt(level: LevelAccessor, pos: BlockPos): BlockState {
+            val npk = DataPack.biome(level, pos).npk
+            val defaultState = FallacyBlocks.FARMLAND.defaultState
+            return applyNPK(defaultState, npk)
+        }
     }
 
     init {
@@ -63,11 +73,8 @@ open class FertilityFarmBlock(
         builder.add(N, P, K)
     }
 
-    protected fun applyNPK(state: BlockState, npk: NPK): BlockState =
-        state.setValue(N, npk.n).setValue(P, npk.p).setValue(K, npk.k)
-
     override fun getStateForPlacement(context: BlockPlaceContext): BlockState? {
-        val biomeNPK = context.level.getBiome(context.clickedPos).value().setting.npk
+        val biomeNPK = DataPack.biome(context.level, context.clickedPos).npk
         val default = applyNPK(defaultBlockState(), biomeNPK)
 
         return if (default.canSurvive(context.level, context.clickedPos)) {
@@ -106,11 +113,11 @@ open class FertilityFarmBlock(
             else -> K
         }
         val value = state.getValue(property)
-        val biomeSetting = level.getBiome(pos).value().setting
+        val biomeNPK = DataPack.biome(level, pos).npk
         val biomeProperty = when (choice) {
-            0 -> biomeSetting.npk.n
-            1 -> biomeSetting.npk.p
-            else -> biomeSetting.npk.k
+            0 -> biomeNPK.n
+            1 -> biomeNPK.p
+            else -> biomeNPK.k
         }
 
         if (value <= biomeProperty) return state

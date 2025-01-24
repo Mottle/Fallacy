@@ -1,6 +1,6 @@
 package dev.deepslate.fallacy.util.data
 
-import java.util.BitSet
+import java.util.*
 
 abstract class SingleWriterMultiReaderNibble(data: ByteArray? = null) {
 
@@ -10,7 +10,7 @@ abstract class SingleWriterMultiReaderNibble(data: ByteArray? = null) {
 
     fun getMaxBitSet() = getMaxSize() * getUnitBitSize()
 
-    protected var writeableData: BitSet = if(data == null) BitSet(getMaxBitSet()) else BitSet.valueOf(data)
+    protected var writeableData: BitSet = if (data == null) BitSet(getMaxBitSet()) else BitSet.valueOf(data)
 
     protected var readableData: BitSet = writeableData.clone() as BitSet
 
@@ -18,9 +18,9 @@ abstract class SingleWriterMultiReaderNibble(data: ByteArray? = null) {
         val startIndex = index * getUnitBitSize()
         val endIndex = startIndex + getUnitBitSize() - 1
         var value = 0
-        for(i in endIndex downTo startIndex) {
+        for (i in endIndex downTo startIndex) {
             value *= 2
-            value += if(data.get(i)) 1 else 0
+            value += if (data.get(i)) 1 else 0
         }
         return value
     }
@@ -29,7 +29,7 @@ abstract class SingleWriterMultiReaderNibble(data: ByteArray? = null) {
         val startIndex = index * getUnitBitSize()
         val endIndex = startIndex + getUnitBitSize() - 1
         var v = value
-        for(i in startIndex..endIndex) {
+        for (i in startIndex..endIndex) {
             data.set(i, v % 2 == 1)
             v /= 2
         }
@@ -64,7 +64,7 @@ abstract class SingleWriterMultiReaderNibble(data: ByteArray? = null) {
     }
 
     private fun isAll(bitSet: BitSet, start: Int, end: Int, value: Boolean): Boolean {
-        for(i in start..end) {
+        for (i in start..end) {
             if (bitSet[i] != value) return false
         }
         return true
@@ -76,7 +76,7 @@ abstract class SingleWriterMultiReaderNibble(data: ByteArray? = null) {
 
     fun flip(update: Boolean = false) {
         writeableData.flip(0, getMaxBitSet() - 1)
-        if(update) update()
+        if (update) update()
     }
 
     fun toByteArray(): ByteArray = writeableData.toByteArray()

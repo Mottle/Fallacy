@@ -16,9 +16,13 @@ object DataPacks {
     val CROP_REGISTRY_KEY: ResourceKey<Registry<CropsConfiguration>> =
         ResourceKey.createRegistryKey<CropsConfiguration>(Fallacy.id("crop"))
 
+    val BIOME_REGISTRY_KEY: ResourceKey<Registry<BiomesConfiguration>> =
+        ResourceKey.createRegistryKey<BiomesConfiguration>(Fallacy.id("biome"))
+
     @SubscribeEvent
     fun register(event: DataPackRegistryEvent.NewRegistry) {
         event.dataPackRegistry(CROP_REGISTRY_KEY, CropsConfiguration.CODEC)
+        event.dataPackRegistry(BIOME_REGISTRY_KEY, BiomesConfiguration.CODEC)
     }
 
     @SubscribeEvent
@@ -27,11 +31,10 @@ object DataPacks {
             DatapackBuiltinEntriesProvider(
                 output,
                 event.lookupProvider,
-                RegistrySetBuilder().add(CROP_REGISTRY_KEY) { bootstrap ->
-                    bootstrap.register(
-                        CropsConfiguration.CONFIG_KEY,
-                        CropsConfiguration.generateDefaultDataPack()
-                    )
+                RegistrySetBuilder().add(CROP_REGISTRY_KEY) { bs ->
+                    bs.register(CropsConfiguration.CONFIGURATION_KEY, CropsConfiguration.generateDefaultPack())
+                }.add(BIOME_REGISTRY_KEY) { bs ->
+                    bs.register(BiomesConfiguration.CONFIGURATION_KEY, BiomesConfiguration.generateDefaultPack())
                 },
                 setOf(Fallacy.MOD_ID)
             )

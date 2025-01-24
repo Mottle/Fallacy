@@ -165,20 +165,25 @@ object FallacyBlocks {
                     )
                 ).tag(*defaultTags).formattedLang().register()
 
+        //大麦
         val BARLEY: BlockEntry<FallacyCropBlock> =
             crop("barley", { FallacyItems.Crop.BARLEY }, seedsRange = 1..3).npk(3, 3, 3).register()
 
+        //燕麦
         val OAT: BlockEntry<FallacyCropBlock> =
             crop("oat", { FallacyItems.Crop.OAT }, seedsRange = 1..4).npk(1, 0, 1).register()
 
+        //大豆
         val SOYBEAN: BlockEntry<FallacyCropBlock> =
             seedCrop("soybean", { FallacyItems.Crop.SOYBEAN }, (2..8)).npk(2, 2, 1).register()
 
         val TOMATO: BlockEntry<FallacyCropBlock> = crop("tomato", { FallacyItems.Crop.TOMATO }).npk(3, 2, 2).register()
 
+        //菠菜
         val SPINACH: BlockEntry<FallacyCropBlock> =
             crop("spinach", { FallacyItems.Crop.SPINACH }).npk(1, 2, 1).register()
 
+        //辣椒
         val CHILE_PEPPER: BlockEntry<FallacyCropBlock> =
             crop("chile_pepper", { FallacyItems.Crop.CHILE_PEPPER }).npk(2, 2, 2).register()
 
@@ -187,9 +192,11 @@ object FallacyBlocks {
         val EGGPLANT: BlockEntry<FallacyCropBlock> =
             crop("eggplant", { FallacyItems.Crop.EGGPLANT }).npk(4, 3, 2).register()
 
+        //芦笋
         val ASPARAGUS: BlockEntry<FallacyCropBlock> =
             crop("asparagus", { FallacyItems.Crop.ASPARAGUS }).npk(2, 4, 3).register()
 
+        //芹菜
         val CELERY: BlockEntry<FallacyCropBlock> = crop("celery", { FallacyItems.Crop.CELERY }).npk(3, 2, 3).register()
 
         val CABBAGE: BlockEntry<FallacyCropBlock> =

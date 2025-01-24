@@ -16,13 +16,15 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries
 object FallacyAttachments {
     private val REGISTRY = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, Fallacy.MOD_ID)
 
-    internal val POSITIVE_CHUNK_HEAT: DeferredHolder<AttachmentType<*>, AttachmentType<HeatStorage>> = REGISTRY.register("positive_chunk_heat") { _ ->
-        AttachmentType.builder(HeatStorage::of).serialize(HeatStorage.CODEC).build()
-    }
+    internal val POSITIVE_CHUNK_HEAT: DeferredHolder<AttachmentType<*>, AttachmentType<HeatStorage>> =
+        REGISTRY.register("positive_chunk_heat") { _ ->
+            AttachmentType.builder(HeatStorage::of).serialize(HeatStorage.CODEC).build()
+        }
 
-    internal val NEGATIVE_CHUNK_HEAT: DeferredHolder<AttachmentType<*>, AttachmentType<HeatStorage>> = REGISTRY.register("negative_chunk_heat") { _ ->
-        AttachmentType.builder(HeatStorage::of).serialize(HeatStorage.CODEC).build()
-    }
+    internal val NEGATIVE_CHUNK_HEAT: DeferredHolder<AttachmentType<*>, AttachmentType<HeatStorage>> =
+        REGISTRY.register("negative_chunk_heat") { _ ->
+            AttachmentType.builder(HeatStorage::of).serialize(HeatStorage.CODEC).build()
+        }
 
     val CHUNK_HEAT_SCANNED = REGISTRY.register("chunk_heat_scanned") { _ ->
         AttachmentType.builder { _ -> false }.serialize(Codec.BOOL).build()

@@ -10,6 +10,10 @@ data class NPK(val n: Int, val p: Int, val k: Int) {
     companion object {
         fun zero() = NPK(0, 0, 0)
 
+        fun empty() = zero()
+
+        fun default() = NPK(2, 2, 2)
+
         val CODEC: Codec<NPK> = RecordCodecBuilder.create { instance ->
             instance.group(
                 Codec.INT.fieldOf("n").forGetter(NPK::n),
