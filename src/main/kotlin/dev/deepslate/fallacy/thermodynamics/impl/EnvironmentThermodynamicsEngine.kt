@@ -9,12 +9,9 @@ import dev.deepslate.fallacy.thermodynamics.HeatStorageCache
 import dev.deepslate.fallacy.thermodynamics.ThermodynamicsEngine
 import dev.deepslate.fallacy.thermodynamics.data.HeatProcessQueue
 import dev.deepslate.fallacy.thermodynamics.data.HeatStorage
-import dev.deepslate.fallacy.thermodynamics.data.Temperature
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
 import net.minecraft.core.BlockPos
-import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.thread.ProcessorMailbox
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.Level
@@ -22,9 +19,7 @@ import net.minecraft.world.level.biome.Biomes
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.event.level.ChunkEvent
-import net.neoforged.neoforge.event.tick.PlayerTickEvent
 import java.lang.ref.WeakReference
-import java.util.*
 import java.util.concurrent.Executors
 
 open class EnvironmentThermodynamicsEngine(override val level: Level) : ThermodynamicsEngine(), HeatStorageCache {
@@ -165,19 +160,19 @@ open class EnvironmentThermodynamicsEngine(override val level: Level) : Thermody
             engine?.negativeHeatCache?.remove(packed)
         }
 
-        private val playerPosMap: MutableMap<UUID, BlockPos> = mutableMapOf()
-
-        @SubscribeEvent
-        fun debug(event: PlayerTickEvent.Post) {
-            val player = event.entity as? ServerPlayer ?: return
-            val uuid = player.uuid
-            val pos = player.blockPosition()
-            if (playerPosMap[uuid] == pos) return
-            playerPosMap[uuid] = pos
-            val heat = getHeatAt(player)
-            val celsius = Temperature.celsius(heat)
-            player.sendSystemMessage(Component.literal("heat: $celsius"))
-        }
+//        private val playerPosMap: MutableMap<UUID, BlockPos> = mutableMapOf()
+//
+//        @SubscribeEvent
+//        fun debug(event: PlayerTickEvent.Post) {
+//            val player = event.entity as? ServerPlayer ?: return
+//            val uuid = player.uuid
+//            val pos = player.blockPosition()
+//            if (playerPosMap[uuid] == pos) return
+//            playerPosMap[uuid] = pos
+//            val heat = getHeatAt(player)
+//            val celsius = Temperature.celsius(heat)
+//            player.sendSystemMessage(Component.literal("heat: $celsius"))
+//        }
     }
 
     private val mailbox = ProcessorMailbox.create(Executors.newFixedThreadPool(3), "fallacy-thermodynamics-process")
