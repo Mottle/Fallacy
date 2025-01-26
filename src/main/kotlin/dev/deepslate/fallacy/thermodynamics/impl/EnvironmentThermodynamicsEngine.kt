@@ -39,6 +39,15 @@ open class EnvironmentThermodynamicsEngine(override val level: Level) : Thermody
 
     override val cache: HeatStorageCache = this
 
+    val scanTaskCount: Int
+        get() = chunkScanner.taskCount
+
+    val maintainTaskCount: Int
+        get() = mailbox.size()
+
+    val heatQueueSize: Int
+        get() = heatQueue.size
+
     override fun queryPositive(chunkPos: ChunkPos): HeatStorage {
         val packed = chunkPos.toLong()
         val data = positiveHeatCache[packed]?.get()

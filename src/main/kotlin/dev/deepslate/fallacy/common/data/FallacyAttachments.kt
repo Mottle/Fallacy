@@ -5,6 +5,7 @@ import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.data.player.FoodHistory
 import dev.deepslate.fallacy.common.data.player.NutritionState
 import dev.deepslate.fallacy.race.impl.Unknown
+import dev.deepslate.fallacy.thermodynamics.HeatProcessState
 import dev.deepslate.fallacy.thermodynamics.data.HeatStorage
 import net.minecraft.resources.ResourceLocation
 import net.neoforged.bus.api.IEventBus
@@ -26,9 +27,10 @@ object FallacyAttachments {
             AttachmentType.builder(HeatStorage::of).serialize(HeatStorage.CODEC).build()
         }
 
-    val CHUNK_HEAT_SCANNED = REGISTRY.register("chunk_heat_scanned") { _ ->
-        AttachmentType.builder { _ -> false }.serialize(Codec.BOOL).build()
-    }
+    val HEAT_PROCESS_STATE: DeferredHolder<AttachmentType<*>, AttachmentType<HeatProcessState>> =
+        REGISTRY.register("heat_process_state") { _ ->
+            AttachmentType.builder { _ -> HeatProcessState.UNPROCESSED }.serialize(HeatProcessState.CODEC).build()
+        }
 
     val THIRST = REGISTRY.register("thirst") { _ ->
         AttachmentType.builder { _ -> 20f }.serialize(Codec.FLOAT).build()
