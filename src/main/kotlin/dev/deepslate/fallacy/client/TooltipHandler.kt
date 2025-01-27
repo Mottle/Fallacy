@@ -4,12 +4,15 @@ import com.mojang.datafixers.util.Either
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.capability.FallacyCapabilities
 import dev.deepslate.fallacy.common.data.player.FoodHistory
+import dev.deepslate.fallacy.common.item.FallacyItemTags
 import dev.deepslate.fallacy.common.item.component.FallacyDataComponents
 import dev.deepslate.fallacy.util.extendedProperties
 import net.minecraft.ChatFormatting
 import net.minecraft.client.Minecraft
 import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
+import net.minecraft.tags.TagKey
+import net.minecraft.world.item.Item
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.bus.api.EventPriority
 import net.neoforged.bus.api.SubscribeEvent
@@ -94,5 +97,31 @@ object TooltipHandler {
                     .append(Component.literal(": $formated%").withStyle(ChatFormatting.ITALIC, ChatFormatting.BLUE))
             )
         )
+    }
+
+    @SubscribeEvent
+    fun onRockTypeTooltip(event: RenderTooltipEvent.GatherComponents) {
+        val stack = event.itemStack
+        val existedTags = stack.tags.filter(::matchRockTag).toList()
+
+        if (existedTags.isEmpty()) return
+
+        val tag = existedTags.first()
+        val key = when (tag) {
+            FallacyItemTags.IGNEOUS_ROCK -> "item.fallacy.tooltips.igneous_rock"
+            FallacyItemTags.METAMORPHIC_ROCK -> "item.fallacy.tooltips.metamorphic_rock"
+            else -> "item.fallacy.tooltips.sedimentary_rock"
+        }
+
+        event.tooltipElements.add(
+            Either.left(
+                Component.translatable(key)
+                    .withStyle(ChatFormatting.BOLD, ChatFormatting.WHITE)
+            )
+        )
+    }
+
+    private fun matchRockTag(tag: TagKey<Item>) = with(FallacyItemTags) {
+        tag == SEDIMENTARY_ROCK || tag == IGNEOUS_ROCK || tag == METAMORPHIC_ROCK
     }
 }

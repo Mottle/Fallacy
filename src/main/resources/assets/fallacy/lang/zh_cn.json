@@ -76,5 +76,8 @@
     "item.tooltips.full_level1": "零嘴",
     "item.tooltips.full_level2": "简餐",
     "item.tooltips.full_level3": "大餐",
-    "item.tooltips.full_level4": "饕餮盛宴"
+    "item.tooltips.full_level4": "饕餮盛宴",
+    "item.fallacy.tooltips.igneous_rock": "火成岩",
+    "item.fallacy.tooltips.metamorphic_rock": "变质岩",
+    "item.fallacy.tooltips.sedimentary_rock": "沉积岩"
 }
