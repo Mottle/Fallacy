@@ -1,15 +1,16 @@
 package dev.deepslate.fallacy.race.impl
 
 import dev.deepslate.fallacy.Fallacy
-import dev.deepslate.fallacy.behavior.BehaviorTags
+import dev.deepslate.fallacy.behavior.Behavior
+import dev.deepslate.fallacy.behavior.Behaviors
 import dev.deepslate.fallacy.common.capability.FallacyCapabilities
 import dev.deepslate.fallacy.common.capability.skeleton.ISkeleton
 import dev.deepslate.fallacy.common.data.FallacyAttachments
 import dev.deepslate.fallacy.common.data.player.NutritionState
 import dev.deepslate.fallacy.common.data.player.PlayerAttribute
 import dev.deepslate.fallacy.common.network.packet.BoneSyncPacket
-import dev.deepslate.fallacy.race.FallacyRaces
 import dev.deepslate.fallacy.race.Race
+import dev.deepslate.fallacy.race.Races
 import dev.deepslate.fallacy.race.Respawnable
 import dev.deepslate.fallacy.util.EntityHelper
 import dev.deepslate.fallacy.util.TickHelper
@@ -42,9 +43,9 @@ class Skeleton : Race, Respawnable {
     companion object {
         val ID = Fallacy.id("skeleton")
 
-        val TAGS = arrayOf(
-            BehaviorTags.UNDEAD, BehaviorTags.WEAKNESS2_IN_SUNLIGHT,
-            BehaviorTags.BURNING_IN_SUNLIGHT
+        val TAGS = listOf(
+            Behaviors.UNDEAD, Behaviors.WEAKNESS_2_IN_SUNLIGHT,
+            Behaviors.BURNING_IN_SUNLIGHT
         )
 
         internal fun internalKill(player: Player, source: DamageSource?) {
@@ -127,7 +128,7 @@ class Skeleton : Race, Respawnable {
         private fun check(entity: LivingEntity, item: ItemStack): Boolean {
             if (!item.`is`(Items.BONE)) return false
             if (entity !is Player) return false
-            if (!Race.get(entity).isSame(FallacyRaces.SKELETON)) return false
+            if (!Race.get(entity).isSame(Races.SKELETON)) return false
             return true
         }
 
@@ -208,12 +209,12 @@ class Skeleton : Race, Respawnable {
     }
 
     override fun set(player: ServerPlayer) {
-        BehaviorTags.set(player, *TAGS)
+        Behavior.addAll(player, TAGS)
         syncBone(player)
     }
 
     override fun remove(player: ServerPlayer) {
-        BehaviorTags.remove(player, *TAGS)
+        Behavior.removeAll(player, TAGS)
     }
 
     override fun onRespawn(

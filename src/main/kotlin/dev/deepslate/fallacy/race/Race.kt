@@ -47,13 +47,13 @@ interface Race {
 
         fun get(player: Player): Race {
             val raceId = getRaceId(player)
-            val race = FallacyRaces.REGISTRY.get(raceId) ?: Unknown.INSTANCE
+            val race = Races.REGISTRY.get(raceId) ?: Unknown.INSTANCE
             return race
         }
 
-        fun contains(raceId: ResourceLocation) = FallacyRaces.REGISTRY.containsKey(raceId)
+        fun contains(raceId: ResourceLocation) = Races.REGISTRY.containsKey(raceId)
 
-        fun get(raceId: ResourceLocation) = FallacyRaces.REGISTRY.get(raceId)
+        fun get(raceId: ResourceLocation) = Races.REGISTRY.get(raceId)
 
         fun getOrUnknown(raceId: ResourceLocation) = get(raceId) ?: Unknown.INSTANCE
 
