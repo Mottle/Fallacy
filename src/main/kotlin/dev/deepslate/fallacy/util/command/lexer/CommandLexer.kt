@@ -21,7 +21,7 @@ internal class CommandLexer {
             val c = queue.poll()
 
             if (c.isWhitespace()) break
-            else if (c.isLetter() || c.isDigit()) sb.append(c)
+            else if (c.isLetter() || c.isDigit() || c == '_') sb.append(c)
             else throw IllegalArgumentException("Command Lexer state in word: Unexpected character: $c")
         }
         return TokenType.Word(sb.toString())

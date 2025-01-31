@@ -5,13 +5,15 @@ import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.client.event.ClientTickEvent
 
-@EventBusSubscriber(modid = Fallacy.MOD_ID)
 object TickHelper {
     private var clientTickCounter = 0
 
-    @SubscribeEvent
-    fun onClientTick(event: ClientTickEvent.Post) {
-        clientTickCounter++
+    @EventBusSubscriber(modid = Fallacy.MOD_ID)
+    object Handler {
+        @SubscribeEvent
+        fun onClientTick(event: ClientTickEvent.Post) {
+            clientTickCounter++
+        }
     }
 
     val currentClientTick
@@ -25,4 +27,6 @@ object TickHelper {
     fun second(sec: Int) = sec * 20
 
     fun minute(min: Int) = second(60 * min)
+
+    fun hour(hour: Int) = minute(60 * hour)
 }

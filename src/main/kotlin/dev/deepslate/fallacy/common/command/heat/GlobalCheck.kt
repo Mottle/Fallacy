@@ -6,7 +6,7 @@ import dev.deepslate.fallacy.util.command.GameCommand
 import net.minecraft.commands.CommandSourceStack
 
 class GlobalCheck : GameCommand {
-    override val source: String = "fallacy heat globalCheck"
+    override val source: String = "fallacy heat global_check"
 
     override val suggestions: Map<String, SuggestionProvider<CommandSourceStack>> = emptyMap()
 

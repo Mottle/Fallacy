@@ -3,6 +3,7 @@ package dev.deepslate.fallacy.behavior
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.behavior.impl.*
 import net.minecraft.core.Registry
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceKey
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.bus.api.SubscribeEvent
@@ -19,7 +20,7 @@ object Behaviors {
 
     private val registry = DeferredRegister.create(REGISTRY, Fallacy.MOD_ID)
 
-    val UNDEAD: DeferredHolder<Behavior, SimpleBehavior> = registry.register("undead", SimpleBehavior::of)
+    val UNDEAD: DeferredHolder<Behavior, SymbolBehavior> = registry.register("undead", SymbolBehavior::of)
 
     val BURNING_IN_SUNLIGHT: DeferredHolder<Behavior, BurningInSunlight> =
         registry.register("burning_in_sunlight", ::BurningInSunlight)

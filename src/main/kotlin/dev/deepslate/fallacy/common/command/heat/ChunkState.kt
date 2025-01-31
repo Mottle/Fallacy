@@ -3,23 +3,24 @@ package dev.deepslate.fallacy.common.command.heat
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.suggestion.SuggestionProvider
-import dev.deepslate.fallacy.thermodynamics.impl.EnvironmentThermodynamicsEngine
+import dev.deepslate.fallacy.common.data.FallacyAttachments
 import dev.deepslate.fallacy.util.command.GameCommand
 import net.minecraft.commands.CommandSourceStack
-import net.minecraft.network.chat.Component
 
-class EngineState : GameCommand {
-    override val source: String = "fallacy heat engine_state"
+class ChunkState : GameCommand {
+    override val source: String = "fallacy heat chunk_state"
 
     override val suggestions: Map<String, SuggestionProvider<CommandSourceStack>> = emptyMap()
 
     override val permissionRequired: String? = null
 
     override fun execute(context: CommandContext<CommandSourceStack>): Int {
-        val level = context.source.level
-        val engine = EnvironmentThermodynamicsEngine.getEnvironmentEngineOrNull(level) ?: return 0
-
-        context.source.sendSystemMessage(Component.literal("scan: ${engine.scanTaskCount}, update: ${engine.maintainTaskCount}"))
+        if (context.source.player == null) return 0
+        val player = context.source.player!!
+        val blockPos = player.blockPosition()
+        val chunk = player.level().getChunkAt(blockPos)
+        val state = chunk.getData(FallacyAttachments.HEAT_PROCESS_STATE)
+        context.source.sendSystemMessage(state.toComponent())
 
         return Command.SINGLE_SUCCESS
     }

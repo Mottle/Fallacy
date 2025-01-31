@@ -15,10 +15,10 @@ data class BehaviorContainer(private val behaviorSet: Set<Behavior>) : Iterable<
         private fun fromResourceLocation(key: ResourceLocation): Behavior? = Behaviors.REGISTRY.get(key)
 
         val CODEC: Codec<BehaviorContainer> =
-            ResourceLocation.CODEC.listOf().xmap(::fromResourceLocations, BehaviorContainer::toKeys)
+            ResourceLocation.CODEC.listOf().xmap(::fromResourceLocations, BehaviorContainer::toResourceLocations)
     }
 
-    fun toKeys(): List<ResourceLocation> = behaviorSet.mapNotNull(Behaviors.REGISTRY::getKey)
+    fun toResourceLocations(): List<ResourceLocation> = behaviorSet.mapNotNull(Behaviors.REGISTRY::getKey)
 
     fun has(tag: ResourceLocation): Boolean = Behaviors.REGISTRY.get(tag)?.let { it in behaviorSet } == true
 

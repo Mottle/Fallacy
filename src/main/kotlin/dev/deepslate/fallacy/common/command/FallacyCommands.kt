@@ -1,5 +1,6 @@
 package dev.deepslate.fallacy.common.command
 
+import dev.deepslate.fallacy.common.command.heat.ChunkState
 import dev.deepslate.fallacy.common.command.heat.EngineState
 import dev.deepslate.fallacy.common.command.heat.GlobalCheck
 import dev.deepslate.fallacy.common.command.race.RaceGet
@@ -23,5 +24,6 @@ object FallacyCommands {
         add(RaceSet())
         add(GlobalCheck())
         add(EngineState())
+        add(ChunkState())
     }
 }
