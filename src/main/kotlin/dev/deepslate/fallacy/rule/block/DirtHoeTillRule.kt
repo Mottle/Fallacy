@@ -3,7 +3,6 @@ package dev.deepslate.fallacy.rule.block
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.block.FallacyBlocks
 import net.minecraft.core.Direction
-import net.minecraft.world.item.HoeItem
 import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks

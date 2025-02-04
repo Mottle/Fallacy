@@ -1,16 +1,7 @@
 package dev.deepslate.fallacy.race
 
 import dev.deepslate.fallacy.Fallacy
-import dev.deepslate.fallacy.race.impl.Elf
-import dev.deepslate.fallacy.race.impl.God
-import dev.deepslate.fallacy.race.impl.Gynou
-import dev.deepslate.fallacy.race.impl.Humankind
-import dev.deepslate.fallacy.race.impl.Orc
-import dev.deepslate.fallacy.race.impl.Rock
-import dev.deepslate.fallacy.race.impl.Skeleton
-import dev.deepslate.fallacy.race.impl.Unknown
-import dev.deepslate.fallacy.race.impl.Wood
-import dev.deepslate.fallacy.race.impl.Zombie
+import dev.deepslate.fallacy.race.impl.*
 import net.minecraft.resources.ResourceKey
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.bus.api.SubscribeEvent

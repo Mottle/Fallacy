@@ -6,7 +6,7 @@ import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload
 
-class WeatherSyncPacket(val weathers: List<WeatherInstance>): CustomPacketPayload {
+class WeatherSyncPacket(val weathers: List<WeatherInstance>) : CustomPacketPayload {
 
     companion object {
         val TYPE = CustomPacketPayload.Type<WeatherSyncPacket>(Fallacy.id("weather_sync_packet"))

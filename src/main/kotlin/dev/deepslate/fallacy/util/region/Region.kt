@@ -8,9 +8,9 @@ import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.level.Level
 
 sealed class Region {
-    abstract fun isIn(x: Int, y: Int, z: Int): Boolean
+    abstract fun contains(x: Int, y: Int, z: Int): Boolean
 
-    fun isIn(pos: BlockPos): Boolean = isIn(pos.x, pos.y, pos.z)
+    fun contains(pos: BlockPos): Boolean = contains(pos.x, pos.y, pos.z)
 
     abstract fun random(level: Level): Triple<Int, Int, Int>
 

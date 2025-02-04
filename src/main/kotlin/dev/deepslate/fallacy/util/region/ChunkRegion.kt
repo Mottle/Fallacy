@@ -34,7 +34,7 @@ data class ChunkRegion(val chunkStart: ChunkPos, val chunkEnd: ChunkPos) : Regio
         require(chunkStart.z <= chunkEnd.z) { "Chunk start z must be less than or equal to chunk end z." }
     }
 
-    override fun isIn(x: Int, y: Int, z: Int): Boolean =
+    override fun contains(x: Int, y: Int, z: Int): Boolean =
         x in chunkStart.minBlockX..chunkEnd.maxBlockX && z in chunkStart.minBlockZ..chunkEnd.maxBlockZ
 
     private val xStart = chunkStart.minBlockX

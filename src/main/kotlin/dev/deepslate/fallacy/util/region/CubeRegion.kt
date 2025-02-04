@@ -34,7 +34,7 @@ data class CubeRegion(val xStart: Int, val yStart: Int, val zStart: Int, val xEn
         )
     }
 
-    override fun isIn(x: Int, y: Int, z: Int): Boolean = x in xStart..xEnd && y in yStart..yEnd && z in zStart..zEnd
+    override fun contains(x: Int, y: Int, z: Int): Boolean = x in xStart..xEnd && y in yStart..yEnd && z in zStart..zEnd
 
     override fun random(level: Level): Triple<Int, Int, Int> {
         val source = level.random

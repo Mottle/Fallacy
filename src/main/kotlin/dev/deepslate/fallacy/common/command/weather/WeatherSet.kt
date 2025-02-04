@@ -7,8 +7,8 @@ import dev.deepslate.fallacy.util.command.suggestion.SimpleSuggestionProvider
 import dev.deepslate.fallacy.util.extension.weatherEngine
 import dev.deepslate.fallacy.util.region.UniversalRegion
 import dev.deepslate.fallacy.weather.FallacyWeathers
-import dev.deepslate.fallacy.weather.ServerWeatherEngine
 import dev.deepslate.fallacy.weather.WeatherInstance
+import dev.deepslate.fallacy.weather.impl.ServerWeatherEngine
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.arguments.ResourceLocationArgument
 

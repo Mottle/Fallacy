@@ -20,17 +20,18 @@ interface WeatherEngine {
     @EventBusSubscriber(modid = Fallacy.MOD_ID)
     object Handler {
 
-        const val SEC = 20
+        const val WEATHER_TICK_INTERVAL = 20
+
+        const val WIND_TICK_INTERVAL = 5
 
         @SubscribeEvent
         fun onLevelTick(event: LevelTickEvent.Post) {
             val level = event.level as Level
 
-            if (!TickHelper.checkServerTickRate(SEC)) return
-            if (level.dimension() != Level.OVERWORLD) return
-
-            level.weatherEngine?.tick()
-            level.windEngine?.tick()
+            with(level) {
+                if (TickHelper.checkServerTickRate(WEATHER_TICK_INTERVAL)) weatherEngine?.tick()
+                if (TickHelper.checkServerTickRate(WIND_TICK_INTERVAL)) windEngine?.tick()
+            }
         }
     }
 }

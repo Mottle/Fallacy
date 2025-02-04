@@ -18,7 +18,7 @@ object UniversalRegion : Region() {
         ByteBufCodecs.INT, { 0 }, { UniversalRegion }
     )
 
-    override fun isIn(x: Int, y: Int, z: Int): Boolean = true
+    override fun contains(x: Int, y: Int, z: Int): Boolean = true
 
     override fun random(level: Level): Triple<Int, Int, Int> {
         val source = level.random

@@ -1,10 +1,13 @@
-package dev.deepslate.fallacy.weather.wind
+package dev.deepslate.fallacy.weather.impl
 
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.util.extension.internalWindEngine
+import dev.deepslate.fallacy.weather.WindEngine
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3
 import net.neoforged.bus.api.SubscribeEvent
@@ -18,8 +21,8 @@ class ServerWindEngine(val level: ServerLevel) : WindEngine {
     }
 
     override fun tick() {
-//        val entities = level.allEntities.filter { it is LivingEntity || it is ItemEntity }
-//        entities.forEach(::tickEntity)
+        val entities = level.allEntities.filter { it is LivingEntity || it is ItemEntity }
+        entities.forEach(::tickEntity)
     }
 
     var globalWindVec: Vec3 = Vec3.ZERO
@@ -37,7 +40,7 @@ class ServerWindEngine(val level: ServerLevel) : WindEngine {
         }
     }
 
-    @EventBusSubscriber(modid = Fallacy.MOD_ID)
+    @EventBusSubscriber(modid = Fallacy.Companion.MOD_ID)
     object Handler {
         @SubscribeEvent
         fun onServerLevelLoad(event: LevelEvent.Load) {

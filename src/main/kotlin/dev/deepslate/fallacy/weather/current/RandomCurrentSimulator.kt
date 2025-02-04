@@ -6,9 +6,9 @@ import dev.deepslate.fallacy.util.extension.windEngine
 import dev.deepslate.fallacy.util.region.ChunkRegion
 import dev.deepslate.fallacy.util.region.CubeRegion
 import dev.deepslate.fallacy.weather.FallacyWeathers
-import dev.deepslate.fallacy.weather.ServerWeatherEngine
 import dev.deepslate.fallacy.weather.WeatherInstance
-import dev.deepslate.fallacy.weather.wind.ServerWindEngine
+import dev.deepslate.fallacy.weather.impl.ServerWeatherEngine
+import dev.deepslate.fallacy.weather.impl.ServerWindEngine
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.ChunkPos

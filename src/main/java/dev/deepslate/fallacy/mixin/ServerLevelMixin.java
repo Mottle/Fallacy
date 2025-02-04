@@ -1,11 +1,11 @@
 package dev.deepslate.fallacy.mixin;
 
 import dev.deepslate.fallacy.inject.FallacyWeatherExtension;
-import dev.deepslate.fallacy.weather.ServerWeatherEngine;
+import dev.deepslate.fallacy.weather.impl.ServerWeatherEngine;
 import dev.deepslate.fallacy.weather.WeatherEngine;
 import dev.deepslate.fallacy.weather.current.CurrentSimulator;
-import dev.deepslate.fallacy.weather.wind.ServerWindEngine;
-import dev.deepslate.fallacy.weather.wind.WindEngine;
+import dev.deepslate.fallacy.weather.impl.ServerWindEngine;
+import dev.deepslate.fallacy.weather.WindEngine;
 import net.minecraft.server.level.ServerLevel;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;

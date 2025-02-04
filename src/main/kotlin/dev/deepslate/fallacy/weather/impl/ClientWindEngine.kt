@@ -1,7 +1,8 @@
-package dev.deepslate.fallacy.weather.wind
+package dev.deepslate.fallacy.weather.impl
 
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.util.extension.internalWindEngine
+import dev.deepslate.fallacy.weather.WindEngine
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.Level
@@ -18,7 +19,7 @@ class ClientWindEngine : WindEngine {
         TODO("Not yet implemented")
     }
 
-    @EventBusSubscriber(modid = Fallacy.MOD_ID)
+    @EventBusSubscriber(modid = Fallacy.Companion.MOD_ID)
     object Handler {
         @SubscribeEvent
         fun onClientLevelLoad(event: LevelEvent.Load) {

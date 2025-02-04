@@ -33,7 +33,7 @@ data class CircleChunkRegion(val centerX: Int, val centerZ: Int, val radius: Int
         require(radius > 0) { "radius must be greater than 0." }
     }
 
-    override fun isIn(x: Int, y: Int, z: Int): Boolean {
+    override fun contains(x: Int, y: Int, z: Int): Boolean {
         val dx = x - centerX
         val dz = z - centerZ
         return dx * dx + dz * dz <= radius * radius

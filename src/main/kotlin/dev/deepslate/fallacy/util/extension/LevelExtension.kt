@@ -2,8 +2,8 @@ package dev.deepslate.fallacy.util.extension
 
 import dev.deepslate.fallacy.inject.FallacyWeatherExtension
 import dev.deepslate.fallacy.weather.WeatherEngine
+import dev.deepslate.fallacy.weather.WindEngine
 import dev.deepslate.fallacy.weather.current.CurrentSimulator
-import dev.deepslate.fallacy.weather.wind.WindEngine
 import net.minecraft.world.level.Level
 
 internal var Level.internalWeatherEngine: WeatherEngine?

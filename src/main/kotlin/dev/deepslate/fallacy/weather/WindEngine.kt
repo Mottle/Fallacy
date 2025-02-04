@@ -1,4 +1,4 @@
-package dev.deepslate.fallacy.weather.wind
+package dev.deepslate.fallacy.weather
 
 import net.minecraft.core.BlockPos
 import net.minecraft.world.phys.Vec3

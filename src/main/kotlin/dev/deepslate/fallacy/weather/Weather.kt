@@ -29,7 +29,7 @@ abstract class Weather {
 
     open fun tickWeatherEntity(entity: Entity, level: ServerLevel, pos: BlockPos) {}
 
-    open fun isValidIn(level: Level, pos: BlockPos): Boolean = true
+    open fun isValidAt(level: Level, pos: BlockPos): Boolean = true
 
     open val isWet: Boolean = false
 

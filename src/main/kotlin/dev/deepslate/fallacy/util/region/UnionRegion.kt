@@ -26,7 +26,7 @@ class UnionRegion(val union: List<Region> = emptyList()) : Region() {
         require(union.none { it is UniversalRegion }) { "UnionRegion cannot contain UniversalRegion!" }
     }
 
-    override fun isIn(x: Int, y: Int, z: Int): Boolean = union.any { it.isIn(x, y, z) }
+    override fun contains(x: Int, y: Int, z: Int): Boolean = union.any { it.contains(x, y, z) }
 
     override fun random(level: Level): Triple<Int, Int, Int> {
 //        val unionWithVolume = union.map { it to it.calculateVolume(level) }

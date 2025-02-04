@@ -7,11 +7,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.level.Level
-import kotlin.math.PI
-import kotlin.math.acos
-import kotlin.math.cbrt
-import kotlin.math.cos
-import kotlin.math.sin
+import kotlin.math.*
 
 data class SphereRegion(val centerX: Int, val centerY: Int, val centerZ: Int, val radius: Int) : Region() {
     companion object {
@@ -37,7 +33,7 @@ data class SphereRegion(val centerX: Int, val centerY: Int, val centerZ: Int, va
         require(radius > 0) { "Radius must be greater than 0." }
     }
 
-    override fun isIn(x: Int, y: Int, z: Int): Boolean {
+    override fun contains(x: Int, y: Int, z: Int): Boolean {
         val dx = x - centerX
         val dy = y - centerY
         val dz = z - centerZ

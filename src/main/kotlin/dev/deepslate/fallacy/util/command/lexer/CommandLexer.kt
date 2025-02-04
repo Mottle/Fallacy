@@ -1,7 +1,6 @@
 package dev.deepslate.fallacy.util.command.lexer
 
-import java.util.LinkedList
-import java.util.Queue
+import java.util.*
 
 internal class CommandLexer {
 

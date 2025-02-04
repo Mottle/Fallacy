@@ -26,7 +26,7 @@ class WeatherInstance(
     val priority: Int = weather.priority
 ) {
     companion object {
-        val CODEC = RecordCodecBuilder.create<WeatherInstance> { instance ->
+        val CODEC: Codec<WeatherInstance> = RecordCodecBuilder.create<WeatherInstance> { instance ->
             instance.group(
                 ResourceLocation.CODEC.fieldOf("weather").forGetter { it.weather.namespaceId },
                 Codec.INT.fieldOf("remaining_ticks").forGetter(WeatherInstance::remainingTicks),
@@ -75,16 +75,17 @@ class WeatherInstance(
 
     fun `is`(holder: Holder<Weather>): Boolean = holder.value().namespaceId == weather.namespaceId
 
-    fun isValidIn(level: Level, pos: BlockPos): Boolean = weather.isValidIn(level, pos)
+    fun isValidAt(level: Level, pos: BlockPos): Boolean = weather.isValidAt(level, pos)
 
-    fun isIn(pos: BlockPos) = region.isIn(pos)
+    fun contains(pos: BlockPos) = region.contains(pos)
 
     val isEnded: Boolean
         get() = remainingTicks <= 0
 
     val weatherEntity = weather.createWeatherEntity()
 
-    val isWet: Boolean = weather.isWet
+    val isWet: Boolean
+        get() = weather.isWet
 
     init {
         if (weatherEntityPos != null && weatherEntity != null) weatherEntity.setPos(weatherEntityPos)
@@ -96,7 +97,6 @@ class WeatherInstance(
         remainingTicks -= 20
 
         if (TickHelper.checkServerTickRate(weather.tickInterval)) weather.tick(level, region)
-
         if (weatherEntity != null && TickHelper.checkServerTickRate(weather.tickWeatherEntityInterval)) weather.tickWeatherEntity(
             weatherEntity,
             level,
@@ -105,7 +105,7 @@ class WeatherInstance(
 
         if (weather.shouldTickEntities(level, region) && TickHelper.checkServerTickRate(weather.tickEntityInterval)) {
             val entitiesInRegion = level.entities.all.filter { it is LivingEntity && it.isAlive }
-                .filter { region.isIn(it.blockPosition()) }
+                .filter { region.contains(it.blockPosition()) }
                 .filter { level.weatherEngine?.getWeatherAt(it.blockPosition())?.weather == weather }
 
             entitiesInRegion.forEach { weather.tickEntity(it as LivingEntity, level, it.blockPosition()) }

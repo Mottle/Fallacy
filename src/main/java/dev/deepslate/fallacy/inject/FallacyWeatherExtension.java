@@ -2,7 +2,7 @@ package dev.deepslate.fallacy.inject;
 
 import dev.deepslate.fallacy.weather.WeatherEngine;
 import dev.deepslate.fallacy.weather.current.CurrentSimulator;
-import dev.deepslate.fallacy.weather.wind.WindEngine;
+import dev.deepslate.fallacy.weather.WindEngine;
 import kotlin.NotImplementedError;
 
 public interface FallacyWeatherExtension {

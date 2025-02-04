@@ -1,4 +1,4 @@
-package dev.deepslate.fallacy.weather
+package dev.deepslate.fallacy.weather.impl
 
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.data.FallacyAttachments
@@ -6,7 +6,9 @@ import dev.deepslate.fallacy.common.network.packet.WeatherSyncPacket
 import dev.deepslate.fallacy.util.extension.internalWeatherEngine
 import dev.deepslate.fallacy.util.extension.weatherEngine
 import dev.deepslate.fallacy.util.region.UniversalRegion
-import dev.deepslate.fallacy.weather.impl.Clear
+import dev.deepslate.fallacy.weather.WeatherEngine
+import dev.deepslate.fallacy.weather.WeatherInstance
+import dev.deepslate.fallacy.weather.WeatherStorage
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
@@ -56,7 +58,7 @@ class ServerWeatherEngine(
     }
 
     override fun getWeatherAt(pos: BlockPos): WeatherInstance {
-        val weather = weatherStorage.find { w -> w.isIn(pos) && w.isValidIn(level, pos) && !w.isEnded }
+        val weather = weatherStorage.find { w -> w.contains(pos) && w.isValidAt(level, pos) && !w.isEnded }
         return weather ?: WeatherInstance(Clear, region = UniversalRegion)
     }
 
@@ -88,7 +90,7 @@ class ServerWeatherEngine(
         weatherStorage.add(weatherInstance)
     }
 
-    @EventBusSubscriber(modid = Fallacy.MOD_ID)
+    @EventBusSubscriber(modid = Fallacy.Companion.MOD_ID)
     object Handler {
         @SubscribeEvent
         fun onServerLevelLoad(event: LevelEvent.Load) {

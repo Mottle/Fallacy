@@ -3,11 +3,7 @@ package dev.deepslate.fallacy.common.item.component
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.deepslate.fallacy.Fallacy
-import dev.deepslate.fallacy.common.item.component.CladdingData.Cladding
-import dev.deepslate.fallacy.race.impl.Rock.CladdingAttributeModifier
-import dev.deepslate.fallacy.race.impl.Rock.CladdingEffect
-import dev.deepslate.fallacy.race.impl.Rock.CladdingEnchantmentAdder
-import dev.deepslate.fallacy.race.impl.Rock.CladdingInfo
+import dev.deepslate.fallacy.race.impl.Rock.*
 import net.minecraft.core.Holder
 import net.minecraft.core.HolderLookup
 import net.minecraft.network.codec.ByteBufCodecs
