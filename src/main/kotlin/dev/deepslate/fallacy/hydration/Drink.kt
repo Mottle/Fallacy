@@ -12,6 +12,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.phys.HitResult
@@ -38,7 +39,7 @@ object Drink {
         if (hit.type != HitResult.Type.BLOCK) return InteractionResult.PASS
 
         val pos = hit.blockPos
-        val state = level.getBlockState(pos)
+        val state = if (level.isAreaLoaded(pos, 0)) level.getBlockState(pos) else Blocks.AIR.defaultBlockState()
         val fluid = state.fluidState.type
 
         if (!fluid.isSame(Fluids.WATER)) return InteractionResult.PASS

@@ -3,7 +3,6 @@ package dev.deepslate.fallacy.behavior
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.behavior.impl.*
 import net.minecraft.core.Registry
-import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceKey
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.bus.api.SubscribeEvent

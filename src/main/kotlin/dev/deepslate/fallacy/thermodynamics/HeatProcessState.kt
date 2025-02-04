@@ -21,7 +21,8 @@ enum class HeatProcessState {
     }
 
     fun toComponent(): Component = when (this) {
-        CORRECTED -> Component.empty().append(corrected.copy()).append(Component.literal("|Pending|Error|Unprocessed").withStyle(ChatFormatting.GRAY))
+        CORRECTED -> Component.empty().append(corrected.copy())
+            .append(Component.literal("|Pending|Error|Unprocessed").withStyle(ChatFormatting.GRAY))
 
         PENDING -> Component.literal("Corrected|").withStyle(ChatFormatting.GRAY).append(pending)
             .append(Component.literal("|Error|Unprocessed|").withStyle(ChatFormatting.GRAY))

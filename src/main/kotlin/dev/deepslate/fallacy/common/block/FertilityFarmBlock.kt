@@ -38,6 +38,7 @@ open class FertilityFarmBlock(
          * @see net.minecraft.world.level.block.FarmBlock.isNearWater
          */
         protected fun isNearWater(level: LevelReader, pos: BlockPos): Boolean {
+            if (!level.isAreaLoaded(pos, 0)) return false
             val state = level.getBlockState(pos);
             for (blockPos in BlockPos.betweenClosed(pos.offset(-4, 0, -4), pos.offset(4, 1, 4))) {
                 if (state.canBeHydrated(level, pos, level.getFluidState(blockPos), blockPos)) {
