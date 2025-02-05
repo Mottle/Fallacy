@@ -87,7 +87,7 @@ class Skeleton : Race, Respawnable {
             val realArmor = player.getAttributeValue(Attributes.ARMOR).toFloat()
             val prob = getProbability(realArmor, fixedDamage)
             val beforeLoss = floor(sqrt(max(0f, fixedDamage)))
-            val boneLoss = if (player.random.nextIntBetweenInclusive(0, 99) < prob) 0f else beforeLoss
+            val boneLoss = if (player.random.nextIntBetweenInclusive(0, 99) < prob) beforeLoss else 0f
             cap.bone -= boneLoss
             return cap.bone
         }
@@ -112,7 +112,8 @@ class Skeleton : Race, Respawnable {
 
     @EventBusSubscriber(modid = Fallacy.MOD_ID)
     object Handler {
-        fun handleBoneSync(data: BoneSyncPacket, context: IPayloadContext) {
+        //client side
+        internal fun handleBoneSync(data: BoneSyncPacket, context: IPayloadContext) {
             context.player().setData(FallacyAttachments.BONE, data.bone)
             Fallacy.LOGGER.info("Syncing bone.")
         }
