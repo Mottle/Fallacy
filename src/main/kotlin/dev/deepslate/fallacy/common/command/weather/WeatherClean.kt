@@ -1,5 +1,6 @@
 package dev.deepslate.fallacy.common.command.weather
 
+import com.mojang.brigadier.Command
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.suggestion.SuggestionProvider
 import dev.deepslate.fallacy.util.command.GameCommand
@@ -15,7 +16,11 @@ class WeatherClean : GameCommand {
     override val permissionRequired: String? = null
 
     override fun execute(context: CommandContext<CommandSourceStack>): Int {
-        ((context.source.level.weatherEngine ?: return 0) as ServerWeatherEngine).removeAll()
-        return 1
+        val engine = context.source.level.weatherEngine as? ServerWeatherEngine ?: return 0
+
+        engine.clean()
+        engine.markDirty()
+
+        return Command.SINGLE_SUCCESS
     }
 }

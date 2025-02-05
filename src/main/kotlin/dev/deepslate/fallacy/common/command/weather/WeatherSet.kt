@@ -1,5 +1,6 @@
 package dev.deepslate.fallacy.common.command.weather
 
+import com.mojang.brigadier.Command
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.suggestion.SuggestionProvider
 import dev.deepslate.fallacy.util.command.GameCommand
@@ -29,6 +30,6 @@ class WeatherSet : GameCommand {
 
         engine.addWeather(instance)
         engine.markDirty()
-        return 1
+        return Command.SINGLE_SUCCESS
     }
 }
