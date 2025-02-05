@@ -43,7 +43,7 @@ interface Race {
             Fallacy.LOGGER.info("Syncing race id: $raceId to player [${player.name.string}, ${player.uuid}].")
         }
 
-        fun getRaceId(player: Player) = player.getData(FallacyAttachments.RACE_ID)
+        fun getRaceId(player: Player): ResourceLocation = player.getData(FallacyAttachments.RACE_ID)
 
         fun get(player: Player): Race {
             val raceId = getRaceId(player)
@@ -59,15 +59,13 @@ interface Race {
 
         fun setNewRace(player: ServerPlayer, race: Race) {
             val oldRace = get(player)
+            val diet = player.getCapability(FallacyCapabilities.DIET)!!
 
             oldRace.remove(player)
             player.setData(FallacyAttachments.RACE_ID, race.namespacedId)
             race.attribute.set(player)
-
-            val diet = player.getCapability(FallacyCapabilities.DIET)!!
             diet.nutrition = race.nutrition
             diet.sync()
-
             race.set(player)
             sync(player)
         }

@@ -62,5 +62,12 @@ object FallacyNetwork {
             BoneSyncPacket.STREAM_CODEC,
             Skeleton.Handler::handleBoneSync
         )
+
+        registrar.playToServer(
+            SelectRacePacket.TYPE,
+            SelectRacePacket.STREAM_CODEC,
+            RaceHandler::handleSelectRacePacket
+        )
+
     }
 }

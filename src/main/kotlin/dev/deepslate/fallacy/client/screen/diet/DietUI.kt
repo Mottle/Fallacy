@@ -26,11 +26,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
 
 class DietUI : ContextWrapperUI() {
-    override fun build(
-        context: UIContext,
-        layout: Layout,
-        theme: Theme
-    ): UIComponent {
+    override fun build(context: UIContext, layout: Layout, theme: Theme): UIComponent {
 
         val list = Align.Builder().withHorizontal(LayoutSetting.CENTER).build(getList())
         val title = getTitle()

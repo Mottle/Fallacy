@@ -2,6 +2,7 @@ package dev.deepslate.fallacy.race
 
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.race.impl.*
+import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.bus.api.SubscribeEvent
@@ -12,9 +13,9 @@ import net.neoforged.neoforge.registries.RegistryBuilder
 
 @EventBusSubscriber(modid = Fallacy.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 object FallacyRaces {
-    val KEY = ResourceKey.createRegistryKey<Race>(Fallacy.id("race"))
+    val KEY: ResourceKey<Registry<Race>> = ResourceKey.createRegistryKey<Race>(Fallacy.id("race"))
 
-    val REGISTRY = RegistryBuilder(KEY).sync(true).maxId(256).create()
+    val REGISTRY: Registry<Race> = RegistryBuilder(KEY).sync(true).maxId(256).create()
 
     private val registry = DeferredRegister.create(REGISTRY, Fallacy.MOD_ID)
 
