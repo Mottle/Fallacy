@@ -10,6 +10,7 @@ internal class CommandLexer {
         const val INT_ARG = 'i'
         const val FLOAT_ARG = 'f'
         const val BOOL_ARG = 'b'
+        const val RESOURCE_LOCATION_ARG = 'r'
         const val ARG_L = '<'
         const val ARG_R = '>'
     }
@@ -45,6 +46,7 @@ internal class CommandLexer {
             INT_ARG -> scanFor(queue, TokenType::IntArg)
             FLOAT_ARG -> scanFor(queue, TokenType::FloatArg)
             BOOL_ARG -> scanFor(queue, TokenType::BoolArg)
+            RESOURCE_LOCATION_ARG -> scanFor(queue, TokenType::ResourceLocationArg)
             else -> throw IllegalArgumentException("Command Lexer state in argument: Unexpected character: $c")
         }
     }

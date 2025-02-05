@@ -22,7 +22,11 @@ object TickHelper {
     val currentServerTick
         get() = ServerHelper.server?.tickCount ?: -1
 
-    fun checkServerTickRate(rate: Int) = currentServerTick % rate == 0
+    fun checkServerTickRate(rate: Int): Boolean = currentServerTick % rate == 0
+
+    fun checkServerSecondRate(second: Int): Boolean = checkServerTickRate(second * 20)
+
+    fun checkServerMinuteRate(minute: Int): Boolean = checkServerSecondRate(minute * 60)
 
     fun second(sec: Int) = sec * 20
 

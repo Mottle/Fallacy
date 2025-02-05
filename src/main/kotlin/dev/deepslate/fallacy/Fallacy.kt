@@ -15,6 +15,8 @@ import dev.deepslate.fallacy.race.Races
 import dev.deepslate.fallacy.rule.RangedAttributeRule
 import dev.deepslate.fallacy.rule.item.VanillaExtendedFoodPropertiesRule
 import dev.deepslate.fallacy.rule.item.VanillaItemDeprecationRule
+import dev.deepslate.fallacy.util.region.RegionTypes
+import dev.deepslate.fallacy.weather.FallacyWeathers
 import net.minecraft.resources.ResourceLocation
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.bus.api.SubscribeEvent
@@ -36,6 +38,7 @@ class Fallacy(val modBus: IEventBus) {
     init {
         modBus.addListener(::commonSetup)
         Registration.init()
+        RegionTypes.init(modBus)
         FallacyAttachments.register(modBus)
 
         FallacyLootModifiers.init(modBus)
@@ -46,6 +49,7 @@ class Fallacy(val modBus: IEventBus) {
         Races.init(modBus)
         FallacyDataComponents.init(modBus)
         FallacyArmorMaterials.init(modBus)
+        FallacyWeathers.init(modBus)
 
         FallacyItems
         FallacyBlocks

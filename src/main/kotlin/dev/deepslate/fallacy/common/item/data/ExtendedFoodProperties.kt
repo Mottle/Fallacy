@@ -3,7 +3,7 @@ package dev.deepslate.fallacy.common.item.data
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.item.component.FallacyDataComponents
 import dev.deepslate.fallacy.common.item.component.NutritionData
-import dev.deepslate.fallacy.util.extendedProperties
+import dev.deepslate.fallacy.util.extension.extendedProperties
 import net.minecraft.core.component.DataComponents
 import net.minecraft.world.food.FoodProperties
 import net.neoforged.bus.api.EventPriority

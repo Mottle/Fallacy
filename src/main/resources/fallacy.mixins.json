@@ -10,17 +10,19 @@
         "CreeperMixin",
         "EnchantmentMixin",
         "EquipableMixin",
-        "LevelChunkMixin",
         "LivingEntityMixin",
         "NearestAttackableTargetGoalMixin",
-        "ServerLevelHeatMixin",
         "item.ItemExtensionMixin",
         "item.ItemStackMixin",
-        "player.PlayerMixin"
+        "player.PlayerMixin",
+        "ServerLevelMixin",
+        "LevelMixin",
+        "player.PlayerMixin",
     ],
     "client": [
         "client.ItemStackMixin",
-        "client.PlayerRenderMixin"
+        "client.PlayerRenderMixin",
+        "client.ClientLevelMixin"
     ],
     "injectors": {
         "defaultRequire": 1
