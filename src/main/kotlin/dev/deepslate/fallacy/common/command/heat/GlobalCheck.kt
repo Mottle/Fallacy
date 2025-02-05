@@ -1,5 +1,6 @@
 package dev.deepslate.fallacy.common.command.heat
 
+import com.mojang.brigadier.Command
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.suggestion.SuggestionProvider
 import dev.deepslate.fallacy.util.command.GameCommand
@@ -13,6 +14,7 @@ class GlobalCheck : GameCommand {
     override val permissionRequired: String? = null
 
     override fun execute(context: CommandContext<CommandSourceStack>): Int {
-        TODO("Not yet implemented")
+//        TODO("Not yet implemented")
+        return Command.SINGLE_SUCCESS
     }
 }

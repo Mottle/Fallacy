@@ -3,11 +3,12 @@ package dev.deepslate.fallacy.client.particle
 import dev.deepslate.fallacy.Fallacy
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.resources.ResourceLocation
+import net.neoforged.api.distmarker.Dist
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.client.event.TextureAtlasStitchedEvent
 
-@EventBusSubscriber(modid = Fallacy.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Fallacy.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = [Dist.CLIENT])
 object ParticleTextureAtlasSprites {
     private val location_particles = ResourceLocation.withDefaultNamespace("textures/atlas/particles.png")
 

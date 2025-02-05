@@ -18,7 +18,7 @@ class WeatherClean : GameCommand {
     override fun execute(context: CommandContext<CommandSourceStack>): Int {
         val engine = context.source.level.weatherEngine as? ServerWeatherEngine ?: return 0
 
-        engine.clean()
+        engine.removeAll()
         engine.markDirty()
 
         return Command.SINGLE_SUCCESS

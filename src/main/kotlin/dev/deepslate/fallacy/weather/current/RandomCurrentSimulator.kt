@@ -43,7 +43,7 @@ class RandomCurrentSimulator(val serverLevel: ServerLevel) : CurrentSimulator {
         if (serverLevel.weatherEngine == null) return
 
         tickWind()
-        weatherEngine.clean()
+        weatherEngine.maintain()
 
         if (weatherEngine.size >= MAX_WEATHER_SIZE) return
 
@@ -75,7 +75,7 @@ class RandomCurrentSimulator(val serverLevel: ServerLevel) : CurrentSimulator {
     private fun generateWeather(blockPos: BlockPos): WeatherInstance {
         val random = serverLevel.random
         val sec = random.nextInt(5, 40)
-        val radius = random.nextIntBetweenInclusive(4, 20) //天气半径
+        val radius = random.nextIntBetweenInclusive(10, 60) //天气半径
         val chunkCenter = ChunkPos(blockPos)
         val chunkStart = ChunkPos(chunkCenter.x - radius, chunkCenter.z - radius)
         val chunkEnd = ChunkPos(chunkCenter.x + radius, chunkCenter.z + radius)

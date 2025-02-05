@@ -39,7 +39,7 @@ class ServerWeatherEngine(
 
     override fun tick() {
         weatherStorage.forEach { weather -> weather.tick(level) }
-        clean()
+        maintain()
 //        if (TickHelper.checkServerSecondRate(30)) schedule()
 
         //若天气发生变化则向客户端同步
@@ -64,7 +64,7 @@ class ServerWeatherEngine(
 
     override fun isWet(pos: BlockPos): Boolean = getWeatherAt(pos).isWet
 
-    fun clean() {
+    fun maintain() {
         val removed = weatherStorage.filter { it.isEnded }
 
         if (removed.isEmpty()) return

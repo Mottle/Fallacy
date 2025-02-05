@@ -34,5 +34,9 @@ class SimpleSuggestionProvider(val factory: (CommandContext<CommandSourceStack>)
         val WEATHER = SimpleSuggestionProvider { _ ->
             FallacyWeathers.REGISTRY.keySet().map { it.toString() }
         }
+
+        val WEATHER_RANGE = SimpleSuggestionProvider {
+            listOf("local", "global")
+        }
     }
 }

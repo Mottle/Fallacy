@@ -3,6 +3,7 @@ package dev.deepslate.fallacy.common.command
 import dev.deepslate.fallacy.common.command.heat.ChunkState
 import dev.deepslate.fallacy.common.command.heat.EngineState
 import dev.deepslate.fallacy.common.command.heat.GlobalCheck
+import dev.deepslate.fallacy.common.command.heat.Here
 import dev.deepslate.fallacy.common.command.race.RaceGet
 import dev.deepslate.fallacy.common.command.race.RaceSet
 import dev.deepslate.fallacy.common.command.weather.WeatherClean
@@ -29,5 +30,6 @@ object FallacyCommands {
         add(ChunkState())
         add(WeatherSet())
         add(WeatherClean())
+        add(Here())
     }
 }
