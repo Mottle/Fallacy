@@ -6,7 +6,6 @@ import dev.deepslate.fallacy.common.network.packet.RaceIdSyncPacket
 import dev.deepslate.fallacy.common.network.packet.SelectRacePacket
 import dev.deepslate.fallacy.race.impl.Unknown
 import dev.deepslate.fallacy.util.TickHelper
-import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.neoforged.bus.api.SubscribeEvent
@@ -28,7 +27,7 @@ object Handler {
     //server side
     internal fun handleSelectRacePacket(data: SelectRacePacket, context: IPayloadContext) {
         val raceId = data.raceId
-        val race = FallacyRaces.REGISTRY.get(raceId) ?: Unknown.INSTANCE
+        val race = Races.REGISTRY.get(raceId) ?: Unknown.INSTANCE
         val player = context.player() as ServerPlayer
         Race.setNewRace(player, race)
     }

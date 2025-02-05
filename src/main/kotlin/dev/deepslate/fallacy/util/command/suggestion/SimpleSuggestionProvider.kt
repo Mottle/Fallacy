@@ -5,7 +5,6 @@ import com.mojang.brigadier.suggestion.SuggestionProvider
 import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import dev.deepslate.fallacy.race.Races
-import dev.deepslate.fallacy.race.FallacyRaces
 import dev.deepslate.fallacy.weather.FallacyWeathers
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.SharedSuggestionProvider

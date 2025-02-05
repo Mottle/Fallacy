@@ -2,7 +2,6 @@ package dev.deepslate.fallacy.common.block
 
 import dev.deepslate.fallacy.common.block.data.NPK
 import dev.deepslate.fallacy.common.datapack.DataPack
-import dev.deepslate.fallacy.util.extension.setting
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
 import net.minecraft.core.registries.BuiltInRegistries

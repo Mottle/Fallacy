@@ -1,7 +1,12 @@
 package dev.deepslate.fallacy.common.command
 
+import dev.deepslate.fallacy.common.command.heat.ChunkState
+import dev.deepslate.fallacy.common.command.heat.EngineState
+import dev.deepslate.fallacy.common.command.heat.GlobalCheck
 import dev.deepslate.fallacy.common.command.race.RaceGet
 import dev.deepslate.fallacy.common.command.race.RaceSet
+import dev.deepslate.fallacy.common.command.weather.WeatherClean
+import dev.deepslate.fallacy.common.command.weather.WeatherSet
 import dev.deepslate.fallacy.util.command.GameCommand
 
 object FallacyCommands {
