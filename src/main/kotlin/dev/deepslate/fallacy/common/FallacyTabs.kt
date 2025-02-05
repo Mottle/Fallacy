@@ -44,6 +44,11 @@ object FallacyTabs {
             .icon { FallacyItems.MIU_BERRIES.asStack() }.build()
     }
 
+    val GEOLOGY = simpleRegister("geology") { builder ->
+        builder.title(REG.addLang("itemGroup", Fallacy.id("geology"), "Fallacy: Geology"))
+            .icon { FallacyItems.Rock.GNEISS.asStack() }.build()
+    }
+
     val FARMING = simpleRegister("farming") { builder ->
         builder.title(REG.addLang("itemGroup", Fallacy.id("farming"), "Fallacy: Farming"))
             .icon { FallacyItems.Crop.BARLEY.asStack() }.build()

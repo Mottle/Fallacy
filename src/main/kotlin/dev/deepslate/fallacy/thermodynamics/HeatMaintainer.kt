@@ -1,5 +1,7 @@
 package dev.deepslate.fallacy.thermodynamics
 
+import dev.deepslate.fallacy.Fallacy
+import dev.deepslate.fallacy.common.data.FallacyAttachments
 import dev.deepslate.fallacy.thermodynamics.data.HeatStorage
 import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet
@@ -78,14 +80,20 @@ abstract class HeatMaintainer(val engine: ThermodynamicsEngine) {
     abstract fun checkBlock(pos: BlockPos)
 
     fun processHeatChanges(chunkPos: ChunkPos, changedPositions: Set<BlockPos>) {
-        setupCache(level, chunkPos, engine.cache)
-        val packed = chunkPos.toLong()
-        val chunk = chunkCache[packed] ?: return
-        if (changedPositions.isNotEmpty()) propagateBlockChanges(chunk, changedPositions)
+        try {
+            setupCache(level, chunkPos, engine.cache)
+            val packed = chunkPos.toLong()
+            val chunk = chunkCache[packed] ?: return
+            if (changedPositions.isNotEmpty()) propagateBlockChanges(chunk, changedPositions)
 
-        for (packed in markChangedChunk.iterator()) {
-            storageCache[packed]?.update()
-            chunkCache[packed]?.isUnsaved = true
+            for (packed in markChangedChunk.iterator()) {
+                storageCache[packed]?.update()
+                chunkCache[packed]?.isUnsaved = true
+            }
+        } catch (e: Exception) {
+            Fallacy.LOGGER.error(e)
+            level.getChunk(chunkPos.x, chunkPos.z)
+                .setData(FallacyAttachments.HEAT_PROCESS_STATE, HeatProcessState.ERROR)
         }
     }
 

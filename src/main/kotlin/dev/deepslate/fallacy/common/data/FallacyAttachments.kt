@@ -2,9 +2,11 @@ package dev.deepslate.fallacy.common.data
 
 import com.mojang.serialization.Codec
 import dev.deepslate.fallacy.Fallacy
+import dev.deepslate.fallacy.behavior.BehaviorContainer
 import dev.deepslate.fallacy.common.data.player.FoodHistory
 import dev.deepslate.fallacy.common.data.player.NutritionState
 import dev.deepslate.fallacy.race.impl.Unknown
+import dev.deepslate.fallacy.thermodynamics.HeatProcessState
 import dev.deepslate.fallacy.thermodynamics.data.HeatStorage
 import net.minecraft.resources.ResourceLocation
 import net.neoforged.bus.api.IEventBus
@@ -26,9 +28,10 @@ object FallacyAttachments {
             AttachmentType.builder(HeatStorage::of).serialize(HeatStorage.CODEC).build()
         }
 
-    val CHUNK_HEAT_SCANNED = REGISTRY.register("chunk_heat_scanned") { _ ->
-        AttachmentType.builder { _ -> false }.serialize(Codec.BOOL).build()
-    }
+    internal val HEAT_PROCESS_STATE: DeferredHolder<AttachmentType<*>, AttachmentType<HeatProcessState>> =
+        REGISTRY.register("heat_process_state") { _ ->
+            AttachmentType.builder { _ -> HeatProcessState.UNPROCESSED }.serialize(HeatProcessState.CODEC).build()
+        }
 
     val THIRST = REGISTRY.register("thirst") { _ ->
         AttachmentType.builder { _ -> 20f }.serialize(Codec.FLOAT).build()
@@ -43,10 +46,10 @@ object FallacyAttachments {
         AttachmentType.builder { _ -> Unknown.ID }.serialize(ResourceLocation.CODEC).copyOnDeath().build()
     }
 
-    val BEHAVIOR_TAGS = REGISTRY.register("behavior_tags") { _ ->
-        AttachmentType.builder { _ -> emptyList<ResourceLocation>() }.serialize(ResourceLocation.CODEC.listOf())
-            .copyOnDeath().build()
-    }
+    val BEHAVIORS: DeferredHolder<AttachmentType<*>, AttachmentType<BehaviorContainer>> =
+        REGISTRY.register("behaviors") { _ ->
+            AttachmentType.builder(BehaviorContainer::empty).serialize(BehaviorContainer.CODEC).copyOnDeath().build()
+        }
 
     val NUTRITION_STATE = REGISTRY.register("nutrition_state") { _ ->
         AttachmentType.builder { _ -> NutritionState() }.serialize(NutritionState.CODEC).copyOnDeath().build()

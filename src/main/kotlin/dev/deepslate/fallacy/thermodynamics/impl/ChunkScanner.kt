@@ -1,6 +1,7 @@
 package dev.deepslate.fallacy.thermodynamics.impl
 
 import dev.deepslate.fallacy.common.data.FallacyAttachments
+import dev.deepslate.fallacy.thermodynamics.HeatProcessState
 import dev.deepslate.fallacy.thermodynamics.ThermodynamicsEngine
 import dev.deepslate.fallacy.thermodynamics.data.HeatProcessQueue
 import net.minecraft.core.BlockPos
@@ -17,24 +18,25 @@ class ChunkScanner(
     private val mailbox =
         ProcessorMailbox.create(Executors.newFixedThreadPool(threadAmount), "fallacy-thermodynamics-scan")
 
+    val taskCount: Int
+        get() = mailbox.size()
+
     fun enqueue(chunk: ChunkAccess) {
-        if (hasScanned(chunk)) return
+        if (getProcessState(chunk) == HeatProcessState.CORRECTED) return
         forceEnqueue(chunk)
     }
 
     fun forceEnqueue(chunk: ChunkAccess) {
+        setProcessState(chunk, HeatProcessState.PENDING)
         mailbox.tell {
-//            val d1 = System.currentTimeMillis()
             scanSources(chunk)
-//            val d2 = System.currentTimeMillis()
-//            Fallacy.LOGGER.info("Scanned chunk ${chunk.pos} in ${d2 - d1}ms")
         }
     }
 
-    fun hasScanned(chunk: ChunkAccess): Boolean = chunk.getData(FallacyAttachments.CHUNK_HEAT_SCANNED)
+    fun getProcessState(chunk: ChunkAccess): HeatProcessState = chunk.getData(FallacyAttachments.HEAT_PROCESS_STATE)
 
-    fun markScanned(chunk: ChunkAccess) {
-        chunk.setData(FallacyAttachments.CHUNK_HEAT_SCANNED, true)
+    fun setProcessState(chunk: ChunkAccess, state: HeatProcessState) {
+        chunk.setData(FallacyAttachments.HEAT_PROCESS_STATE, state)
     }
 
 
@@ -63,6 +65,6 @@ class ChunkScanner(
         }
 
         heatQueue.enqueueAll(chunk.pos, positions)
-        markScanned(chunk)
+        setProcessState(chunk, HeatProcessState.CORRECTED)
     }
 }

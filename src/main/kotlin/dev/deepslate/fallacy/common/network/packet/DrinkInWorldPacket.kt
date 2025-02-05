@@ -12,7 +12,8 @@ class DrinkInWorldPacket : CustomPacketPayload {
 
         val PACKET = DrinkInWorldPacket()
 
-        val STREAM_CODEC = StreamCodec.unit<ByteBuf, DrinkInWorldPacket>(PACKET)
+        val STREAM_CODEC: StreamCodec<ByteBuf, DrinkInWorldPacket> =
+            StreamCodec.unit<ByteBuf, DrinkInWorldPacket>(PACKET)
     }
 
     override fun type(): CustomPacketPayload.Type<out CustomPacketPayload> = TYPE

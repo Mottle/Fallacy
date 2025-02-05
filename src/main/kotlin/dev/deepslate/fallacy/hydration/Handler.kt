@@ -103,7 +103,7 @@ object Handler {
 
     internal fun handleThirstSyncPacket(data: ThirstSyncPacket, context: IPayloadContext) {
         context.player().getCapability(FallacyCapabilities.THIRST)!!.value = data.value
-        Fallacy.LOGGER.info("Syncing thirst.")
+//        Fallacy.LOGGER.info("Syncing thirst.")
     }
 
     internal fun handleDrinkInWorldPacket(data: DrinkInWorldPacket, context: IPayloadContext) {

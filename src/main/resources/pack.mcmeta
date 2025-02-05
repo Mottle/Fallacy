@@ -2,5 +2,11 @@
     "pack": {
         "description": "fallacy resources",
         "pack_format": 48
+    },
+    "filter": {
+        "block": [{
+            "namespace": "minecraft",
+            "path": "recipe/nnothing"
+        }]
     }
 }

@@ -7,12 +7,13 @@ import net.minecraft.resources.ResourceKey
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
+import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredRegister
 import net.neoforged.neoforge.registries.NewRegistryEvent
 import net.neoforged.neoforge.registries.RegistryBuilder
 
 @EventBusSubscriber(modid = Fallacy.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
-object FallacyRaces {
+object Races {
     val KEY: ResourceKey<Registry<Race>> = ResourceKey.createRegistryKey<Race>(Fallacy.id("race"))
 
     val REGISTRY: Registry<Race> = RegistryBuilder(KEY).sync(true).maxId(256).create()
@@ -28,23 +29,23 @@ object FallacyRaces {
         registry.register(bus)
     }
 
-    val UNKNOWN = registry.register(Unknown.ID.path) { _ -> Unknown.INSTANCE }
+    val UNKNOWN: DeferredHolder<Race, Unknown> = registry.register(Unknown.ID.path) { _ -> Unknown.INSTANCE }
 
-    val HUMANKIND = registry.register(Humankind.ID.path) { _ -> Humankind() }
+    val HUMANKIND: DeferredHolder<Race, Humankind> = registry.register(Humankind.ID.path, ::Humankind)
 
-    val ZOMBIE = registry.register(Zombie.ID.path) { _ -> Zombie() }
+    val ZOMBIE: DeferredHolder<Race, Zombie> = registry.register(Zombie.ID.path, ::Zombie)
 
-    val GYNOU = registry.register(Gynou.ID.path) { _ -> Gynou() }
+    val GYNOU: DeferredHolder<Race, Gynou> = registry.register(Gynou.ID.path, ::Gynou)
 
-    val ROCK = registry.register(Rock.ID.path) { _ -> Rock() }
+    val ROCK: DeferredHolder<Race, Rock> = registry.register(Rock.ID.path, ::Rock)
 
-    val GOD = registry.register(God.ID.path) { _ -> God() }
+    val GOD: DeferredHolder<Race, God> = registry.register(God.ID.path, ::God)
 
-    val WOOD = registry.register(Wood.ID.path) { _ -> Wood() }
+    val WOOD: DeferredHolder<Race, Wood> = registry.register(Wood.ID.path, ::Wood)
 
-    val ELF = registry.register(Elf.ID.path) { _ -> Elf() }
+    val ELF: DeferredHolder<Race, Elf> = registry.register(Elf.ID.path, ::Elf)
 
-    val ORC = registry.register(Orc.ID.path) { _ -> Orc() }
+    val ORC: DeferredHolder<Race, Orc> = registry.register(Orc.ID.path, ::Orc)
 
-    val SKELETON = registry.register(Skeleton.ID.path) { _ -> Skeleton() }
+    val SKELETON: DeferredHolder<Race, Skeleton> = registry.register(Skeleton.ID.path, ::Skeleton)
 }

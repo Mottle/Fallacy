@@ -1,10 +1,8 @@
 package dev.deepslate.fallacy.behavior.impl
 
-import dev.deepslate.fallacy.behavior.BehaviorTags
 import dev.deepslate.fallacy.behavior.TickableBehavior
 import dev.deepslate.fallacy.util.announce.Autoload
 import net.minecraft.core.BlockPos
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.effect.MobEffectInstance
@@ -26,6 +24,4 @@ class WeaknessInDay : TickableBehavior {
         if (player.isInvulnerable) return
         player.addEffect(createWeakness())
     }
-
-    override val tagRequired: List<ResourceLocation> = listOf(BehaviorTags.WEAKNESS_IN_DAY)
 }
