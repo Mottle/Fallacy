@@ -46,6 +46,7 @@ open class EnvironmentThermodynamicsEngine(override val level: Level) : Thermody
         chunkScanner.stop()
 
         mailbox.close()
+        executor.close()
 
         record.map {
             val chunkPos = ChunkPos(it)
@@ -213,7 +214,9 @@ open class EnvironmentThermodynamicsEngine(override val level: Level) : Thermody
         }
     }
 
-    private val mailbox = ProcessorMailbox.create(Executors.newFixedThreadPool(4), "fallacy-thermodynamics-process")
+    private val executor = Executors.newFixedThreadPool(4)
+
+    private val mailbox = ProcessorMailbox.create(executor, "fallacy-thermodynamics-process")
 
     //记录正在处理的区块
     private val record = ConcurrentSkipListSet<Long>()

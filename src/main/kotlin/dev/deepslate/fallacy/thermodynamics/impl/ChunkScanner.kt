@@ -19,8 +19,10 @@ class ChunkScanner(
 
     private val record = ConcurrentSkipListSet<Long>()
 
+    private val executor = Executors.newFixedThreadPool(threadAmount)
+
     private val mailbox =
-        ProcessorMailbox.create(Executors.newFixedThreadPool(threadAmount), "fallacy-thermodynamics-scan")
+        ProcessorMailbox.create(executor, "fallacy-thermodynamics-scan")
 
     val taskCount: Int
         get() = mailbox.size()
@@ -77,6 +79,7 @@ class ChunkScanner(
 
     fun stop() {
         mailbox.close()
+        executor.close()
         record.forEach {
             val chunkPos = ChunkPos(it)
             val chunk = engine.level.getChunk(chunkPos.x, chunkPos.z)
