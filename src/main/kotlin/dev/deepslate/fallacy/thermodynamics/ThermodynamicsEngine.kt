@@ -123,6 +123,9 @@ abstract class ThermodynamicsEngine {
             if (!TickHelper.checkServerTickRate(TickHelper.second(2))) return
 
             val player = event.entity as ServerPlayer
+
+            if (player.isSpectator) return
+
             val level = player.level() as ServerLevel
             val centerChunkPos = player.chunkPosition()
             val engine = getEngine(level)

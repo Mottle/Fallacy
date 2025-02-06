@@ -5,6 +5,7 @@ import dev.deepslate.fallacy.common.data.FallacyAttachments
 import dev.deepslate.fallacy.common.datapack.BiomesConfiguration
 import dev.deepslate.fallacy.common.datapack.DataPack
 import dev.deepslate.fallacy.inject.FallacyThermodynamicsExtension
+import dev.deepslate.fallacy.thermodynamics.HeatProcessState
 import dev.deepslate.fallacy.thermodynamics.HeatStorageCache
 import dev.deepslate.fallacy.thermodynamics.ThermodynamicsEngine
 import dev.deepslate.fallacy.thermodynamics.data.HeatProcessQueue
@@ -19,7 +20,9 @@ import net.minecraft.world.level.biome.Biomes
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.event.level.ChunkEvent
+import net.neoforged.neoforge.event.server.ServerStoppingEvent
 import java.lang.ref.WeakReference
+import java.util.concurrent.ConcurrentSkipListSet
 import java.util.concurrent.Executors
 
 open class EnvironmentThermodynamicsEngine(override val level: Level) : ThermodynamicsEngine(), HeatStorageCache {
@@ -38,6 +41,22 @@ open class EnvironmentThermodynamicsEngine(override val level: Level) : Thermody
     private val negativeHeatCache: Long2ObjectOpenHashMap<WeakReference<HeatStorage>> = Long2ObjectOpenHashMap()
 
     override val cache: HeatStorageCache = this
+
+    fun stop() {
+        chunkScanner.stop()
+
+        mailbox.close()
+
+        record.map {
+            val chunkPos = ChunkPos(it)
+            level.getChunk(chunkPos.x, chunkPos.z)
+        }.forEach { chunkScanner.setProcessState(it, HeatProcessState.STERN) }
+
+        heatQueue.forEach {
+            val chunk = level.getChunk(it.chunkPos.worldPosition)
+            chunkScanner.setProcessState(chunk, HeatProcessState.STERN)
+        }
+    }
 
     val scanTaskCount: Int
         get() = chunkScanner.taskCount
@@ -182,9 +201,22 @@ open class EnvironmentThermodynamicsEngine(override val level: Level) : Thermody
 //            val celsius = Temperature.celsius(heat)
 //            player.sendSystemMessage(Component.literal("heat: $celsius"))
 //        }
+
+        @SubscribeEvent
+        fun onServerStop(event: ServerStoppingEvent) {
+            val levels = event.server.allLevels
+
+            levels.forEach {
+                val engine = getEnvironmentEngineOrNull(it) ?: return@forEach
+                engine.stop()
+            }
+        }
     }
 
-    private val mailbox = ProcessorMailbox.create(Executors.newFixedThreadPool(3), "fallacy-thermodynamics-process")
+    private val mailbox = ProcessorMailbox.create(Executors.newFixedThreadPool(4), "fallacy-thermodynamics-process")
+
+    //记录正在处理的区块
+    private val record = ConcurrentSkipListSet<Long>()
 
     fun propagateChanges() {
         if (heatQueue.empty) return
@@ -193,10 +225,25 @@ open class EnvironmentThermodynamicsEngine(override val level: Level) : Thermody
         while (!heatQueue.empty) {
             val task = heatQueue.dequeue() ?: break
             val positions = task.changedPosition
+
             if (positions.isNotEmpty()) {
+                record.add(task.chunkPos.toLong())
                 mailbox.tell {
                     PositiveHeatMaintainer(this).processHeatChanges(task.chunkPos, task.changedPosition)
                     NegativeHeatMaintainer(this).processHeatChanges(task.chunkPos, task.changedPosition)
+
+                    if (task.initialized) {
+                        val chunk = level.getChunk(task.chunkPos.x, task.chunkPos.z)
+                        chunkScanner.setProcessState(chunk, HeatProcessState.CORRECTED)
+                    }
+
+                    record.remove(task.chunkPos.toLong())
+                }
+            } else {
+                if (task.initialized) {
+                    val chunk = level.getChunk(task.chunkPos.x, task.chunkPos.z)
+
+                    chunkScanner.setProcessState(chunk, HeatProcessState.CORRECTED)
                 }
             }
         }

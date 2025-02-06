@@ -44,6 +44,8 @@ class RaceSet : GameCommand {
 //        race.set(player)
 //        Race.sync(player)
 
+        context.source.sendSystemMessage(Component.literal("Set $playerName's race to $raceId."))
+
         return Command.SINGLE_SUCCESS
     }
 }

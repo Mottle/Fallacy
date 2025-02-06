@@ -4,7 +4,6 @@ import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.data.player.FoodHistory
 import dev.deepslate.fallacy.common.data.player.NutritionState
 import dev.deepslate.fallacy.common.network.packet.*
-import dev.deepslate.fallacy.race.impl.rock.Handler as RockHandler
 import dev.deepslate.fallacy.race.impl.Skeleton
 import dev.deepslate.fallacy.weather.impl.ClientWeatherEngine
 import net.neoforged.bus.api.SubscribeEvent
@@ -12,6 +11,7 @@ import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent
 import dev.deepslate.fallacy.hydration.Handler as HydrationHandler
 import dev.deepslate.fallacy.race.Handler as RaceHandler
+import dev.deepslate.fallacy.race.impl.rock.Handler as RockHandler
 
 @EventBusSubscriber(modid = Fallacy.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 object FallacyNetwork {

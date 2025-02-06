@@ -14,6 +14,7 @@ import dev.deepslate.fallacy.weather.WeatherInstance
 import dev.deepslate.fallacy.weather.impl.ServerWeatherEngine
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.arguments.ResourceLocationArgument
+import net.minecraft.network.chat.Component
 import net.minecraft.world.level.ChunkPos
 
 class WeatherSet : GameCommand {
@@ -41,6 +42,8 @@ class WeatherSet : GameCommand {
 
         engine.addWeather(instance)
         engine.markDirty()
+
+        context.source.sendSuccess({ Component.literal("Weather set.") }, false)
 
         return Command.SINGLE_SUCCESS
     }

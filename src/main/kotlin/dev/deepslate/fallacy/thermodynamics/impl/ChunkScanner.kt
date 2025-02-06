@@ -6,7 +6,9 @@ import dev.deepslate.fallacy.thermodynamics.ThermodynamicsEngine
 import dev.deepslate.fallacy.thermodynamics.data.HeatProcessQueue
 import net.minecraft.core.BlockPos
 import net.minecraft.util.thread.ProcessorMailbox
+import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.chunk.ChunkAccess
+import java.util.concurrent.ConcurrentSkipListSet
 import java.util.concurrent.Executors
 
 class ChunkScanner(
@@ -15,6 +17,8 @@ class ChunkScanner(
     val heatQueue: HeatProcessQueue
 ) {
 
+    private val record = ConcurrentSkipListSet<Long>()
+
     private val mailbox =
         ProcessorMailbox.create(Executors.newFixedThreadPool(threadAmount), "fallacy-thermodynamics-scan")
 
@@ -22,12 +26,14 @@ class ChunkScanner(
         get() = mailbox.size()
 
     fun enqueue(chunk: ChunkAccess) {
-        if (getProcessState(chunk) == HeatProcessState.CORRECTED) return
+        val state = getProcessState(chunk)
+        if (state == HeatProcessState.CORRECTED || state == HeatProcessState.PENDING) return
         forceEnqueue(chunk)
     }
 
     fun forceEnqueue(chunk: ChunkAccess) {
         setProcessState(chunk, HeatProcessState.PENDING)
+        record.add(chunk.pos.toLong())
         mailbox.tell {
             scanSources(chunk)
         }
@@ -64,7 +70,17 @@ class ChunkScanner(
             }
         }
 
-        heatQueue.enqueueAll(chunk.pos, positions)
-        setProcessState(chunk, HeatProcessState.CORRECTED)
+        heatQueue.enqueueAll(chunk.pos, positions, true)
+        record.remove(chunk.pos.toLong())
+//        setProcessState(chunk, HeatProcessState.CORRECTED)
+    }
+
+    fun stop() {
+        mailbox.close()
+        record.forEach {
+            val chunkPos = ChunkPos(it)
+            val chunk = engine.level.getChunk(chunkPos.x, chunkPos.z)
+            setProcessState(chunk, HeatProcessState.STERN)
+        }
     }
 }

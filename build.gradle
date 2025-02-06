@@ -77,14 +77,14 @@ runs {
         // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
         systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
 
-        jvmArguments '-Xmx8G'
+        jvmArguments '-Xmx20G'
     }
 
     server {
         systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
 //        programArgument '--nogui'
 
-        jvmArguments '-Xms8G'
+        jvmArguments '-Xms20G'
     }
 
     // This run config launches GameTestServer and runs all registered gametests, then exits.

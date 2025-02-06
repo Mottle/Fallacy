@@ -3,11 +3,11 @@ package dev.deepslate.fallacy.common.item.component
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.deepslate.fallacy.Fallacy
-import dev.deepslate.fallacy.race.impl.rock.Rock.*
 import dev.deepslate.fallacy.race.impl.rock.cladding.CladdingAttributeModifier
 import dev.deepslate.fallacy.race.impl.rock.cladding.CladdingContainer
 import dev.deepslate.fallacy.race.impl.rock.cladding.CladdingEffect
 import dev.deepslate.fallacy.race.impl.rock.cladding.CladdingEnchantmentAdder
+import io.netty.buffer.ByteBuf
 import net.minecraft.core.Holder
 import net.minecraft.core.HolderLookup
 import net.minecraft.network.codec.ByteBufCodecs
@@ -23,13 +23,13 @@ import net.minecraft.world.item.enchantment.Enchantments
 data class CladdingData(val claddings: List<Cladding>) {
 
     companion object {
-        val CODEC = RecordCodecBuilder.create { instance ->
+        val CODEC: Codec<CladdingData> = RecordCodecBuilder.create { instance ->
             instance.group(
                 Codec.list(Cladding.CODEC).fieldOf("claddings").forGetter(CladdingData::claddings)
             ).apply(instance, ::CladdingData)
         }
 
-        val STREAM_CODEC = StreamCodec.composite(
+        val STREAM_CODEC: StreamCodec<ByteBuf, CladdingData> = StreamCodec.composite(
             Cladding.STREAM_CODEC.apply(ByteBufCodecs.list(16)), CladdingData::claddings, ::CladdingData
         )
 
@@ -38,14 +38,14 @@ data class CladdingData(val claddings: List<Cladding>) {
 
     data class Cladding(val textureId: ResourceLocation, val duration: Int) {
         companion object {
-            val CODEC = RecordCodecBuilder.create { instance ->
+            val CODEC: Codec<Cladding> = RecordCodecBuilder.create { instance ->
                 instance.group(
                     ResourceLocation.CODEC.fieldOf("id").forGetter(Cladding::textureId),
                     Codec.INT.fieldOf("duration").forGetter(Cladding::duration)
                 ).apply(instance, ::Cladding)
             }
 
-            val STREAM_CODEC = StreamCodec.composite(
+            val STREAM_CODEC: StreamCodec<ByteBuf, Cladding> = StreamCodec.composite(
                 ResourceLocation.STREAM_CODEC, Cladding::textureId,
                 ByteBufCodecs.INT, Cladding::duration, ::Cladding
             )

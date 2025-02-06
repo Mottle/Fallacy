@@ -7,6 +7,7 @@ import dev.deepslate.fallacy.util.command.GameCommand
 import dev.deepslate.fallacy.util.extension.weatherEngine
 import dev.deepslate.fallacy.weather.impl.ServerWeatherEngine
 import net.minecraft.commands.CommandSourceStack
+import net.minecraft.network.chat.Component
 
 class WeatherClean : GameCommand {
     override val source: String = "fallacy weather clean"
@@ -20,6 +21,8 @@ class WeatherClean : GameCommand {
 
         engine.removeAll()
         engine.markDirty()
+
+        context.source.sendSuccess({ Component.literal("Weather cleaned.") }, false)
 
         return Command.SINGLE_SUCCESS
     }
