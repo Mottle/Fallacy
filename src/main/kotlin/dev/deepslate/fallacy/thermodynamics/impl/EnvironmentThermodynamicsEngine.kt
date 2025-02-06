@@ -17,6 +17,7 @@ import net.minecraft.util.thread.ProcessorMailbox
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.biome.Biomes
+import net.minecraft.world.level.chunk.storage.IOWorker
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.event.level.ChunkEvent
@@ -24,6 +25,7 @@ import net.neoforged.neoforge.event.server.ServerStoppingEvent
 import java.lang.ref.WeakReference
 import java.util.concurrent.ConcurrentSkipListSet
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 open class EnvironmentThermodynamicsEngine(override val level: Level) : ThermodynamicsEngine(), HeatStorageCache {
 
@@ -46,7 +48,15 @@ open class EnvironmentThermodynamicsEngine(override val level: Level) : Thermody
         chunkScanner.stop()
 
         mailbox.close()
-        executor.close()
+        executor.shutdown()
+
+        try {
+            executor.awaitTermination(5, TimeUnit.SECONDS)
+        } catch (e: InterruptedException) {
+            Fallacy.LOGGER.error(e)
+        } finally {
+            executor.shutdownNow()
+        }
 
         record.map {
             val chunkPos = ChunkPos(it)

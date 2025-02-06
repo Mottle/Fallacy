@@ -48,16 +48,21 @@ class GlobalCheck : GameCommand {
             val size = (endChunkPos.x - startChunkPos.x + 1) * (endChunkPos.z - startChunkPos.z + 1)
             var progress = 0
             var lastRatio = 0
+
             for (x in startChunkPos.x..endChunkPos.x) for (z in startChunkPos.z..endChunkPos.z) {
                 val chunkPos = ChunkPos(x, z)
+
                 engine.scanChunk(chunkPos)
                 ++progress
+
                 val ratio = ((progress.toFloat() / size.toFloat()) * 100f).toInt()
+
                 if (ratio > lastRatio) {
                     lastRatio = ratio
                     context.source.sendSuccess({ Component.literal("Scanning... $ratio%") }, true)
                 }
             }
+
             context.source.sendSuccess({ Component.literal("Scan successful.") }, true)
             running = false
         }

@@ -6,7 +6,7 @@
     "filter": {
         "block": [{
             "namespace": "minecraft",
-            "path": "recipe/nnothing"
+            "path": "recipe/"
         }]
     }
 }
