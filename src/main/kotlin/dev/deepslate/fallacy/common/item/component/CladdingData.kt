@@ -3,7 +3,11 @@ package dev.deepslate.fallacy.common.item.component
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.deepslate.fallacy.Fallacy
-import dev.deepslate.fallacy.race.impl.Rock.*
+import dev.deepslate.fallacy.race.impl.rock.Rock.*
+import dev.deepslate.fallacy.race.impl.rock.cladding.CladdingAttributeModifier
+import dev.deepslate.fallacy.race.impl.rock.cladding.CladdingContainer
+import dev.deepslate.fallacy.race.impl.rock.cladding.CladdingEffect
+import dev.deepslate.fallacy.race.impl.rock.cladding.CladdingEnchantmentAdder
 import net.minecraft.core.Holder
 import net.minecraft.core.HolderLookup
 import net.minecraft.network.codec.ByteBufCodecs
@@ -63,7 +67,7 @@ data class CladdingData(val claddings: List<Cladding>) {
 
     infix operator fun plus(cladding: Cladding) = copy(claddings = claddings + cladding)
 
-    private fun collectTextures(claddingEffectMap: Map<ResourceLocation, CladdingInfo>): Map<ResourceLocation, Int> {
+    private fun collectTextures(claddingEffectMap: Map<ResourceLocation, CladdingContainer>): Map<ResourceLocation, Int> {
         val materialCountMap = mutableMapOf<ResourceLocation, Int>()
         for (c in claddings) {
             val id = c.textureId
@@ -75,7 +79,7 @@ data class CladdingData(val claddings: List<Cladding>) {
     }
 
     private inline fun <reified T : CladdingEffect, reified V, I> collectEffects(
-        claddingEffectMap: Map<ResourceLocation, CladdingInfo>,
+        claddingEffectMap: Map<ResourceLocation, CladdingContainer>,
         materialCountMap: Map<ResourceLocation, Int>,
         contextHandler: (T, Int) -> Pair<V, I>
     ): List<Pair<V, I>> = materialCountMap.map { (id, count) ->
@@ -88,7 +92,7 @@ data class CladdingData(val claddings: List<Cladding>) {
     }.flatten()
 
     fun getModifiers(
-        claddingEffectMap: Map<ResourceLocation, CladdingInfo>,
+        claddingEffectMap: Map<ResourceLocation, CladdingContainer>,
         slot: EquipmentSlot
     ): Map<Holder<Attribute>, AttributeModifier> {
         val materialCountMap = collectTextures(claddingEffectMap)
@@ -122,7 +126,7 @@ data class CladdingData(val claddings: List<Cladding>) {
     }
 
     fun getEnchantments(
-        claddingEffectMap: Map<ResourceLocation, CladdingInfo>,
+        claddingEffectMap: Map<ResourceLocation, CladdingContainer>,
         lookup: HolderLookup.RegistryLookup<Enchantment>
     ): Map<Holder<Enchantment>, Int> {
         val materialCountMap = collectTextures(claddingEffectMap)

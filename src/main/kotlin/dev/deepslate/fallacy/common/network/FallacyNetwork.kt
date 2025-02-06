@@ -4,7 +4,7 @@ import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.data.player.FoodHistory
 import dev.deepslate.fallacy.common.data.player.NutritionState
 import dev.deepslate.fallacy.common.network.packet.*
-import dev.deepslate.fallacy.race.impl.Rock
+import dev.deepslate.fallacy.race.impl.rock.Handler as RockHandler
 import dev.deepslate.fallacy.race.impl.Skeleton
 import dev.deepslate.fallacy.weather.impl.ClientWeatherEngine
 import net.neoforged.bus.api.SubscribeEvent
@@ -43,7 +43,7 @@ object FallacyNetwork {
         registrar.playToServer(
             CladdingPacket.TYPE,
             CladdingPacket.STREAM_CODEC,
-            Rock.Handler::handleCladdingPacket
+            RockHandler::handleCladdingPacket
         )
 
         registrar.playToClient(

@@ -2,6 +2,7 @@ package dev.deepslate.fallacy.race
 
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.race.impl.*
+import dev.deepslate.fallacy.race.impl.rock.Rock
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
 import net.neoforged.bus.api.IEventBus
