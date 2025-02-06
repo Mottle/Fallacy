@@ -8,6 +8,7 @@ import dev.deepslate.fallacy.race.Races
 import dev.deepslate.fallacy.weather.FallacyWeathers
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.SharedSuggestionProvider
+import net.minecraft.resources.ResourceLocation
 import java.util.concurrent.CompletableFuture
 
 class SimpleSuggestionProvider(val factory: (CommandContext<CommandSourceStack>) -> List<String>) :
@@ -28,7 +29,7 @@ class SimpleSuggestionProvider(val factory: (CommandContext<CommandSourceStack>)
         val SERVER_PLAYER_NAME = SimpleSuggestionProvider { it.source.server.playerNames.toList() }
 
         val RACE_ID = SimpleSuggestionProvider { _ ->
-            Races.REGISTRY.keySet().map { it.toString().replace(':', '.') }
+            Races.REGISTRY.keySet().map(ResourceLocation::toString)
         }
 
         val WEATHER = SimpleSuggestionProvider { _ ->

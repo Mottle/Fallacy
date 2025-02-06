@@ -43,7 +43,7 @@ class WeatherSet : GameCommand {
         engine.addWeather(instance)
         engine.markDirty()
 
-        context.source.sendSuccess({ Component.literal("Weather set.") }, false)
+        context.source.sendSuccess({ Component.literal("Weather set.") }, true)
 
         return Command.SINGLE_SUCCESS
     }

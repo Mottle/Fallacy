@@ -24,7 +24,6 @@ class RaceGet : GameCommand {
     override fun execute(context: CommandContext<CommandSourceStack>): Int {
         val playerName = StringArgumentType.getString(context, "player name")
         val server = context.source.server
-        val commandFrom = context.source.source
 //        val player = context.source.server.profileRepository.findProfilesByNames(arrayOf("Wangyee"), object : ProfileLookupCallback {
 //            override fun onProfileLookupSucceeded(profile: GameProfile?) {
 //                val player = ServerPlayer()
@@ -38,9 +37,12 @@ class RaceGet : GameCommand {
 
         val player = server.playerList.getPlayerByName(playerName)
         if (player == null) {
-            commandFrom.sendSystemMessage(Component.literal("$playerName not found."))
+            context.source.sendSuccess({ Component.literal("$playerName not found.") }, true)
         } else {
-            commandFrom.sendSystemMessage(Component.literal("Race: ${player.getData(FallacyAttachments.RACE_ID)}"))
+            context.source.sendSuccess(
+                { Component.literal("Race: ${player.getData(FallacyAttachments.RACE_ID)}.") },
+                true
+            )
         }
 
         return Command.SINGLE_SUCCESS

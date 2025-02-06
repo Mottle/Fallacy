@@ -22,7 +22,7 @@ class WeatherClean : GameCommand {
         engine.removeAll()
         engine.markDirty()
 
-        context.source.sendSuccess({ Component.literal("Weather cleaned.") }, false)
+        context.source.sendSuccess({ Component.literal("Weather cleaned.") }, true)
 
         return Command.SINGLE_SUCCESS
     }

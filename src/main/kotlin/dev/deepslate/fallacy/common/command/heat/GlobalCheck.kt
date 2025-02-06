@@ -55,10 +55,10 @@ class GlobalCheck : GameCommand {
                 val ratio = ((progress.toFloat() / size.toFloat()) * 100f).toInt()
                 if (ratio > lastRatio) {
                     lastRatio = ratio
-                    context.source.sendSuccess({ Component.literal("Scanning... $ratio%") }, false)
+                    context.source.sendSuccess({ Component.literal("Scanning... $ratio%") }, true)
                 }
             }
-            context.source.sendSuccess({ Component.literal("Scan successful.") }, false)
+            context.source.sendSuccess({ Component.literal("Scan successful.") }, true)
             running = false
         }
 
