@@ -10,6 +10,7 @@ import dev.deepslate.fallacy.thermodynamics.HeatStorageCache
 import dev.deepslate.fallacy.thermodynamics.ThermodynamicsEngine
 import dev.deepslate.fallacy.thermodynamics.data.HeatProcessQueue
 import dev.deepslate.fallacy.thermodynamics.data.HeatStorage
+import dev.deepslate.fallacy.util.Worker
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
@@ -17,15 +18,13 @@ import net.minecraft.util.thread.ProcessorMailbox
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.biome.Biomes
-import net.minecraft.world.level.chunk.storage.IOWorker
+import net.neoforged.bus.api.EventPriority
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.event.level.ChunkEvent
 import net.neoforged.neoforge.event.server.ServerStoppingEvent
 import java.lang.ref.WeakReference
 import java.util.concurrent.ConcurrentSkipListSet
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
 
 open class EnvironmentThermodynamicsEngine(override val level: Level) : ThermodynamicsEngine(), HeatStorageCache {
 
@@ -36,7 +35,7 @@ open class EnvironmentThermodynamicsEngine(override val level: Level) : Thermody
 
     private val heatQueue: HeatProcessQueue = HeatProcessQueue()
 
-    private val chunkScanner = ChunkScanner(3, this, heatQueue)
+    private val chunkScanner = ChunkScanner(this, heatQueue)
 
     private val positiveHeatCache: Long2ObjectOpenHashMap<WeakReference<HeatStorage>> = Long2ObjectOpenHashMap()
 
@@ -46,17 +45,7 @@ open class EnvironmentThermodynamicsEngine(override val level: Level) : Thermody
 
     fun stop() {
         chunkScanner.stop()
-
         mailbox.close()
-        executor.shutdown()
-
-        try {
-            executor.awaitTermination(5, TimeUnit.SECONDS)
-        } catch (e: InterruptedException) {
-            Fallacy.LOGGER.error(e)
-        } finally {
-            executor.shutdownNow()
-        }
 
         record.map {
             val chunkPos = ChunkPos(it)
@@ -213,7 +202,7 @@ open class EnvironmentThermodynamicsEngine(override val level: Level) : Thermody
 //            player.sendSystemMessage(Component.literal("heat: $celsius"))
 //        }
 
-        @SubscribeEvent
+        @SubscribeEvent(priority = EventPriority.NORMAL)
         fun onServerStop(event: ServerStoppingEvent) {
             val levels = event.server.allLevels
 
@@ -224,9 +213,7 @@ open class EnvironmentThermodynamicsEngine(override val level: Level) : Thermody
         }
     }
 
-    private val executor = Executors.newFixedThreadPool(4)
-
-    private val mailbox = ProcessorMailbox.create(executor, "fallacy-thermodynamics-process")
+    private val mailbox = ProcessorMailbox.create(Worker.IO_POOL, "fallacy-thermodynamics-process")
 
     //记录正在处理的区块
     private val record = ConcurrentSkipListSet<Long>()

@@ -1,6 +1,8 @@
 package dev.deepslate.fallacy.util.extension
 
+import dev.deepslate.fallacy.inject.FallacyThermodynamicsExtension
 import dev.deepslate.fallacy.inject.FallacyWeatherExtension
+import dev.deepslate.fallacy.thermodynamics.ThermodynamicsEngine
 import dev.deepslate.fallacy.weather.WeatherEngine
 import dev.deepslate.fallacy.weather.WindEngine
 import dev.deepslate.fallacy.weather.current.CurrentSimulator
@@ -32,3 +34,6 @@ internal var Level.internalCurrentSimulator: CurrentSimulator?
 
 val Level.currentSimulator: CurrentSimulator?
     get() = this.internalCurrentSimulator
+
+val Level.thermodynamicsEngine: ThermodynamicsEngine?
+    get() = (this as FallacyThermodynamicsExtension).`fallacy$getThermodynamicsEngine`()

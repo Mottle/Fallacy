@@ -14,7 +14,6 @@
         "LevelMixin",
         "LivingEntityMixin",
         "NearestAttackableTargetGoalMixin",
-        "ServerLevelHeatMixin",
         "ServerLevelMixin",
         "item.ItemExtensionMixin",
         "item.ItemStackMixin",

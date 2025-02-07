@@ -1,30 +1,25 @@
 package dev.deepslate.fallacy.thermodynamics.impl
 
-import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.data.FallacyAttachments
 import dev.deepslate.fallacy.thermodynamics.HeatProcessState
 import dev.deepslate.fallacy.thermodynamics.ThermodynamicsEngine
 import dev.deepslate.fallacy.thermodynamics.data.HeatProcessQueue
+import dev.deepslate.fallacy.util.Worker
 import net.minecraft.core.BlockPos
 import net.minecraft.util.thread.ProcessorMailbox
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.chunk.ChunkAccess
 import java.util.concurrent.ConcurrentSkipListSet
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
 
 class ChunkScanner(
-    val threadAmount: Int = 3,
     val engine: EnvironmentThermodynamicsEngine,
     val heatQueue: HeatProcessQueue
 ) {
 
     private val record = ConcurrentSkipListSet<Long>()
 
-    private val executor = Executors.newFixedThreadPool(threadAmount)
-
     private val mailbox =
-        ProcessorMailbox.create(executor, "fallacy-thermodynamics-scan")
+        ProcessorMailbox.create(Worker.IO_POOL, "fallacy-thermodynamics-scan")
 
     val taskCount: Int
         get() = mailbox.size()
@@ -81,15 +76,6 @@ class ChunkScanner(
 
     fun stop() {
         mailbox.close()
-        executor.shutdown()
-
-        try {
-            executor.awaitTermination(3, TimeUnit.SECONDS)
-        } catch (e: InterruptedException) {
-            Fallacy.LOGGER.error(e)
-        } finally {
-            executor.shutdownNow()
-        }
 
         record.forEach {
             val chunkPos = ChunkPos(it)

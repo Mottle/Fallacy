@@ -7,4 +7,8 @@ public interface FallacyThermodynamicsExtension {
     default ThermodynamicsEngine fallacy$getThermodynamicsEngine() {
         throw new NotImplementedError("FallacyHeatEngineExtension#fallacy$getThermodynamicsEngine not implemented. This will never happen.");
     }
+
+    default void fallacy$setThermodynamicsEngine(ThermodynamicsEngine engine) {
+        throw new NotImplementedError("FallacyHeatEngineExtension#fallacy$setThermodynamicsEngine not implemented. This will never happen.");
+    }
 }
