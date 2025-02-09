@@ -16,7 +16,7 @@ class ClientWindEngine : WindEngine {
     }
 
     override fun getWindAt(pos: BlockPos): Vec3 {
-        TODO("Not yet implemented")
+        return Vec3(0.4, 0.0, 0.4)
     }
 
     @EventBusSubscriber(modid = Fallacy.Companion.MOD_ID)

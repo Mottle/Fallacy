@@ -5,8 +5,8 @@ import dev.deepslate.fallacy.util.extension.weatherEngine
 import dev.deepslate.fallacy.util.extension.windEngine
 import dev.deepslate.fallacy.util.region.ChunkRegion
 import dev.deepslate.fallacy.util.region.CubeRegion
-import dev.deepslate.fallacy.weather.FallacyWeathers
 import dev.deepslate.fallacy.weather.WeatherInstance
+import dev.deepslate.fallacy.weather.Weathers
 import dev.deepslate.fallacy.weather.impl.ServerWeatherEngine
 import dev.deepslate.fallacy.weather.impl.ServerWindEngine
 import net.minecraft.core.BlockPos
@@ -48,7 +48,7 @@ class RandomCurrentSimulator(val serverLevel: ServerLevel) : CurrentSimulator {
         if (weatherEngine.size >= MAX_WEATHER_SIZE) return
 
         val weatherInstances = rollPosition().let(::chooseRandomDistinct).filter { pos ->
-            weatherEngine.getWeatherAt(pos).`is`(FallacyWeathers.CLEAR)
+            weatherEngine.getWeatherAt(pos).`is`(Weathers.CLEAR)
         }.map(::generateWeather)
 
         feedWeather(weatherEngine, weatherInstances)
@@ -81,7 +81,7 @@ class RandomCurrentSimulator(val serverLevel: ServerLevel) : CurrentSimulator {
         val chunkEnd = ChunkPos(chunkCenter.x + radius, chunkCenter.z + radius)
         val region = ChunkRegion(chunkStart, chunkEnd)
 
-        return WeatherInstance.create(FallacyWeathers.RAIN, sec, region)
+        return WeatherInstance.create(Weathers.RAIN, sec, region)
     }
 
     private fun chooseRandom(): List<BlockPos> = List(MAX_GENERATION_TRY_COUNT) {

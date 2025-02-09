@@ -9,8 +9,8 @@ import dev.deepslate.fallacy.util.command.suggestion.SimpleSuggestionProvider
 import dev.deepslate.fallacy.util.extension.weatherEngine
 import dev.deepslate.fallacy.util.region.ChunkRegion
 import dev.deepslate.fallacy.util.region.UniversalRegion
-import dev.deepslate.fallacy.weather.FallacyWeathers
 import dev.deepslate.fallacy.weather.WeatherInstance
+import dev.deepslate.fallacy.weather.Weathers
 import dev.deepslate.fallacy.weather.impl.ServerWeatherEngine
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.arguments.ResourceLocationArgument
@@ -27,7 +27,7 @@ class WeatherSet : GameCommand {
 
     override fun execute(context: CommandContext<CommandSourceStack>): Int {
         val weatherId = ResourceLocationArgument.getId(context, "weather")
-        val weather = FallacyWeathers.REGISTRY.get(weatherId) ?: return 0
+        val weather = Weathers.REGISTRY.get(weatherId) ?: return 0
         val range = StringArgumentType.getString(context, "range") ?: "global"
         val region = if (range == "global") UniversalRegion else {
             val player = context.source.player ?: return 0

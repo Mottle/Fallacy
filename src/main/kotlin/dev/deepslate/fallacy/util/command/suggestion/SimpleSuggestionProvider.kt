@@ -5,7 +5,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider
 import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import dev.deepslate.fallacy.race.Races
-import dev.deepslate.fallacy.weather.FallacyWeathers
+import dev.deepslate.fallacy.weather.Weathers
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.SharedSuggestionProvider
 import net.minecraft.resources.ResourceLocation
@@ -33,7 +33,7 @@ class SimpleSuggestionProvider(val factory: (CommandContext<CommandSourceStack>)
         }
 
         val WEATHER = SimpleSuggestionProvider { _ ->
-            FallacyWeathers.REGISTRY.keySet().map { it.toString() }
+            Weathers.REGISTRY.keySet().map { it.toString() }
         }
 
         val WEATHER_RANGE = SimpleSuggestionProvider {

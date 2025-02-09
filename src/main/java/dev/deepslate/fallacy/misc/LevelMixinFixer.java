@@ -1,7 +1,7 @@
 package dev.deepslate.fallacy.misc;
 
 import dev.deepslate.fallacy.inject.FallacyWeatherExtension;
-import dev.deepslate.fallacy.weather.FallacyWeathers;
+import dev.deepslate.fallacy.weather.Weathers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.level.Level;
@@ -22,7 +22,7 @@ public class LevelMixinFixer {
                 return true;
             }
             var weather = engine.getWeatherAt(player.blockPosition());
-            if (weather.is(FallacyWeathers.INSTANCE.getTHUNDER())) cir.setReturnValue(1f);
+            if (weather.is(Weathers.INSTANCE.getTHUNDER())) cir.setReturnValue(1f);
             return true;
         }
         return false;

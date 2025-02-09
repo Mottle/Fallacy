@@ -16,10 +16,10 @@ import net.neoforged.neoforge.registries.NewRegistryEvent
 import net.neoforged.neoforge.registries.RegistryBuilder
 
 @EventBusSubscriber(modid = Fallacy.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
-object FallacyWeathers {
+object Weathers {
     val KEY: ResourceKey<Registry<Weather>> = ResourceKey.createRegistryKey<Weather>(Fallacy.id("weather"))
 
-    val REGISTRY = RegistryBuilder(KEY).sync(true).maxId(256).create()
+    val REGISTRY: Registry<Weather> = RegistryBuilder(KEY).sync(true).maxId(256).create()
 
     @SubscribeEvent
     fun registerRegistries(event: NewRegistryEvent) {

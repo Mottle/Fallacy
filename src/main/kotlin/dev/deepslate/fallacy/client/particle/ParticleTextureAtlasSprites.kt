@@ -10,17 +10,25 @@ import net.neoforged.neoforge.client.event.TextureAtlasStitchedEvent
 
 @EventBusSubscriber(modid = Fallacy.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = [Dist.CLIENT])
 object ParticleTextureAtlasSprites {
-    private val location_particles = ResourceLocation.withDefaultNamespace("textures/atlas/particles.png")
+    val PARTICLE_LOCATION: ResourceLocation = ResourceLocation.withDefaultNamespace("textures/atlas/particles.png")
 
     lateinit var CLOUD_256: TextureAtlasSprite
         private set
 
+    lateinit var TUMBLEWEED: TextureAtlasSprite
+        private set
+
+    lateinit var WUGUN: TextureAtlasSprite
+        private set
+
     @SubscribeEvent
     fun onTextureStitch(event: TextureAtlasStitchedEvent) {
-        if (event.atlas.location() != location_particles) return
+        if (event.atlas.location() != PARTICLE_LOCATION) return
 
         with(event.atlas) {
             CLOUD_256 = getSprite(Fallacy.id("cloud256"))
+            TUMBLEWEED = getSprite(Fallacy.id("tumbleweed"))
+            WUGUN = getSprite(Fallacy.id("wugun"))
         }
     }
 

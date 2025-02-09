@@ -10,6 +10,8 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.biome.Biomes
 
 class Sandstorm : Weather() {
     companion object {
@@ -24,7 +26,13 @@ class Sandstorm : Weather() {
         if (!level.canSeeSky(pos)) return
 
         val effect = MobEffects.MOVEMENT_SLOWDOWN
-        val effectInstance = MobEffectInstance(effect, TickHelper.second(5), 0)
+        val effectInstance = MobEffectInstance(effect, TickHelper.second(12), 1)
         entity.addEffect(effectInstance)
+    }
+
+    override fun isValidAt(level: Level, pos: BlockPos): Boolean {
+        val biome = level.getBiome(pos)
+        return biome.`is`(Biomes.DESERT) || biome.`is`(Biomes.BADLANDS)
+                || biome.`is`(Biomes.WOODED_BADLANDS) || biome.`is`(Biomes.ERODED_BADLANDS)
     }
 }

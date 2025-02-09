@@ -36,7 +36,7 @@ class WeatherInstance(
                 Codec.intRange(0, 7).fieldOf("priority").forGetter(WeatherInstance::priority),
             ).apply(instance) { weatherId, remainingTicks, region, pos, priority ->
                 WeatherInstance(
-                    FallacyWeathers.REGISTRY.get(weatherId)!!,
+                    Weathers.REGISTRY.get(weatherId)!!,
                     remainingTicks,
                     region,
                     pos.getOrNull(),
@@ -52,7 +52,7 @@ class WeatherInstance(
             ByteBufCodecs.INT, WeatherInstance::priority,
             { id, ticks, region, priority ->
                 WeatherInstance(
-                    FallacyWeathers.REGISTRY.get(id)!!,
+                    Weathers.REGISTRY.get(id)!!,
                     ticks,
                     region,
                     priority = priority

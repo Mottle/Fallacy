@@ -2,7 +2,7 @@ package dev.deepslate.fallacy.client.particle.data
 
 class Rotation {
     // 横滚角度
-    private val yawField = UpdatableField(0f, 0f)
+    private val yawField = RecordField(0f)
 
     var previousYaw: Float
         get() = yawField.previous
@@ -17,7 +17,7 @@ class Rotation {
         }
 
     // 俯仰角度
-    private val pitchField = UpdatableField(0f, 0f)
+    private val pitchField = RecordField(0f, 0f)
 
     var previousPitch: Float
         get() = pitchField.previous
