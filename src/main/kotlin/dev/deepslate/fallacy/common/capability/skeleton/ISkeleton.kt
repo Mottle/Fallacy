@@ -4,6 +4,4 @@ interface ISkeleton {
     var bone: Float
 
     val max: Float
-
-    fun sync()
 }

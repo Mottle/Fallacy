@@ -1,5 +1,6 @@
 package dev.deepslate.fallacy.common.capability.diet
 
+import dev.deepslate.fallacy.common.capability.Synchronous
 import dev.deepslate.fallacy.common.data.FallacyAttachments
 import dev.deepslate.fallacy.common.data.player.FoodHistory
 import dev.deepslate.fallacy.common.data.player.NutritionState
@@ -14,7 +15,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.neoforged.neoforge.network.PacketDistributor
 
-class PlayerDiet(override val player: Player) : IDiet {
+class PlayerDiet(override val player: Player) : IDiet, Synchronous {
 
     override var history: FoodHistory
         get() = player.getData(FallacyAttachments.FOOD_HISTORY)
@@ -28,7 +29,7 @@ class PlayerDiet(override val player: Player) : IDiet {
             player.setData(FallacyAttachments.NUTRITION_STATE, value)
         }
 
-    override fun sync() {
+    override fun synchronize() {
         if (player !is ServerPlayer) return
         PacketDistributor.sendToPlayer(player, NutritionStateSyncPacket(nutrition))
         PacketDistributor.sendToPlayer(player, FoodHistorySyncPacket(history))

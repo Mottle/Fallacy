@@ -16,8 +16,6 @@ interface IDiet {
 
     var nutrition: NutritionState
 
-    fun sync()
-
     //food必须保证可食用
     fun eat(food: ItemStack) {
         if (food.has(FallacyDataComponents.NUTRITION)) {

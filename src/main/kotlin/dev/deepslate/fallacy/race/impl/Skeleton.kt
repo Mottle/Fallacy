@@ -4,6 +4,7 @@ import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.behavior.Behavior
 import dev.deepslate.fallacy.behavior.Behaviors
 import dev.deepslate.fallacy.common.capability.FallacyCapabilities
+import dev.deepslate.fallacy.common.capability.Synchronous
 import dev.deepslate.fallacy.common.capability.skeleton.ISkeleton
 import dev.deepslate.fallacy.common.data.FallacyAttachments
 import dev.deepslate.fallacy.common.data.player.NutritionState
@@ -123,7 +124,9 @@ class Skeleton : Race, Respawnable {
 //            val race = Race.get(event.entity)
 //            if (race !is Skeleton) return
 //            race.syncBone(event.entity as ServerPlayer)
-            event.entity.getCapability(FallacyCapabilities.SKELETON)?.sync()
+            val cap = event.entity.getCapability(FallacyCapabilities.SKELETON) ?: return
+
+            if (cap is Synchronous) cap.synchronize()
         }
 
         private fun check(entity: LivingEntity, item: ItemStack): Boolean {
@@ -201,7 +204,9 @@ class Skeleton : Race, Respawnable {
         if (player.isInvulnerable) return
         if (EntityHelper.checkUndeadBurning(level, player, position)) {
             cap.bone -= 0.5f
-            cap.sync()
+
+            if (cap is Synchronous) cap.synchronize()
+
             EntityHelper.damageHead(player, 2)
         }
 
