@@ -27,7 +27,7 @@ data class NutritionState(
 ) {
 
     companion object {
-        val CODEC = RecordCodecBuilder.create { instance ->
+        val CODEC: Codec<NutritionState> = RecordCodecBuilder.create { instance ->
             instance.group(
                 Nutrition.CODEC.fieldOf("carbohydrate").forGetter(NutritionState::carbohydrate),
                 Nutrition.CODEC.fieldOf("protein").forGetter(NutritionState::protein),
@@ -37,7 +37,7 @@ data class NutritionState(
             ).apply(instance, ::NutritionState)
         }
 
-        val STREAM_CODEC = StreamCodec.composite(
+        val STREAM_CODEC: StreamCodec<ByteBuf, NutritionState> = StreamCodec.composite(
             Nutrition.STREAM_CODEC, NutritionState::carbohydrate,
             Nutrition.STREAM_CODEC, NutritionState::protein,
             Nutrition.STREAM_CODEC, NutritionState::fat,

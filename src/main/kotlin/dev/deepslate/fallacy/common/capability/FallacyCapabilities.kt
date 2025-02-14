@@ -3,6 +3,7 @@ package dev.deepslate.fallacy.common.capability
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.capability.diet.DietProvider
 import dev.deepslate.fallacy.common.capability.diet.IDiet
+import dev.deepslate.fallacy.common.capability.heat.IBodyHeat
 import dev.deepslate.fallacy.common.capability.hydration.HydrationProvider
 import dev.deepslate.fallacy.common.capability.hydration.IHydration
 import dev.deepslate.fallacy.common.capability.skeleton.ISkeleton
@@ -31,6 +32,9 @@ object FallacyCapabilities {
 
     val SKELETON: EntityCapability<ISkeleton, Void?> =
         EntityCapability.createVoid(Fallacy.id("skeleton"), ISkeleton::class.java)
+
+    val BODY_HEAT: EntityCapability<IBodyHeat, Void?> =
+        EntityCapability.createVoid(Fallacy.id("body_heat"), IBodyHeat::class.java)
 
     @SubscribeEvent
     fun registerAll(event: RegisterCapabilitiesEvent) {

@@ -10,6 +10,7 @@ import dev.deepslate.fallacy.thermodynamics.HeatProcessState
 import dev.deepslate.fallacy.thermodynamics.data.HeatStorage
 import dev.deepslate.fallacy.weather.WeatherInstance
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.entity.LivingEntity
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.neoforge.attachment.AttachmentType
 import net.neoforged.neoforge.registries.DeferredHolder
@@ -34,7 +35,7 @@ object FallacyAttachments {
             AttachmentType.builder { _ -> HeatProcessState.UNPROCESSED }.serialize(HeatProcessState.CODEC).build()
         }
 
-    val THIRST = REGISTRY.register("thirst") { _ ->
+    val THIRST: DeferredHolder<AttachmentType<*>, AttachmentType<Float>> = REGISTRY.register("thirst") { _ ->
         AttachmentType.builder { _ -> 20f }.serialize(Codec.FLOAT).build()
     }
 
@@ -43,32 +44,46 @@ object FallacyAttachments {
         AttachmentType.builder { _ -> -1 }.build()
     }
 
-    val RACE_ID = REGISTRY.register("race_id") { _ ->
-        AttachmentType.builder { _ -> Unknown.ID }.serialize(ResourceLocation.CODEC).copyOnDeath().build()
-    }
+    val RACE_ID: DeferredHolder<AttachmentType<*>, AttachmentType<ResourceLocation>> =
+        REGISTRY.register("race_id") { _ ->
+            AttachmentType.builder { _ -> Unknown.ID }.serialize(ResourceLocation.CODEC).copyOnDeath().build()
+        }
 
     val BEHAVIORS: DeferredHolder<AttachmentType<*>, AttachmentType<BehaviorContainer>> =
         REGISTRY.register("behaviors") { _ ->
             AttachmentType.builder(BehaviorContainer::empty).serialize(BehaviorContainer.CODEC).copyOnDeath().build()
         }
 
-    val NUTRITION_STATE = REGISTRY.register("nutrition_state") { _ ->
-        AttachmentType.builder { _ -> NutritionState() }.serialize(NutritionState.CODEC).copyOnDeath().build()
-    }
+    val NUTRITION_STATE: DeferredHolder<AttachmentType<*>, AttachmentType<NutritionState>> =
+        REGISTRY.register("nutrition_state") { _ ->
+            AttachmentType.builder { _ -> NutritionState() }.serialize(NutritionState.CODEC).copyOnDeath().build()
+        }
 
-    val FOOD_HISTORY = REGISTRY.register("food_history") { _ ->
-        AttachmentType.builder { _ -> FoodHistory() }.serialize(FoodHistory.CODEC).copyOnDeath().build()
-    }
+    val FOOD_HISTORY: DeferredHolder<AttachmentType<*>, AttachmentType<FoodHistory>> =
+        REGISTRY.register("food_history") { _ ->
+            AttachmentType.builder { _ -> FoodHistory() }.serialize(FoodHistory.CODEC).copyOnDeath().build()
+        }
 
-    val BONE = REGISTRY.register("bone") { _ ->
+    val BONE: DeferredHolder<AttachmentType<*>, AttachmentType<Float>> = REGISTRY.register("bone") { _ ->
         AttachmentType.builder { _ -> 10f }.serialize(Codec.FLOAT).build()
     }
 
+    val BODY_HEAT: DeferredHolder<AttachmentType<*>, AttachmentType<Float>> = REGISTRY.register("body_heat") { _ ->
+        AttachmentType.builder { p ->
+            if (p is LivingEntity) {
+                return@builder p.getAttribute(FallacyAttributes.DEFAULT_BODY_HEAT)?.value?.toFloat() ?: 0f
+            }
+            return@builder 0f
+        }.serialize(Codec.FLOAT).build()
+    }
+
     object Level {
-        val WEATHERS = REGISTRY.register("weathers") { _ ->
-            AttachmentType.builder { _ -> emptyList<WeatherInstance>() }.serialize(Codec.list(WeatherInstance.CODEC))
-                .build()
-        }
+        val WEATHERS: DeferredHolder<AttachmentType<*>, AttachmentType<List<WeatherInstance>>> =
+            REGISTRY.register("weathers") { _ ->
+                AttachmentType.builder { _ -> emptyList<WeatherInstance>() }
+                    .serialize(Codec.list(WeatherInstance.CODEC))
+                    .build()
+            }
     }
 
     init {

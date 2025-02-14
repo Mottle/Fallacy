@@ -9,6 +9,7 @@ import dev.deepslate.fallacy.weather.impl.ClientWeatherEngine
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent
+import dev.deepslate.fallacy.bodyheat.Handler as BodyHeatHandler
 import dev.deepslate.fallacy.hydration.Handler as HydrationHandler
 import dev.deepslate.fallacy.race.Handler as RaceHandler
 import dev.deepslate.fallacy.race.impl.rock.Handler as RockHandler
@@ -75,6 +76,12 @@ object FallacyNetwork {
             WeatherSyncPacket.TYPE,
             WeatherSyncPacket.STREAM_CODEC,
             ClientWeatherEngine.Handler::handleWeatherSync
+        )
+
+        registrar.playToClient(
+            BodyHeatSyncPacket.TYPE,
+            BodyHeatSyncPacket.STREAM_CODEC,
+            BodyHeatHandler::handleSync
         )
     }
 }

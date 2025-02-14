@@ -14,7 +14,7 @@ class Dehydration : MobEffect(MobEffectCategory.HARMFUL, 0xffffff) {
     ): Boolean {
         val cap = livingEntity.getCapability(FallacyCapabilities.THIRST) ?: return false
 
-        //口渴至大于0f则消失
+        //口渴值大于0f则消失
         if (cap.value > 0f) return false
         return true
     }

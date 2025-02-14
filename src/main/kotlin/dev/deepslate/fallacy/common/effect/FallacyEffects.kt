@@ -2,9 +2,11 @@ package dev.deepslate.fallacy.common.effect
 
 import dev.deepslate.fallacy.Fallacy
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.neoforged.bus.api.IEventBus
+import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredRegister
 
 object FallacyEffects {
@@ -14,7 +16,7 @@ object FallacyEffects {
         registry.register(bus)
     }
 
-    val DEHYDRATION = registry.register("dehydration") { _ ->
+    val DEHYDRATION: DeferredHolder<MobEffect, MobEffect> = registry.register("dehydration") { _ ->
         val id = Fallacy.id("effect.dehydration")
         Dehydration().addAttributeModifier(
             Attributes.ATTACK_SPEED,

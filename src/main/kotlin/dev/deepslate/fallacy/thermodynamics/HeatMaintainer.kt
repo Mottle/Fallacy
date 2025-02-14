@@ -68,7 +68,7 @@ abstract class HeatMaintainer(val engine: ThermodynamicsEngine) {
 
     abstract fun getHeat(pos: BlockPos): Int
 
-    protected fun getBlockState(pos: BlockPos): BlockState {
+    protected fun getBlockStateFromCache(pos: BlockPos): BlockState {
         val sections = sectionCache[ChunkPos.asLong(pos)] ?: return Blocks.AIR.defaultBlockState()
         val sectionIndex = (pos.y - level.minBuildHeight) / 16
         val section = sections[sectionIndex]

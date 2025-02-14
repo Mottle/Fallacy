@@ -31,7 +31,7 @@ class NegativeHeatMaintainer(engine: ThermodynamicsEngine) : HeatMaintainer(engi
 
     override fun checkBlock(pos: BlockPos) {
         val currentHeat = getHeat(pos)
-        val state = getBlockState(pos)
+        val state = getBlockStateFromCache(pos)
         val emittedHeat = if (ThermodynamicsEngine.isHeatSource(state)) ThermodynamicsEngine.getEpitaxialHeat(
             state,
             level,
@@ -62,7 +62,7 @@ class NegativeHeatMaintainer(engine: ThermodynamicsEngine) : HeatMaintainer(engi
             for (direct in Direction.entries) {
                 val currentPos = pos.relative(direct)
                 val currentHeat = getHeat(currentPos)
-                val state = getBlockState(currentPos)
+                val state = getBlockStateFromCache(currentPos)
                 val thermalConductivity = ThermodynamicsEngine.getThermalConductivity(state, level, currentPos)
                 val nextHeat = (decay(propagatedHeat) / thermalConductivity).toInt()
 
@@ -85,7 +85,7 @@ class NegativeHeatMaintainer(engine: ThermodynamicsEngine) : HeatMaintainer(engi
                 //当前温度已经高于最高温度，不会再继续传播
                 if (currentHeat >= ThermodynamicsEngine.MAX_BIOME_HEAT) continue
 
-                val state = getBlockState(currentPos)
+                val state = getBlockStateFromCache(currentPos)
                 val thermalConductivity = ThermodynamicsEngine.getThermalConductivity(state, level, currentPos)
                 val nextHeat = (decay(propagatedHeat) / thermalConductivity).toInt()
 

@@ -2,6 +2,7 @@ package dev.deepslate.fallacy.common.item.component
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import io.netty.buffer.ByteBuf
 import net.minecraft.network.chat.Component
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
@@ -19,7 +20,7 @@ data class NutritionData(
 
         const val ITEM_DIET_MIN = -100f
 
-        val CODEC = RecordCodecBuilder.create { instance ->
+        val CODEC: Codec<NutritionData> = RecordCodecBuilder.create { instance ->
             instance.group(
                 Codec.floatRange(ITEM_DIET_MIN, ITEM_DIET_MAX).fieldOf("carbohydrate")
                     .forGetter(NutritionData::electrolyte),
@@ -31,7 +32,7 @@ data class NutritionData(
             ).apply(instance, ::NutritionData)
         }
 
-        val STREAM_CODEC = StreamCodec.composite(
+        val STREAM_CODEC: StreamCodec<ByteBuf, NutritionData> = StreamCodec.composite(
             ByteBufCodecs.FLOAT, NutritionData::electrolyte,
             ByteBufCodecs.FLOAT, NutritionData::protein,
             ByteBufCodecs.FLOAT, NutritionData::fat,
