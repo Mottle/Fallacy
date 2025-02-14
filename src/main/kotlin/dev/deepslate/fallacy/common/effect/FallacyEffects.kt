@@ -31,5 +31,5 @@ object FallacyEffects {
         )
     }
 
-    val FULL = registry.register("full", ::Full)
+    val FULL: DeferredHolder<MobEffect, Full> = registry.register("full", ::Full)
 }

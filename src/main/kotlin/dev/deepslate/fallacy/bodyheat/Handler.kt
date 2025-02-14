@@ -2,7 +2,7 @@ package dev.deepslate.fallacy.bodyheat
 
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.capability.FallacyCapabilities
-import dev.deepslate.fallacy.common.capability.heat.PlayerBodyHeat
+import dev.deepslate.fallacy.common.capability.Synchronous
 import dev.deepslate.fallacy.common.network.packet.BodyHeatSyncPacket
 import net.minecraft.server.level.ServerPlayer
 import net.neoforged.bus.api.SubscribeEvent
@@ -17,8 +17,8 @@ object Handler {
         val player = event.entity as ServerPlayer
         val capability = player.getCapability(FallacyCapabilities.BODY_HEAT)
 
-        if (capability is PlayerBodyHeat) {
-            capability.sync()
+        if (capability is Synchronous) {
+            capability.synchronize()
         }
     }
 
