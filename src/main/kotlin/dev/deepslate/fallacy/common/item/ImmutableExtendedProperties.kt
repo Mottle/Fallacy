@@ -1,0 +1,3 @@
+package dev.deepslate.fallacy.common.item
+
+interface ImmutableExtendedProperties

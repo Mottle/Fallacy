@@ -7,7 +7,7 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 
 open class FallacyBlockItem(block: Block, properties: Item.Properties, extendedProperties: ExtendedProperties) :
-    BlockItem(block, properties) {
+    BlockItem(block, properties), ImmutableExtendedProperties {
     init {
         this.internalExtendedProperties = extendedProperties
     }

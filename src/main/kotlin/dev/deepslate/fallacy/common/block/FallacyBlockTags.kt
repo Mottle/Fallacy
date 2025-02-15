@@ -16,4 +16,10 @@ object FallacyBlockTags {
     val SEDIMENTARY_ROCK: TagKey<Block> = BlockTags.create(Fallacy.id("sedimentary_rock"))
 
     val COAL: TagKey<Block> = BlockTags.create(Fallacy.id("coal"))
+
+    val INCORRECT_FOR_DIGGER_LEVEL_0: TagKey<Block> = BlockTags.create(Fallacy.id("incorrect_for_digger_level_0"))
+
+    val INCORRECT_FOR_DIGGER_LEVEL_1: TagKey<Block> = BlockTags.create(Fallacy.id("incorrect_for_digger_level_1"))
+
+    val INCORRECT_FOR_DIGGER_LEVEL_2: TagKey<Block> = BlockTags.create(Fallacy.id("incorrect_for_digger_level_2"))
 }

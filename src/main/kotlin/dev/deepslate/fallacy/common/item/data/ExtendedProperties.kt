@@ -1,14 +1,15 @@
 package dev.deepslate.fallacy.common.item.data
 
-data class ExtendedProperties(val rank: Int, val foodProperties: ExtendedFoodProperties?, val isDeprecated: Boolean) {
+data class ExtendedProperties(val rank: Int, val foodProperties: ExtendedFoodProperties?, val deprecated: Boolean) :
+    ExtendedPropertiesLike {
 
-    class Builder() {
+    class Builder() : ExtendedPropertiesLike {
 
         private var rank = 0
 
         private var foodProperties: ExtendedFoodProperties? = null
 
-        private var isDeprecated = false
+        private var deprecated = false
 
         fun withRank(rank: Int): Builder {
             this.rank = rank
@@ -21,12 +22,16 @@ data class ExtendedProperties(val rank: Int, val foodProperties: ExtendedFoodPro
         }
 
         fun deprecated(): Builder {
-            this.isDeprecated = true
+            this.deprecated = true
             return this
         }
 
-        fun build(): ExtendedProperties = ExtendedProperties(rank, foodProperties, isDeprecated)
+        fun build(): ExtendedProperties = ExtendedProperties(rank, foodProperties, deprecated)
+
+        override fun get(): ExtendedProperties = build()
     }
+
+    override fun get(): ExtendedProperties = this
 
     companion object {
 

@@ -26,7 +26,7 @@ object TooltipHandler {
         val stack = event.itemStack
         val item = stack.item
         val extendedProperties = item.extendedProperties
-        if ((extendedProperties != null && extendedProperties.isDeprecated) || stack.has(FallacyDataComponents.DEPRECATED)) {
+        if ((extendedProperties != null && extendedProperties.deprecated) || stack.has(FallacyDataComponents.DEPRECATED)) {
             event.tooltipElements.add(
                 Either.left(
                     Component.translatable("item.tooltips.deprecated")
@@ -123,5 +123,12 @@ object TooltipHandler {
 
     private fun matchRockTag(tag: TagKey<Item>) = with(FallacyItemTags) {
         tag == SEDIMENTARY_ROCK || tag == IGNEOUS_ROCK || tag == METAMORPHIC_ROCK
+    }
+
+    @SubscribeEvent
+    fun onRankTooltip(event: RenderTooltipEvent.GatherComponents) {
+        val stack = event.itemStack
+        val extendedProperties = stack.item.extendedProperties ?: return
+        val rank = extendedProperties.rank
     }
 }

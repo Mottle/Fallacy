@@ -1,9 +1,11 @@
 package dev.deepslate.fallacy.common.data.player
 
+import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.data.FallacyAttachments
 import dev.deepslate.fallacy.common.network.packet.FoodHistorySyncPacket
+import io.netty.buffer.ByteBuf
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
@@ -21,13 +23,13 @@ data class FoodHistory(val foods: List<ResourceLocation> = listOf()) {
     companion object {
         const val MAX_SIZE = 10
 
-        val CODEC = RecordCodecBuilder.create { instance ->
+        val CODEC: Codec<FoodHistory> = RecordCodecBuilder.create { instance ->
             instance.group(
                 ResourceLocation.CODEC.sizeLimitedListOf(MAX_SIZE).fieldOf("foods").forGetter(FoodHistory::foods)
             ).apply(instance, ::FoodHistory)
         }
 
-        val STREAM_CODEC = StreamCodec.composite(
+        val STREAM_CODEC: StreamCodec<ByteBuf, FoodHistory> = StreamCodec.composite(
             ResourceLocation.STREAM_CODEC.apply(ByteBufCodecs.list()), FoodHistory::foods,
             ::FoodHistory
         )

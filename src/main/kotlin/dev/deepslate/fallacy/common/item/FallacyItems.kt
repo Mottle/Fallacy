@@ -9,6 +9,7 @@ import dev.deepslate.fallacy.common.item.data.ExtendedProperties
 import dev.deepslate.fallacy.common.item.items.CropItems
 import dev.deepslate.fallacy.common.item.items.RaceItems
 import dev.deepslate.fallacy.common.item.items.RockItems
+import dev.deepslate.fallacy.common.item.items.ToolItems
 import dev.deepslate.fallacy.common.registrate.REG
 import dev.deepslate.fallacy.common.registrate.defaultModelWithTexture
 import dev.deepslate.fallacy.common.registrate.formattedLang
@@ -42,4 +43,6 @@ object FallacyItems {
     val Race = RaceItems
 
     val Rock = RockItems
+
+    val TOOL = ToolItems
 }

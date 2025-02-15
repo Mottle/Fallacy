@@ -21,7 +21,7 @@ object DisableItemRule {
         }
 
         val extendedProperties = stack.item.extendedProperties ?: return
-        if (extendedProperties.isDeprecated) callback()
+        if (extendedProperties.deprecated) callback()
     }
 
     @SubscribeEvent

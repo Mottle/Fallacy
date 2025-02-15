@@ -10,7 +10,7 @@ object VanillaItemDeprecationRule {
 
     private fun setDeprecated(item: Item) {
         val properties =
-            item.extendedProperties?.copy(isDeprecated = true) ?: ExtendedProperties.Builder().deprecated().build()
+            item.extendedProperties?.copy(deprecated = true) ?: ExtendedProperties.Builder().deprecated().build()
         item.internalExtendedProperties = properties
     }
 

@@ -107,9 +107,9 @@ data class NutritionState(
             private fun fromEither(either: Either<NoNeed, State>): Nutrition =
                 if (either.right().isPresent) either.right().get() else NoNeed
 
-            val CODEC = Codec.either(NO_NEED_CODEC, STATE_CODEC).xmap(::fromEither, ::toEither)
+            val CODEC: Codec<Nutrition> = Codec.either(NO_NEED_CODEC, STATE_CODEC).xmap(::fromEither, ::toEither)
 
-            val STREAM_CODEC =
+            val STREAM_CODEC: StreamCodec<ByteBuf, Nutrition> =
                 ByteBufCodecs.either(NO_NEED_STREAM_CODEC, STATE_STREAM_CODEC).map(::fromEither, ::toEither)
         }
     }

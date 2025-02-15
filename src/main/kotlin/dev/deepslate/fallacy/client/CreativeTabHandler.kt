@@ -11,11 +11,11 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent
 object CreativeTabHandler {
     @SubscribeEvent
     fun onRegisterCreativeTabs(event: BuildCreativeModeTabContentsEvent) {
-        event.parentEntries.filter { it.item.extendedProperties?.isDeprecated == true }.forEach {
+        event.parentEntries.filter { it.item.extendedProperties?.deprecated == true }.forEach {
             event.remove(it, CreativeModeTab.TabVisibility.PARENT_TAB_ONLY)
         }
 
-        event.searchEntries.filter { it.item.extendedProperties?.isDeprecated == true }.forEach {
+        event.searchEntries.filter { it.item.extendedProperties?.deprecated == true }.forEach {
             event.remove(it, CreativeModeTab.TabVisibility.SEARCH_TAB_ONLY)
         }
     }
