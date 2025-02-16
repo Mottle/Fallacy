@@ -36,9 +36,9 @@ object Helper {
     }
 
     fun checkBroken(itemStack: ItemStack): Boolean = with(itemStack) {
-        `is`(FallacyItems.Race.ROCK_SKIN_BROKEN_HELMET) || `is`(FallacyItems.Race.ROCK_SKIN_BROKEN_CHESTPLATE)
-                || `is`(FallacyItems.Race.ROCK_SKIN_BROKEN_LEGGINGS)
-                || `is`(FallacyItems.Race.ROCK_SKIN_BROKEN_BOOTS)
+        `is`(FallacyItems.RACE.ROCK_SKIN_BROKEN_HELMET) || `is`(FallacyItems.RACE.ROCK_SKIN_BROKEN_CHESTPLATE)
+                || `is`(FallacyItems.RACE.ROCK_SKIN_BROKEN_LEGGINGS)
+                || `is`(FallacyItems.RACE.ROCK_SKIN_BROKEN_BOOTS)
     }
 
     fun getMaxCladdingCount(id: ResourceLocation) = claddingEffectMap[id]?.maxCount ?: Int.MAX_VALUE

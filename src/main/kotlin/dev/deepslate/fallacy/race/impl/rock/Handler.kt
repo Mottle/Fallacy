@@ -128,10 +128,10 @@ object Handler {
         lookup: HolderLookup.RegistryLookup<Enchantment>
     ): ItemStack {
         val item = when (slot) {
-            EquipmentSlot.HEAD -> FallacyItems.Race.ROCK_SKIN_BROKEN_HELMET
-            EquipmentSlot.CHEST -> FallacyItems.Race.ROCK_SKIN_BROKEN_CHESTPLATE
-            EquipmentSlot.LEGS -> FallacyItems.Race.ROCK_SKIN_BROKEN_LEGGINGS
-            EquipmentSlot.FEET -> FallacyItems.Race.ROCK_SKIN_BROKEN_BOOTS
+            EquipmentSlot.HEAD -> FallacyItems.RACE.ROCK_SKIN_BROKEN_HELMET
+            EquipmentSlot.CHEST -> FallacyItems.RACE.ROCK_SKIN_BROKEN_CHESTPLATE
+            EquipmentSlot.LEGS -> FallacyItems.RACE.ROCK_SKIN_BROKEN_LEGGINGS
+            EquipmentSlot.FEET -> FallacyItems.RACE.ROCK_SKIN_BROKEN_BOOTS
             else -> return ItemStack.EMPTY
         }
         val stack = item.get().defaultInstance.let { forceBind(it, lookup) }

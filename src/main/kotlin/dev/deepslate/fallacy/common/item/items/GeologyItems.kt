@@ -15,56 +15,60 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.Item
 
-object RockItems {
+object GeologyItems {
     val GNEISS: ItemEntry<FallacyItemNameBlockItem> = REG.item("gneiss") {
-        FallacyItemNameBlockItem(FallacyBlocks.Rock.GNEISS, it, ExtendedProperties.default())
+        FallacyItemNameBlockItem(FallacyBlocks.GEOLOGY.GNEISS, it, ExtendedProperties.default())
     }.formattedLang().model(::withModel).tag(FallacyItemTags.METAMORPHIC_ROCK).tab(tabKey).register()
 
     val MARBLE: ItemEntry<FallacyItemNameBlockItem> = REG.item("marble") {
-        FallacyItemNameBlockItem(FallacyBlocks.Rock.MARBLE, it, ExtendedProperties.default())
+        FallacyItemNameBlockItem(FallacyBlocks.GEOLOGY.MARBLE, it, ExtendedProperties.default())
     }.formattedLang().model(::withModel).tag(FallacyItemTags.METAMORPHIC_ROCK).tab(tabKey).register()
 
     val SCHIST: ItemEntry<FallacyItemNameBlockItem> = REG.item("schist") {
-        FallacyItemNameBlockItem(FallacyBlocks.Rock.SCHIST, it, ExtendedProperties.default())
+        FallacyItemNameBlockItem(FallacyBlocks.GEOLOGY.SCHIST, it, ExtendedProperties.default())
     }.formattedLang().model(::withModel).tag(FallacyItemTags.METAMORPHIC_ROCK).tab(tabKey).register()
 
     val QUARTZITE: ItemEntry<FallacyItemNameBlockItem> = REG.item("quartzite") {
-        FallacyItemNameBlockItem(FallacyBlocks.Rock.QUARTZITE, it, ExtendedProperties.default())
+        FallacyItemNameBlockItem(FallacyBlocks.GEOLOGY.QUARTZITE, it, ExtendedProperties.default())
     }.formattedLang().model(::withModel).tag(FallacyItemTags.METAMORPHIC_ROCK).tab(tabKey).register()
 
     val SKARN: ItemEntry<FallacyItemNameBlockItem> = REG.item("skarn") {
-        FallacyItemNameBlockItem(FallacyBlocks.Rock.SKARN, it, ExtendedProperties.default())
+        FallacyItemNameBlockItem(FallacyBlocks.GEOLOGY.SKARN, it, ExtendedProperties.default())
     }.formattedLang().model(::withModel).tag(FallacyItemTags.METAMORPHIC_ROCK).tab(tabKey).register()
 
     val PHYLLITE: ItemEntry<FallacyItemNameBlockItem> = REG.item("phyllite") {
-        FallacyItemNameBlockItem(FallacyBlocks.Rock.PHYLLITE, it, ExtendedProperties.default())
+        FallacyItemNameBlockItem(FallacyBlocks.GEOLOGY.PHYLLITE, it, ExtendedProperties.default())
     }.formattedLang().model(::withModel).tag(FallacyItemTags.METAMORPHIC_ROCK).tab(tabKey).register()
 
     val SHALE: ItemEntry<FallacyItemNameBlockItem> = REG.item("shale") {
-        FallacyItemNameBlockItem(FallacyBlocks.Rock.SHALE, it, ExtendedProperties.default())
+        FallacyItemNameBlockItem(FallacyBlocks.GEOLOGY.SHALE, it, ExtendedProperties.default())
     }.formattedLang().model(::withModel).tag(FallacyItemTags.SEDIMENTARY_ROCK).tab(tabKey).register()
 
     val CONGLOMERATE: ItemEntry<FallacyItemNameBlockItem> = REG.item("conglomerate") {
-        FallacyItemNameBlockItem(FallacyBlocks.Rock.CONGLOMERATE, it, ExtendedProperties.default())
+        FallacyItemNameBlockItem(FallacyBlocks.GEOLOGY.CONGLOMERATE, it, ExtendedProperties.default())
     }.formattedLang().model(::withModel).tag(FallacyItemTags.SEDIMENTARY_ROCK).tab(tabKey).register()
 
     val PEAT: ItemEntry<FallacyItemNameBlockItem> = REG.item("peat") {
-        FallacyItemNameBlockItem(FallacyBlocks.Rock.PEAT, it, ExtendedProperties.default())
+        FallacyItemNameBlockItem(FallacyBlocks.GEOLOGY.PEAT, it, ExtendedProperties.default())
     }.formattedLang().model(::withModel).tag(FallacyItemTags.SEDIMENTARY_ROCK).tab(tabKey).register()
 
     val LIMESTONE: ItemEntry<FallacyItemNameBlockItem> = REG.item("limestone") {
-        FallacyItemNameBlockItem(FallacyBlocks.Rock.LIMESTONE, it, ExtendedProperties.default())
+        FallacyItemNameBlockItem(FallacyBlocks.GEOLOGY.LIMESTONE, it, ExtendedProperties.default())
     }.formattedLang().model(::withModel).tag(FallacyItemTags.SEDIMENTARY_ROCK).tab(tabKey).register()
 
     val HALITE: ItemEntry<FallacyItemNameBlockItem> = REG.item("halite") {
-        FallacyItemNameBlockItem(FallacyBlocks.Rock.HALITE, it, ExtendedProperties.default())
+        FallacyItemNameBlockItem(FallacyBlocks.GEOLOGY.HALITE, it, ExtendedProperties.default())
     }.formattedLang().model(::withModel).tag(FallacyItemTags.SEDIMENTARY_ROCK).tab(tabKey).register()
+
+    val FOSSIL: ItemEntry<FallacyItemNameBlockItem> = REG.item("fossil") {
+        FallacyItemNameBlockItem(FallacyBlocks.GEOLOGY.FOSSIL, it, ExtendedProperties.default())
+    }.formattedLang().model(::withModel).tab(tabKey).register()
 
     private fun <T : Item> withModel(
         context: DataGenContext<Item, T>,
         provider: RegistrateItemModelProvider
     ) {
-        provider.withExistingParent(context.name, Fallacy.id("block/rock/${context.name}"))
+        provider.withExistingParent(context.name, Fallacy.id("block/geology/${context.name}"))
     }
 
     private val tabKey: ResourceKey<CreativeModeTab>

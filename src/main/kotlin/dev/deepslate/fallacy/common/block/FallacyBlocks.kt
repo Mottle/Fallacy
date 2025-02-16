@@ -2,7 +2,7 @@ package dev.deepslate.fallacy.common.block
 
 import com.tterrag.registrate.util.entry.BlockEntry
 import dev.deepslate.fallacy.common.block.blocks.CropBlocks
-import dev.deepslate.fallacy.common.block.blocks.RockBlocks
+import dev.deepslate.fallacy.common.block.blocks.GeologyBlocks
 import dev.deepslate.fallacy.common.item.FallacyItems
 import dev.deepslate.fallacy.common.item.items.RaceItems
 import dev.deepslate.fallacy.common.registrate.REG
@@ -76,9 +76,9 @@ object FallacyBlocks {
         }
     }.formattedLang().register()
 
-    val Crop = CropBlocks
+    val CROP = CropBlocks
 
-    val Race = RaceItems
+    val RACE = RaceItems
 
-    val Rock = RockBlocks
+    val GEOLOGY = GeologyBlocks
 }

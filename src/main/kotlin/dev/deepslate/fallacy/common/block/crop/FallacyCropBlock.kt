@@ -211,7 +211,7 @@ open class FallacyCropBlock(
     override fun getAgeProperty(): IntegerProperty = AGE
 
     protected open val dead: Holder<Block>
-        get() = FallacyBlocks.Crop.DYING_CROP
+        get() = FallacyBlocks.CROP.DYING_CROP
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block?, BlockState?>) {
         super.createBlockStateDefinition(builder)
@@ -332,5 +332,5 @@ open class FallacyCropBlock(
 
     open val canGrowByBoneMeal: Boolean = false
 
-    override fun getBaseSeedId(): ItemLike = FallacyItems.Crop.WHEAT_SEEDS
+    override fun getBaseSeedId(): ItemLike = FallacyItems.CROP.WHEAT_SEEDS
 }

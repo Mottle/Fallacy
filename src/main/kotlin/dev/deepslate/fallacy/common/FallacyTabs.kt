@@ -46,11 +46,16 @@ object FallacyTabs {
 
     val GEOLOGY = simpleRegister("geology") { builder ->
         builder.title(REG.addLang("itemGroup", Fallacy.id("geology"), "Fallacy: Geology"))
-            .icon { FallacyItems.Rock.GNEISS.asStack() }.build()
+            .icon { FallacyItems.GEOLOGY.GNEISS.asStack() }.build()
     }
 
     val FARMING = simpleRegister("farming") { builder ->
         builder.title(REG.addLang("itemGroup", Fallacy.id("farming"), "Fallacy: Farming"))
-            .icon { FallacyItems.Crop.BARLEY.asStack() }.build()
+            .icon { FallacyItems.CROP.BARLEY.asStack() }.build()
+    }
+
+    val MATERIAl = simpleRegister("material") { builder ->
+        builder.title(REG.addLang("itemGroup", Fallacy.id("material"), "Fallacy: Material"))
+            .icon { FallacyItems.MATERIAL.FOSSIL_FRAGMENT.asStack() }.build()
     }
 }

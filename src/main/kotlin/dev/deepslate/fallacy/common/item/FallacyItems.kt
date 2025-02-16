@@ -6,10 +6,7 @@ import dev.deepslate.fallacy.common.block.FallacyBlocks
 import dev.deepslate.fallacy.common.item.component.NutritionData
 import dev.deepslate.fallacy.common.item.data.ExtendedFoodProperties
 import dev.deepslate.fallacy.common.item.data.ExtendedProperties
-import dev.deepslate.fallacy.common.item.items.CropItems
-import dev.deepslate.fallacy.common.item.items.RaceItems
-import dev.deepslate.fallacy.common.item.items.RockItems
-import dev.deepslate.fallacy.common.item.items.ToolItems
+import dev.deepslate.fallacy.common.item.items.*
 import dev.deepslate.fallacy.common.registrate.REG
 import dev.deepslate.fallacy.common.registrate.defaultModelWithTexture
 import dev.deepslate.fallacy.common.registrate.formattedLang
@@ -38,11 +35,13 @@ object FallacyItems {
     }.formattedLang().defaultModelWithTexture("nature/miu_berry_bush_seeds")
         .tab(FallacyTabs.NATURE.key!!).register()
 
-    val Crop = CropItems
+    val CROP = CropItems
 
-    val Race = RaceItems
+    val RACE = RaceItems
 
-    val Rock = RockItems
+    val GEOLOGY = GeologyItems
 
     val TOOL = ToolItems
+
+    val MATERIAL = MaterialItems
 }

@@ -51,10 +51,10 @@ class RockSkinLayer(val render: RenderLayerParent<AbstractClientPlayer, PlayerMo
     }
 
     private fun checkRockSkin(player: Player): Boolean {
-        if (player.getItemBySlot(EquipmentSlot.HEAD).`is`(FallacyItems.Race.ROCK_SKIN_HELMET)) return true
-        if (player.getItemBySlot(EquipmentSlot.CHEST).`is`(FallacyItems.Race.ROCK_SKIN_CHESTPLATE)) return true
-        if (player.getItemBySlot(EquipmentSlot.LEGS).`is`(FallacyItems.Race.ROCK_SKIN_LEGGINGS)) return true
-        if (player.getItemBySlot(EquipmentSlot.FEET).`is`(FallacyItems.Race.ROCK_SKIN_BOOTS)) return true
+        if (player.getItemBySlot(EquipmentSlot.HEAD).`is`(FallacyItems.RACE.ROCK_SKIN_HELMET)) return true
+        if (player.getItemBySlot(EquipmentSlot.CHEST).`is`(FallacyItems.RACE.ROCK_SKIN_CHESTPLATE)) return true
+        if (player.getItemBySlot(EquipmentSlot.LEGS).`is`(FallacyItems.RACE.ROCK_SKIN_LEGGINGS)) return true
+        if (player.getItemBySlot(EquipmentSlot.FEET).`is`(FallacyItems.RACE.ROCK_SKIN_BOOTS)) return true
         return false
     }
 }

@@ -5,15 +5,28 @@ import com.tterrag.registrate.providers.RegistrateBlockstateProvider
 import com.tterrag.registrate.util.entry.BlockEntry
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.block.FallacyBlockTags
+import dev.deepslate.fallacy.common.item.FallacyItems
 import dev.deepslate.fallacy.common.registrate.REG
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
 import net.minecraft.tags.BlockTags
+import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
+import net.minecraft.world.level.material.MapColor
+import net.minecraft.world.level.storage.loot.LootPool
+import net.minecraft.world.level.storage.loot.LootTable
+import net.minecraft.world.level.storage.loot.entries.AlternativesEntry
+import net.minecraft.world.level.storage.loot.entries.LootItem
+import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount
+import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel
 
-object RockBlocks {
+object GeologyBlocks {
     private val defaultProperties =
         BlockBehaviour.Properties.of().strength(1.5f, 6f).instrument(NoteBlockInstrument.BASEDRUM)
             .requiresCorrectToolForDrops()
@@ -126,12 +139,52 @@ object RockBlocks {
                 FallacyBlockTags.SEDIMENTARY_ROCK
             ).register()
 
+    val FOSSIL: BlockEntry<Block> =
+        REG.block("fossil", ::Block).properties {
+            BlockBehaviour.Properties.of()
+                .mapColor(MapColor.CLAY)
+                .instrument(NoteBlockInstrument.XYLOPHONE)
+                .requiresCorrectToolForDrops()
+                .strength(4.5f)
+                .sound(SoundType.BONE_BLOCK)
+        }.blockstate(::withRock).loot { provider, self ->
+            val fortune = provider.registries.lookup(Registries.ENCHANTMENT).get().get(Enchantments.FORTUNE).get()
+            val drop = FallacyItems.MATERIAL.FOSSIL_FRAGMENT
+            provider.add(
+                self, LootTable.lootTable().apply(ApplyExplosionDecay.explosionDecay()).withPool(
+                    LootPool.lootPool().setRolls(ConstantValue.exactly(1f)).add(
+                        AlternativesEntry.alternatives(
+                            LootItem.lootTableItem(drop).apply(
+                                SetItemCountFunction.setCount(
+                                    ConstantValue.exactly(1f)
+                                )
+                            )
+                        )
+                    )
+                ).withPool(
+                    LootPool.lootPool().setRolls(ConstantValue.exactly(1f)).add(
+                        LootItem.lootTableItem(drop) // seeds additional
+                            .apply(
+                                ApplyBonusCount.addOreBonusCount(
+                                    fortune
+                                )
+                            )
+                    )
+                )
+            )
+        }
+            .defaultLang()
+            .tag(
+                BlockTags.MINEABLE_WITH_PICKAXE,
+                BlockTags.BASE_STONE_OVERWORLD
+            ).register()
+
     private fun <T : Block> withRock(
         context: DataGenContext<Block, T>,
         provider: RegistrateBlockstateProvider
     ) {
         val name = context.name
-        val path = "block/rock/$name"
+        val path = "block/geology/$name"
         val texture = Fallacy.id(path)
         val model = provider.models().cubeAll(path, texture)
         val configuredModel = model.let(::ConfiguredModel)
@@ -146,8 +199,8 @@ object RockBlocks {
         provider: RegistrateBlockstateProvider
     ) {
         val name = context.name
-        val path = "block/rock/$name"
-        val topBottomPath = "block/rock/${name}_top_bottom"
+        val path = "block/geology/$name"
+        val topBottomPath = "block/geology/${name}_top_bottom"
         val sideTexture = Fallacy.id(path)
         val topBottomTexture = Fallacy.id(topBottomPath)
         val model = provider.models().cubeColumn(path, sideTexture, topBottomTexture)

@@ -66,7 +66,7 @@ object CropBlocks {
             .npk(2, 1, 2)
             .loot(
                 FallacyCropBlock.withLoot(
-                    FallacyItems.Crop.POTATO,
+                    FallacyItems.CROP.POTATO,
                     (1..3),
                     (1..3)
                 )
@@ -78,7 +78,7 @@ object CropBlocks {
             .npk(1, 2, 2)
             .loot(
                 FallacyCropBlock.withLoot(
-                    FallacyItems.Crop.CARROT,
+                    FallacyItems.CROP.CARROT,
                     (1..3),
                     (1..3)
                 )
@@ -98,40 +98,40 @@ object CropBlocks {
 
     //大麦
     val BARLEY: BlockEntry<FallacyCropBlock> =
-        crop("barley", { FallacyItems.Crop.BARLEY }, seedsRange = 1..3).npk(3, 3, 3).register()
+        crop("barley", { FallacyItems.CROP.BARLEY }, seedsRange = 1..3).npk(3, 3, 3).register()
 
     //燕麦
     val OAT: BlockEntry<FallacyCropBlock> =
-        crop("oat", { FallacyItems.Crop.OAT }, seedsRange = 1..4).npk(1, 0, 1).register()
+        crop("oat", { FallacyItems.CROP.OAT }, seedsRange = 1..4).npk(1, 0, 1).register()
 
     //大豆
     val SOYBEAN: BlockEntry<FallacyCropBlock> =
-        seedCrop("soybean", { FallacyItems.Crop.SOYBEAN }, (2..8)).npk(2, 2, 1).register()
+        seedCrop("soybean", { FallacyItems.CROP.SOYBEAN }, (2..8)).npk(2, 2, 1).register()
 
-    val TOMATO: BlockEntry<FallacyCropBlock> = crop("tomato", { FallacyItems.Crop.TOMATO }).npk(3, 2, 2).register()
+    val TOMATO: BlockEntry<FallacyCropBlock> = crop("tomato", { FallacyItems.CROP.TOMATO }).npk(3, 2, 2).register()
 
     //菠菜
     val SPINACH: BlockEntry<FallacyCropBlock> =
-        crop("spinach", { FallacyItems.Crop.SPINACH }).npk(1, 2, 1).register()
+        crop("spinach", { FallacyItems.CROP.SPINACH }).npk(1, 2, 1).register()
 
     //辣椒
     val CHILE_PEPPER: BlockEntry<FallacyCropBlock> =
-        crop("chile_pepper", { FallacyItems.Crop.CHILE_PEPPER }).npk(2, 2, 2).register()
+        crop("chile_pepper", { FallacyItems.CROP.CHILE_PEPPER }).npk(2, 2, 2).register()
 
-    val CORN: BlockEntry<FallacyCropBlock> = crop("corn", { FallacyItems.Crop.CORN }).npk(2, 3, 1).register()
+    val CORN: BlockEntry<FallacyCropBlock> = crop("corn", { FallacyItems.CROP.CORN }).npk(2, 3, 1).register()
 
     val EGGPLANT: BlockEntry<FallacyCropBlock> =
-        crop("eggplant", { FallacyItems.Crop.EGGPLANT }).npk(4, 3, 2).register()
+        crop("eggplant", { FallacyItems.CROP.EGGPLANT }).npk(4, 3, 2).register()
 
     //芦笋
     val ASPARAGUS: BlockEntry<FallacyCropBlock> =
-        crop("asparagus", { FallacyItems.Crop.ASPARAGUS }).npk(2, 4, 3).register()
+        crop("asparagus", { FallacyItems.CROP.ASPARAGUS }).npk(2, 4, 3).register()
 
     //芹菜
-    val CELERY: BlockEntry<FallacyCropBlock> = crop("celery", { FallacyItems.Crop.CELERY }).npk(3, 2, 3).register()
+    val CELERY: BlockEntry<FallacyCropBlock> = crop("celery", { FallacyItems.CROP.CELERY }).npk(3, 2, 3).register()
 
     val CABBAGE: BlockEntry<FallacyCropBlock> =
-        crop("cabbage", { FallacyItems.Crop.CABBAGE }).npk(1, 1, 2).register()
+        crop("cabbage", { FallacyItems.CROP.CABBAGE }).npk(1, 1, 2).register()
 
     private fun crop(
         name: String,

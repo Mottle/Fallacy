@@ -154,10 +154,10 @@ class Rock : Race, Respawnable {
 
     private fun getRockSkinItem(slot: EquipmentSlot, lookup: HolderLookup.RegistryLookup<Enchantment>): ItemStack {
         val item = when (slot) {
-            EquipmentSlot.HEAD -> FallacyItems.Race.ROCK_SKIN_HELMET
-            EquipmentSlot.CHEST -> FallacyItems.Race.ROCK_SKIN_CHESTPLATE
-            EquipmentSlot.LEGS -> FallacyItems.Race.ROCK_SKIN_LEGGINGS
-            EquipmentSlot.FEET -> FallacyItems.Race.ROCK_SKIN_BOOTS
+            EquipmentSlot.HEAD -> FallacyItems.RACE.ROCK_SKIN_HELMET
+            EquipmentSlot.CHEST -> FallacyItems.RACE.ROCK_SKIN_CHESTPLATE
+            EquipmentSlot.LEGS -> FallacyItems.RACE.ROCK_SKIN_LEGGINGS
+            EquipmentSlot.FEET -> FallacyItems.RACE.ROCK_SKIN_BOOTS
             else -> return ItemStack.EMPTY
         }
         val stack = item.get().defaultInstance.let { forceBind(it, lookup) }
