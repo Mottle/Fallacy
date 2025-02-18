@@ -22,6 +22,7 @@
     "client": [
         "client.ClientLevelMixin",
         "client.ItemStackMixin",
+        "client.ParticleEngineMixin",
         "client.PlayerRenderMixin"
     ],
     "injectors": {

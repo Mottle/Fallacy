@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.texture.TextureManager
 import net.minecraft.world.inventory.InventoryMenu
 
 // 定义粒子渲染类型
-object ParticleRenderTypes {
+object FallacyParticleRenderTypes {
     val SORTED_TRANSLUCENT = object : ParticleRenderType {
         override fun begin(
             tesselator: Tesselator,

@@ -29,16 +29,13 @@ import java.util.concurrent.Executor;
 @Mixin(ServerLevel.class)
 public abstract class ServerLevelMixin implements FallacyWeatherExtension, FallacyThermodynamicsExtension {
     @Unique
+    protected ThermodynamicsEngine fallacy$thermodynamicsEngine = null;
+    @Unique
     ServerWeatherEngine fallacy$engine = null;
-
     @Unique
     ServerWindEngine fallacy$windEngine = null;
-
     @Unique
     CurrentSimulator fallacy$currentSimulator = null;
-
-    @Unique
-    protected ThermodynamicsEngine fallacy$thermodynamicsEngine = null;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     void construct(MinecraftServer server, Executor dispatcher, LevelStorageSource.LevelStorageAccess levelStorageAccess, ServerLevelData serverLevelData, ResourceKey dimension, LevelStem levelStem, ChunkProgressListener progressListener, boolean isDebug, long biomeZoomSeed, List customSpawners, boolean tickTime, RandomSequences randomSequences, CallbackInfo ci) {

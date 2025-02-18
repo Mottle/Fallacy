@@ -1,5 +1,6 @@
 package dev.deepslate.fallacy.client.render
 
+import com.mojang.blaze3d.systems.RenderSystem
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.client.particle.ParticleTextureAtlasSprites
 import dev.deepslate.fallacy.client.particle.behavior.SandstormBehavior
@@ -48,7 +49,7 @@ object WeatherRenderer {
         val spawnAreaSize = 60
 
         //风沙
-        for (x in 0..1) {
+        for (x in 0..12) {
             val pos = spawnPosition(player, spawnAreaSize)
 
             if (!canPrecipitateAt(level, pos)) continue
@@ -115,7 +116,7 @@ object WeatherRenderer {
                 minecraft.renderBuffers().bufferSource().getBuffer(RenderType.lines()),
                 aabb.move(-camX, -camY, -camZ),
                 1.0F, 0.0F, 0.0F, 1.0F // Red color for the box
-            );
+            )
 
             // Pop the pose stack to reset transformations
             pose.popPose();

@@ -370,7 +370,7 @@ open class RotationEffectParticle(
         rotationAroundCenter %= 360
     }
 
-    override fun getRenderType(): ParticleRenderType = ParticleRenderTypes.SORTED_TRANSLUCENT
+    override fun getRenderType(): ParticleRenderType = FallacyParticleRenderTypes.SORTED_TRANSLUCENT
 
     public override fun setSize(width: Float, height: Float) {
         super.setSize(width, height)
