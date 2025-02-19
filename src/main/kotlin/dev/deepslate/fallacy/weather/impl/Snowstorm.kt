@@ -12,11 +12,10 @@ import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.biome.Biomes
 
-class Sandstorm : Weather() {
+class Snowstorm : Weather() {
     companion object {
-        val ID = Fallacy.id("sandstorm")
+        val ID = Fallacy.id("snowstorm")
     }
 
     override val namespaceId: ResourceLocation = ID
@@ -28,6 +27,10 @@ class Sandstorm : Weather() {
         if (entity.isInWater) return
         if (entity is Player && entity.isInvulnerable) return
 
+        if (entity is Player) {
+            entity.ticksFrozen = 300
+        }
+
         val effect = MobEffects.MOVEMENT_SLOWDOWN
         val effectInstance = MobEffectInstance(effect, TickHelper.second(12), 1)
         entity.addEffect(effectInstance)
@@ -35,7 +38,6 @@ class Sandstorm : Weather() {
 
     override fun isValidAt(level: Level, pos: BlockPos): Boolean {
         val biome = level.getBiome(pos)
-        return biome.`is`(Biomes.DESERT) || biome.`is`(Biomes.BADLANDS)
-                || biome.`is`(Biomes.WOODED_BADLANDS) || biome.`is`(Biomes.ERODED_BADLANDS)
+        return biome.value().coldEnoughToSnow(pos)
     }
 }

@@ -47,7 +47,7 @@ class RockSkinLayer(val render: RenderLayerParent<AbstractClientPlayer, PlayerMo
                 f * 0.01F % 1.0F
             )
         )
-        entityModel.renderToBuffer(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, -8355712);
+        entityModel.renderToBuffer(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, -8355712)
     }
 
     private fun checkRockSkin(player: Player): Boolean {

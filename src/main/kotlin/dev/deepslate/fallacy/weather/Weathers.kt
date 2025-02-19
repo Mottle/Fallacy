@@ -1,10 +1,7 @@
 package dev.deepslate.fallacy.weather
 
 import dev.deepslate.fallacy.Fallacy
-import dev.deepslate.fallacy.weather.impl.Clear
-import dev.deepslate.fallacy.weather.impl.Rain
-import dev.deepslate.fallacy.weather.impl.Sandstorm
-import dev.deepslate.fallacy.weather.impl.Thunder
+import dev.deepslate.fallacy.weather.impl.*
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceKey
 import net.neoforged.bus.api.IEventBus
@@ -35,6 +32,8 @@ object Weathers {
     val THUNDER: DeferredHolder<Weather, Thunder> = registry.register(Thunder.ID.path) { _ -> Thunder() }
 
     val SANDSTORM: DeferredHolder<Weather, Sandstorm> = registry.register(Sandstorm.ID.path) { _ -> Sandstorm() }
+
+    val SNOWSTORM: DeferredHolder<Weather, Snowstorm> = registry.register(Snowstorm.ID.path) { _ -> Snowstorm() }
 
     fun init(bus: IEventBus) {
         registry.register(bus)

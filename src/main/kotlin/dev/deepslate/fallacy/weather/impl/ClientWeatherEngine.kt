@@ -8,6 +8,7 @@ import dev.deepslate.fallacy.util.region.UniversalRegion
 import dev.deepslate.fallacy.weather.WeatherEngine
 import dev.deepslate.fallacy.weather.WeatherInstance
 import dev.deepslate.fallacy.weather.WeatherStorage
+import net.minecraft.client.Minecraft
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.Level
@@ -18,6 +19,18 @@ import net.neoforged.neoforge.network.handling.IPayloadContext
 import java.util.*
 
 class ClientWeatherEngine(val level: ClientLevel) : WeatherEngine, WeatherStorage {
+
+    companion object {
+        val weatherHere: WeatherInstance?
+            get() {
+                val player = Minecraft.getInstance().player ?: return null
+                val level = player.level()
+                val engine = level.weatherEngine ?: return null
+
+                return engine.getWeatherAt(player.blockPosition())
+            }
+    }
+
     override val weatherStorage = PriorityQueue<WeatherInstance>(compareByDescending { w -> w.priority })
 
     fun setWeathers(weather: List<WeatherInstance>) {

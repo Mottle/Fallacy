@@ -102,7 +102,7 @@ open class RotationEffectParticle(
         get() = quadSize
         set(parScale) {
             //do not set the AABB as big as the render scale, otherwise huge performance losses, we'll just use 0.3 in constructor for now
-            //super.setSize(parScale, parScale);
+            //super.setSize(parScale, parScale)
             setSizeForRenderCulling(parScale, parScale)
             quadSize = parScale
         }

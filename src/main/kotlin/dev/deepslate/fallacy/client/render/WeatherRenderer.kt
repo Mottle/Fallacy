@@ -1,6 +1,5 @@
 package dev.deepslate.fallacy.client.render
 
-import com.mojang.blaze3d.systems.RenderSystem
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.client.particle.ParticleTextureAtlasSprites
 import dev.deepslate.fallacy.client.particle.behavior.SandstormBehavior
@@ -17,12 +16,14 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.levelgen.Heightmap
 import net.neoforged.api.distmarker.Dist
+import net.neoforged.api.distmarker.OnlyIn
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.client.event.ClientTickEvent
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent
 import kotlin.math.floor
 
+@OnlyIn(Dist.CLIENT)
 @EventBusSubscriber(modid = Fallacy.MOD_ID, value = [Dist.CLIENT])
 object WeatherRenderer {
     private val particleBehavior = SandstormBehavior(null)
@@ -119,7 +120,7 @@ object WeatherRenderer {
             )
 
             // Pop the pose stack to reset transformations
-            pose.popPose();
+            pose.popPose()
         }
     }
 

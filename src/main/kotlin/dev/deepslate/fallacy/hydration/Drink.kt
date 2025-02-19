@@ -57,6 +57,6 @@ object Drink {
 
     fun doDrink(level: Level, player: Player, thirst: IThirst, state: BlockState, pos: BlockPos) {
         thirst.drink(1f)
-        level.playSound(null, pos, SoundEvents.GENERIC_DRINK, SoundSource.PLAYERS, 1.0f, 1.0f);
+        level.playSound(null, pos, SoundEvents.GENERIC_DRINK, SoundSource.PLAYERS, 1.0f, 1.0f)
     }
 }

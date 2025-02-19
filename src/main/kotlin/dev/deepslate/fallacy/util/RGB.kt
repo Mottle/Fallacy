@@ -28,7 +28,7 @@ data class RGB(val red: Int, val green: Int, val blue: Int) {
         val r = floor(this.red * (1 - rate) + other.red * rate).toInt()
         val g = floor(this.green * (1 - rate) + other.green * rate).toInt()
         val b = floor(this.blue * (1 - rate) + other.blue * rate).toInt()
-        return from(r, g, b);
+        return from(r, g, b)
     }
 
     val value: Int
