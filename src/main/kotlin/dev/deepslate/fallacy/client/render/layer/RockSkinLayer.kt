@@ -18,7 +18,7 @@ class RockSkinLayer(val render: RenderLayerParent<AbstractClientPlayer, PlayerMo
 
     companion object {
         private val TEXTURE_LOCATION =
-            Fallacy.id("textures/item/race/rock_skin.png")
+            Fallacy.withID("textures/item/race/rock_skin.png")
     }
 
 

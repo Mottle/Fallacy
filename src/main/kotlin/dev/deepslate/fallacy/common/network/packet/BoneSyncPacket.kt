@@ -9,7 +9,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload
 data class BoneSyncPacket(val bone: Float) : CustomPacketPayload {
 
     companion object {
-        val TYPE = CustomPacketPayload.Type<BoneSyncPacket>(Fallacy.id("bone"))
+        val TYPE = CustomPacketPayload.Type<BoneSyncPacket>(Fallacy.withID("bone"))
 
         val STREAM_CODEC: StreamCodec<ByteBuf, BoneSyncPacket> =
             StreamCodec.composite(ByteBufCodecs.FLOAT, BoneSyncPacket::bone, ::BoneSyncPacket)

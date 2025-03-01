@@ -14,10 +14,10 @@ import net.neoforged.neoforge.registries.DataPackRegistryEvent
 object DataPacks {
 
     val CROP_REGISTRY_KEY: ResourceKey<Registry<CropsConfiguration>> =
-        ResourceKey.createRegistryKey<CropsConfiguration>(Fallacy.id("crop"))
+        ResourceKey.createRegistryKey<CropsConfiguration>(Fallacy.withID("crop"))
 
     val BIOME_REGISTRY_KEY: ResourceKey<Registry<BiomesConfiguration>> =
-        ResourceKey.createRegistryKey<BiomesConfiguration>(Fallacy.id("biome"))
+        ResourceKey.createRegistryKey<BiomesConfiguration>(Fallacy.withID("biome"))
 
     @SubscribeEvent
     fun register(event: DataPackRegistryEvent.NewRegistry) {

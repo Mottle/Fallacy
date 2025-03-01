@@ -5,5 +5,5 @@ import dev.deepslate.fallacy.weather.Weather
 import net.minecraft.resources.ResourceLocation
 
 object Clear : Weather() {
-    override val namespaceId: ResourceLocation = Fallacy.id("clear")
+    override val namespaceId: ResourceLocation = Fallacy.withID("clear")
 }

@@ -26,7 +26,7 @@ data class BiomesConfiguration(val biomeMap: Map<ResourceLocation, BiomeConfigur
             .xmap(::BiomesConfiguration, BiomesConfiguration::biomeMap)
 
         val CONFIGURATION_KEY: ResourceKey<BiomesConfiguration> =
-            ResourceKey.create(DataPacks.BIOME_REGISTRY_KEY, Fallacy.id("configuration"))
+            ResourceKey.create(DataPacks.BIOME_REGISTRY_KEY, Fallacy.withID("configuration"))
 
         val DEFAULT = BiomeConfiguration(NPK.default(), 15)
 

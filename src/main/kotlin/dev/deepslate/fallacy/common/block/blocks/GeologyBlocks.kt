@@ -179,35 +179,35 @@ object GeologyBlocks {
                 BlockTags.BASE_STONE_OVERWORLD
             ).register()
 
-    private fun <T : Block> withRock(
-        context: DataGenContext<Block, T>,
-        provider: RegistrateBlockstateProvider
-    ) {
+    private fun <T : Block> withRock(context: DataGenContext<Block, T>, provider: RegistrateBlockstateProvider) {
         val name = context.name
         val path = "block/geology/$name"
-        val texture = Fallacy.id(path)
+        val texture = Fallacy.withID(path)
         val model = provider.models().cubeAll(path, texture)
         val configuredModel = model.let(::ConfiguredModel)
+
         provider.getVariantBuilder(context.entry).partialState().setModels(configuredModel)
 
         val itemPath = BuiltInRegistries.BLOCK.getKey(context.entry).path
+
         provider.itemModels().getBuilder(itemPath).parent(model)
     }
 
     private fun <T : Block> withTopBottomTextureRock(
-        context: DataGenContext<Block, T>,
-        provider: RegistrateBlockstateProvider
+        context: DataGenContext<Block, T>, provider: RegistrateBlockstateProvider
     ) {
         val name = context.name
         val path = "block/geology/$name"
         val topBottomPath = "block/geology/${name}_top_bottom"
-        val sideTexture = Fallacy.id(path)
-        val topBottomTexture = Fallacy.id(topBottomPath)
+        val sideTexture = Fallacy.withID(path)
+        val topBottomTexture = Fallacy.withID(topBottomPath)
         val model = provider.models().cubeColumn(path, sideTexture, topBottomTexture)
         val configuredModel = model.let(::ConfiguredModel)
+
         provider.getVariantBuilder(context.entry).partialState().setModels(configuredModel)
 
         val itemPath = BuiltInRegistries.BLOCK.getKey(context.entry).path
+
         provider.itemModels().getBuilder(itemPath).parent(model)
     }
 }

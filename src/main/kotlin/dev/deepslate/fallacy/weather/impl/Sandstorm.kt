@@ -16,7 +16,7 @@ import net.minecraft.world.level.biome.Biomes
 
 class Sandstorm : Weather() {
     companion object {
-        val ID = Fallacy.id("sandstorm")
+        val ID = Fallacy.withID("sandstorm")
     }
 
     override val namespaceId: ResourceLocation = ID

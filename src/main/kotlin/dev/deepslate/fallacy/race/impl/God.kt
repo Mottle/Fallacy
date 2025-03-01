@@ -14,7 +14,7 @@ import net.minecraft.world.level.GameType
 class God : Race {
 
     companion object {
-        val ID = Fallacy.id("god")
+        val ID = Fallacy.withID("god")
     }
 
     override val namespacedId: ResourceLocation = ID

@@ -14,7 +14,7 @@ import net.minecraft.server.level.ServerPlayer
 class Zombie : Race {
 
     companion object {
-        val ID = Fallacy.id("zombie")
+        val ID = Fallacy.withID("zombie")
         val TAGS = listOf(
             Behaviors.UNDEAD, Behaviors.WEAKNESS_IN_SUNLIGHT, Behaviors.WEAKNESS_IN_DAY,
             Behaviors.BURNING_IN_SUNLIGHT

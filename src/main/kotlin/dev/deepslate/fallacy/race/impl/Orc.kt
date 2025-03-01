@@ -12,7 +12,7 @@ import net.minecraft.server.level.ServerPlayer
 class Orc : Race {
 
     companion object {
-        val ID = Fallacy.id("orc")
+        val ID = Fallacy.withID("orc")
     }
 
     override val namespacedId: ResourceLocation = ID

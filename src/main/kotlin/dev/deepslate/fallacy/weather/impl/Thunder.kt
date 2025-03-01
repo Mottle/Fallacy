@@ -15,7 +15,7 @@ import net.minecraft.world.phys.Vec3
 class Thunder : Weather() {
 
     companion object {
-        val ID = Fallacy.id("thunder")
+        val ID = Fallacy.withID("thunder")
     }
 
     override val priority: Int = 2

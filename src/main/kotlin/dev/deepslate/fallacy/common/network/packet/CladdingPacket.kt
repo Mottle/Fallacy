@@ -9,7 +9,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload
 data class CladdingPacket(val index: Int) : CustomPacketPayload {
 
     companion object {
-        val TYPE = CustomPacketPayload.Type<CladdingPacket>(Fallacy.id("cladding_packet"))
+        val TYPE = CustomPacketPayload.Type<CladdingPacket>(Fallacy.withID("cladding_packet"))
 
         val STREAM_CODEC: StreamCodec<ByteBuf, CladdingPacket> =
             StreamCodec.composite(ByteBufCodecs.INT, CladdingPacket::index, ::CladdingPacket)

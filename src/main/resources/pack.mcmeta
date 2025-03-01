@@ -43,6 +43,27 @@
         }, {
             "namespace": "minecraft",
             "path": "recipe/[a-z]+_shield"
+        }, {
+            "namespace": "minecraft",
+            "path": "furnace"
+        }, {
+            "namespace": "minecraft",
+            "path": "smoker"
+        }, {
+            "namespace": "minecraft",
+            "path": "blast_furnace"
+        }, {
+            "namespace": "minecraft",
+            "path": "smithing_table"
+        }, {
+            "namespace": "minecraft",
+            "path": "composter"
+        }, {
+            "namespace": "minecraft",
+            "path": "anvil"
+        }, {
+            "namespace": "minecraft",
+            "path": "enchanting_table"
         }]
     }
 }

@@ -25,7 +25,7 @@ data class RegionType<R : Region>(val codec: MapCodec<R>, val streamCodec: Strea
 //        val STREAM_CODEC_REGISTRY_ID = Fallacy.id(STREAM_CODEC_REGISTRY_KEY)
 
         val REGISTRY_KEY =
-            ResourceKey.createRegistryKey<RegionType<out Region>>(Fallacy.id("region_type"))
+            ResourceKey.createRegistryKey<RegionType<out Region>>(Fallacy.withID("region_type"))
 
         val REGISTRY: Registry<RegionType<out Region>> =
             RegistryBuilder(REGISTRY_KEY).sync(true).create()

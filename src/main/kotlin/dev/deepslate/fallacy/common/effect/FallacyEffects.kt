@@ -17,7 +17,7 @@ object FallacyEffects {
     }
 
     val DEHYDRATION: DeferredHolder<MobEffect, MobEffect> = registry.register("dehydration") { _ ->
-        val id = Fallacy.id("effect.dehydration")
+        val id = Fallacy.withID("effect.dehydration")
         Dehydration().addAttributeModifier(
             Attributes.ATTACK_SPEED,
             id,

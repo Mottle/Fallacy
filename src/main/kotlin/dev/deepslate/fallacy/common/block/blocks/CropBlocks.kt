@@ -41,7 +41,7 @@ object CropBlocks {
             .blockstate { ctx, prov ->
                 prov.simpleBlock(
                     ctx.get(),
-                    prov.models().cross("block/crop/dying_crop", Fallacy.id("block/crop/dying_crop"))
+                    prov.models().cross("block/crop/dying_crop", Fallacy.withID("block/crop/dying_crop"))
                         .renderType("cutout")
                 )
             }.formattedLang().tag(BlockTags.CROPS, BlockTags.MAINTAINS_FARMLAND)

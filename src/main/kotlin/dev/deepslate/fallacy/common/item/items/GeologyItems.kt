@@ -68,7 +68,7 @@ object GeologyItems {
         context: DataGenContext<Item, T>,
         provider: RegistrateItemModelProvider
     ) {
-        provider.withExistingParent(context.name, Fallacy.id("block/geology/${context.name}"))
+        provider.withExistingParent(context.name, Fallacy.withID("block/geology/${context.name}"))
     }
 
     private val tabKey: ResourceKey<CreativeModeTab>

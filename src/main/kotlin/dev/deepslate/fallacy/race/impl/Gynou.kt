@@ -29,7 +29,7 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent
 class Gynou : Race, Respawnable {
 
     companion object {
-        val ID = Fallacy.id("gynou")
+        val ID = Fallacy.withID("gynou")
 
         fun getWings(lookup: HolderLookup.RegistryLookup<Enchantment>): ItemStack {
             val bindingCurse = lookup.get(Enchantments.BINDING_CURSE).get()

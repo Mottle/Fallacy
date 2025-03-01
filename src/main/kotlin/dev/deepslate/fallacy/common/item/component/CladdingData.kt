@@ -118,7 +118,7 @@ data class CladdingData(val claddings: List<Cladding>) {
 
         return finalMap.map { (holder, value) ->
             holder to AttributeModifier(
-                Fallacy.id("rock_skin_cladding_${slot.serializedName}"),
+                Fallacy.withID("rock_skin_cladding_${slot.serializedName}"),
                 value,
                 AttributeModifier.Operation.ADD_VALUE
             )

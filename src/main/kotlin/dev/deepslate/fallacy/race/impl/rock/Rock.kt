@@ -33,7 +33,7 @@ import kotlin.math.pow
 
 class Rock : Race, Respawnable {
     companion object {
-        val ID = Fallacy.Companion.id("rock")
+        val ID = Fallacy.Companion.withID("rock")
 
         const val CLADDING_LIMIT = 8
 
@@ -191,7 +191,7 @@ class Rock : Race, Respawnable {
 
     // newTotal = total * (1.0 - 0.75)
     private val attackSpeedModifier = AttributeModifier(
-        Fallacy.Companion.id("rock_race_attack_speed_modifier"),
+        Fallacy.Companion.withID("rock_race_attack_speed_modifier"),
         -0.75,
         AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
     )

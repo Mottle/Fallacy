@@ -13,7 +13,7 @@ import net.neoforged.neoforge.registries.NewRegistryEvent
 import net.neoforged.neoforge.registries.RegistryBuilder
 
 object Behaviors {
-    val KEY: ResourceKey<Registry<Behavior>> = ResourceKey.createRegistryKey<Behavior>(Fallacy.id("behavior"))
+    val KEY: ResourceKey<Registry<Behavior>> = ResourceKey.createRegistryKey<Behavior>(Fallacy.withID("behavior"))
 
     val REGISTRY: Registry<Behavior> = RegistryBuilder(KEY).sync(false).create()
 

@@ -42,7 +42,7 @@ import kotlin.math.sqrt
 class Skeleton : Race, Respawnable {
 
     companion object {
-        val ID = Fallacy.id("skeleton")
+        val ID = Fallacy.withID("skeleton")
 
         val TAGS = listOf(
             Behaviors.UNDEAD, Behaviors.WEAKNESS_2_IN_SUNLIGHT,

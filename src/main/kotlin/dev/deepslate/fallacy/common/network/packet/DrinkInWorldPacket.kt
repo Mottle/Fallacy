@@ -8,7 +8,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload
 class DrinkInWorldPacket : CustomPacketPayload {
 
     companion object {
-        val TYPE = CustomPacketPayload.Type<DrinkInWorldPacket>(Fallacy.id("drink_in_world_packet"))
+        val TYPE = CustomPacketPayload.Type<DrinkInWorldPacket>(Fallacy.withID("drink_in_world_packet"))
 
         val PACKET = DrinkInWorldPacket()
 

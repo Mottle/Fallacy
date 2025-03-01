@@ -26,9 +26,9 @@ object ParticleTextureAtlasSprites {
         if (event.atlas.location() != PARTICLE_LOCATION) return
 
         with(event.atlas) {
-            CLOUD_256 = getSprite(Fallacy.id("cloud256"))
-            TUMBLEWEED = getSprite(Fallacy.id("tumbleweed"))
-            WUGUN = getSprite(Fallacy.id("wugun"))
+            CLOUD_256 = getSprite(Fallacy.withID("cloud256"))
+            TUMBLEWEED = getSprite(Fallacy.withID("tumbleweed"))
+            WUGUN = getSprite(Fallacy.withID("wugun"))
         }
     }
 

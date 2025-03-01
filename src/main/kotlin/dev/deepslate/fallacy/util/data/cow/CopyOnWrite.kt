@@ -1,4 +1,4 @@
-package dev.deepslate.fallacy.util.cow
+package dev.deepslate.fallacy.util.data.cow
 
 import java.util.concurrent.locks.ReentrantLock
 

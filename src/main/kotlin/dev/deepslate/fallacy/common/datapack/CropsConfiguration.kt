@@ -34,7 +34,7 @@ data class CropsConfiguration(val cropMap: Map<ResourceLocation, CropConfigurati
                 .xmap(::CropsConfiguration, CropsConfiguration::cropMap)
 
         val CONFIGURATION_KEY: ResourceKey<CropsConfiguration> =
-            ResourceKey.create(DataPacks.CROP_REGISTRY_KEY, Fallacy.id("configuration"))
+            ResourceKey.create(DataPacks.CROP_REGISTRY_KEY, Fallacy.withID("configuration"))
 
         val DEFAULT: CropConfiguration = CropConfiguration(
             NPK(2, 2, 2),

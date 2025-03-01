@@ -101,7 +101,7 @@ open class FallacyCropBlock(
             val name = context.name
             val models =
                 (0..3).map {
-                    provider.models().crop("block/crop/${name}_stage$it", Fallacy.id("block/crop/${name}_stage$it"))
+                    provider.models().crop("block/crop/${name}_stage$it", Fallacy.withID("block/crop/${name}_stage$it"))
                         .renderType("cutout")
                 }
 

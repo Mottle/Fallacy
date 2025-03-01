@@ -57,13 +57,13 @@ public abstract class NearestAttackableTargetGoalMixin<T extends LivingEntity> e
     }
 
     @Unique
-    private Boolean fallacy$checkMob() {
+    private Boolean fallacy$checkMobType() {
         return mob instanceof Zombie || mob instanceof Skeleton || mob instanceof Creeper || mob instanceof Spider;
     }
 
     @Unique
     private Boolean fallacy$shouldAttackUndead(Player player) {
-        if (!fallacy$checkMob()) return true;
+        if (!fallacy$checkMobType()) return true;
         return !Behavior.Companion.has((ServerPlayer) player, Behaviors.INSTANCE.getUNDEAD());
     }
 

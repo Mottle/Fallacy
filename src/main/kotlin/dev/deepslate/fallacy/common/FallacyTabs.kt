@@ -30,32 +30,32 @@ object FallacyTabs {
         registry.register(name) { _ -> factory(CreativeModeTab.builder()) }
 
     val OTHER = simpleRegister("other") { builder ->
-        builder.title(REG.addLang("itemGroup", Fallacy.id("other"), "Fallacy: Other"))
+        builder.title(REG.addLang("itemGroup", Fallacy.withID("other"), "Fallacy: Other"))
             .icon { Items.STONE.defaultInstance }.build()
     }
 
     val TOOL = simpleRegister("tool") { builder ->
-        builder.title(REG.addLang("itemGroup", Fallacy.id("tool"), "Fallacy: Tool"))
+        builder.title(REG.addLang("itemGroup", Fallacy.withID("tool"), "Fallacy: Tool"))
             .icon { Items.IRON_PICKAXE.defaultInstance }.build()
     }
 
     val NATURE = simpleRegister("nature") { builder ->
-        builder.title(REG.addLang("itemGroup", Fallacy.id("nature"), "Fallacy: Nature"))
+        builder.title(REG.addLang("itemGroup", Fallacy.withID("nature"), "Fallacy: Nature"))
             .icon { FallacyItems.MIU_BERRIES.asStack() }.build()
     }
 
     val GEOLOGY = simpleRegister("geology") { builder ->
-        builder.title(REG.addLang("itemGroup", Fallacy.id("geology"), "Fallacy: Geology"))
+        builder.title(REG.addLang("itemGroup", Fallacy.withID("geology"), "Fallacy: Geology"))
             .icon { FallacyItems.GEOLOGY.GNEISS.asStack() }.build()
     }
 
     val FARMING = simpleRegister("farming") { builder ->
-        builder.title(REG.addLang("itemGroup", Fallacy.id("farming"), "Fallacy: Farming"))
+        builder.title(REG.addLang("itemGroup", Fallacy.withID("farming"), "Fallacy: Farming"))
             .icon { FallacyItems.CROP.BARLEY.asStack() }.build()
     }
 
     val MATERIAl = simpleRegister("material") { builder ->
-        builder.title(REG.addLang("itemGroup", Fallacy.id("material"), "Fallacy: Material"))
+        builder.title(REG.addLang("itemGroup", Fallacy.withID("material"), "Fallacy: Material"))
             .icon { FallacyItems.MATERIAL.FOSSIL_FRAGMENT.asStack() }.build()
     }
 }

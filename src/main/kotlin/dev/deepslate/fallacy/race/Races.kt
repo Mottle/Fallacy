@@ -15,7 +15,7 @@ import net.neoforged.neoforge.registries.RegistryBuilder
 
 @EventBusSubscriber(modid = Fallacy.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 object Races {
-    val KEY: ResourceKey<Registry<Race>> = ResourceKey.createRegistryKey<Race>(Fallacy.id("race"))
+    val KEY: ResourceKey<Registry<Race>> = ResourceKey.createRegistryKey<Race>(Fallacy.withID("race"))
 
     val REGISTRY: Registry<Race> = RegistryBuilder(KEY).sync(true).maxId(256).create()
 

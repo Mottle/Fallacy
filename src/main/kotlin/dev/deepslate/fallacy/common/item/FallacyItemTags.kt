@@ -6,7 +6,7 @@ import net.minecraft.tags.TagKey
 import net.minecraft.world.item.Item
 
 object FallacyItemTags {
-    private fun create(name: String) = ItemTags.create(Fallacy.id(name))
+    private fun create(name: String) = ItemTags.create(Fallacy.withID(name))
 
     val CLADDINGABLE: TagKey<Item> = create("claddingable")
 
@@ -20,4 +20,6 @@ object FallacyItemTags {
     val SEDIMENTARY_ROCK: TagKey<Item> = create("sedimentary_rock")
 
     val COAL: TagKey<Item> = create("coal")
+
+    val FIRE_STARTER: TagKey<Item> = create("fire_starter")
 }

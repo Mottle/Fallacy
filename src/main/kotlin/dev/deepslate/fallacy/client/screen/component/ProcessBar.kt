@@ -15,7 +15,7 @@ import dev.deepslate.fallacy.util.RGB
 class ProcessBar(val ratio: Int, val color: RGB = RGB.fromHex("0x32cd32")) : UIComponent {
 
     companion object {
-        val DEFAULT_TEXTURE = Fallacy.id("textures/gui/diet_ui.png")
+        val DEFAULT_TEXTURE = Fallacy.withID("textures/gui/diet_ui.png")
 
         val DEFAULT_SIZE = SimpleVec2i(102, 5)
     }

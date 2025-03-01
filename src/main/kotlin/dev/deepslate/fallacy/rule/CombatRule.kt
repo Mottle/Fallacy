@@ -1,6 +1,6 @@
 package dev.deepslate.fallacy.rule
 
-import dev.deepslate.fallacy.util.MathHelper
+import dev.deepslate.fallacy.util.MathFunctions
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.LivingEntity
 import kotlin.math.absoluteValue
@@ -13,7 +13,7 @@ object CombatRule {
     fun getDamageAfterAbsorb(entity: LivingEntity, damage: Float, source: DamageSource, armor: Float): Float {
         if (armor.absoluteValue <= 0.1f) return damage
         if (armor > 0.1f) {
-            val rate = MathHelper.nigmoid((damage + T) / (K * armor)).toFloat() * damage / (damage + armor)
+            val rate = MathFunctions.nigmoid((damage + T) / (K * armor)).toFloat() * damage / (damage + armor)
             val finalDamage = rate * damage
             return finalDamage
         }

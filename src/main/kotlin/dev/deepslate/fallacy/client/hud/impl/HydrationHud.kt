@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Player
 
 class HydrationHud : SimpleHud("hydration") {
-    override val icon: ResourceLocation = Fallacy.id("thirst")
+    override val icon: ResourceLocation = Fallacy.withID("thirst")
 
     override val barColor: RGB = RGB.fromHex("#0A3AE8")
 

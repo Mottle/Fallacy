@@ -7,11 +7,15 @@ import dev.deepslate.fallacy.common.item.FallacyItems
 import dev.deepslate.fallacy.common.item.items.RaceItems
 import dev.deepslate.fallacy.common.registrate.REG
 import dev.deepslate.fallacy.common.registrate.formattedLang
+import dev.deepslate.fallacy.datagen.model.ModelHelper
 import net.minecraft.advancements.critereon.StatePropertiesPredicate
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.FarmBlock
+import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
+import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.level.storage.loot.LootPool
 import net.minecraft.world.level.storage.loot.LootTable
 import net.minecraft.world.level.storage.loot.entries.LootItem
@@ -75,6 +79,12 @@ object FallacyBlocks {
             return@forAllStates ConfiguredModel.builder().modelFile(stateModel).build()
         }
     }.formattedLang().register()
+
+    val BURNING_LOG: BlockEntry<BurningLog> = REG.block("burning_log", ::BurningLog).properties {
+        Properties.of().strength(2f).instrument(NoteBlockInstrument.BASS).sound(
+            SoundType.WOOD
+        ).lightLevel { _ -> 6 }.mapColor(MapColor.WOOD).requiresCorrectToolForDrops().noLootTable()
+    }.blockstate(ModelHelper.withTexture("block/charcoal_forge/lit")).tag(BlockTags.MINEABLE_WITH_PICKAXE).register()
 
     val CROP = CropBlocks
 

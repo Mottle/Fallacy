@@ -16,7 +16,7 @@ class BoneHud : SimpleHud("bone") {
 
     override fun shouldRender(player: Player): Boolean = Race.get(player) is Skeleton
 
-    override val icon: ResourceLocation = Fallacy.id("bone_icon")
+    override val icon: ResourceLocation = Fallacy.withID("bone_icon")
 
     override val barColor: RGB = RGB.fromHex("0xa0a0a0")
 

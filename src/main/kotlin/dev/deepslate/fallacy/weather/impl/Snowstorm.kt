@@ -15,7 +15,7 @@ import net.minecraft.world.level.Level
 
 class Snowstorm : Weather() {
     companion object {
-        val ID = Fallacy.id("snowstorm")
+        val ID = Fallacy.withID("snowstorm")
     }
 
     override val namespaceId: ResourceLocation = ID

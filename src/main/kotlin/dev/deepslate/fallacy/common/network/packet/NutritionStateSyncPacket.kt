@@ -9,7 +9,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload
 class NutritionStateSyncPacket(val state: NutritionState) : CustomPacketPayload {
 
     companion object {
-        val TYPE = CustomPacketPayload.Type<NutritionStateSyncPacket>(Fallacy.id("nutrition_state_sync_packet"))
+        val TYPE = CustomPacketPayload.Type<NutritionStateSyncPacket>(Fallacy.withID("nutrition_state_sync_packet"))
 
         val STREAM_CODEC: StreamCodec<ByteBuf, NutritionStateSyncPacket> =
             StreamCodec.composite(

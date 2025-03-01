@@ -2,7 +2,7 @@ package dev.deepslate.fallacy.util
 
 import kotlin.math.exp
 
-object MathHelper {
+object MathFunctions {
     fun sigmoid(x: Double): Double {
         val nExp = exp(-x)
         return 1.0 / (1.0 + nExp)

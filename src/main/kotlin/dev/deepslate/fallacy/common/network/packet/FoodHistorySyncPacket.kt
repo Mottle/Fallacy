@@ -9,7 +9,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload
 data class FoodHistorySyncPacket(val history: FoodHistory) : CustomPacketPayload {
 
     companion object {
-        val TYPE = CustomPacketPayload.Type<FoodHistorySyncPacket>(Fallacy.id("food_history_sync_packet"))
+        val TYPE = CustomPacketPayload.Type<FoodHistorySyncPacket>(Fallacy.withID("food_history_sync_packet"))
 
         val STREAM_CODEC: StreamCodec<ByteBuf, FoodHistorySyncPacket> =
             StreamCodec.composite(FoodHistory.STREAM_CODEC, FoodHistorySyncPacket::history, ::FoodHistorySyncPacket)

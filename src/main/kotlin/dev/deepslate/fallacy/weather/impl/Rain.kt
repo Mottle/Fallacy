@@ -6,7 +6,7 @@ import net.minecraft.resources.ResourceLocation
 
 class Rain : Weather() {
     companion object {
-        val ID = Fallacy.id("rain")
+        val ID = Fallacy.withID("rain")
     }
 
     override val isWet: Boolean = true

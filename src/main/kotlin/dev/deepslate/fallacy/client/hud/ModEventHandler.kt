@@ -12,7 +12,7 @@ import net.neoforged.neoforge.client.gui.VanillaGuiLayers
 object ModEventHandler {
     @SubscribeEvent
     fun setLayers(event: RegisterGuiLayersEvent) {
-        val rid = Fallacy.id("layers")
+        val rid = Fallacy.withID("layers")
         event.registerBelow(VanillaGuiLayers.SELECTED_ITEM_NAME, rid, LayerRender())
         Fallacy.LOGGER.info("Registering Vanilla gui layers.")
     }

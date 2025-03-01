@@ -16,7 +16,7 @@ import kotlin.math.pow
 class Wood : Race, Respawnable {
 
     companion object {
-        val ID = Fallacy.id("wood")
+        val ID = Fallacy.withID("wood")
     }
 
     override val namespacedId: ResourceLocation = ID
@@ -54,7 +54,7 @@ class Wood : Race, Respawnable {
     }
 
     private val attackSpeedModifier = AttributeModifier(
-        Fallacy.id("wood_race_attack_speed_modifier"),
+        Fallacy.withID("wood_race_attack_speed_modifier"),
         -0.75,
         AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
     )

@@ -23,18 +23,18 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent
 object FallacyCapabilities {
 
     val THIRST: EntityCapability<IThirst, Void?> =
-        EntityCapability.createVoid(Fallacy.id("thirst"), IThirst::class.java)
+        EntityCapability.createVoid(Fallacy.withID("thirst"), IThirst::class.java)
 
     val HYDRATION: ItemCapability<IHydration, Void?> =
-        ItemCapability.createVoid(Fallacy.id("hydration"), IHydration::class.java)
+        ItemCapability.createVoid(Fallacy.withID("hydration"), IHydration::class.java)
 
-    val DIET: EntityCapability<IDiet, Void?> = EntityCapability.createVoid(Fallacy.id("diet"), IDiet::class.java)
+    val DIET: EntityCapability<IDiet, Void?> = EntityCapability.createVoid(Fallacy.withID("diet"), IDiet::class.java)
 
     val SKELETON: EntityCapability<ISkeleton, Void?> =
-        EntityCapability.createVoid(Fallacy.id("skeleton"), ISkeleton::class.java)
+        EntityCapability.createVoid(Fallacy.withID("skeleton"), ISkeleton::class.java)
 
     val BODY_HEAT: EntityCapability<IBodyHeat, Void?> =
-        EntityCapability.createVoid(Fallacy.id("body_heat"), IBodyHeat::class.java)
+        EntityCapability.createVoid(Fallacy.withID("body_heat"), IBodyHeat::class.java)
 
     @SubscribeEvent
     fun registerAll(event: RegisterCapabilitiesEvent) {

@@ -17,8 +17,8 @@ object Handler {
     @SubscribeEvent
     fun onGuiInit(event: ScreenEvent.Init.Post) {
         val screen = event.screen as? InventoryScreen ?: return
-        val on = Fallacy.id("on")
-        val off = Fallacy.id("off")
+        val on = Fallacy.withID("on")
+        val off = Fallacy.withID("off")
         val sprites = WidgetSprites(off, on)
         val context = UIContext().generateNext(screen)
 

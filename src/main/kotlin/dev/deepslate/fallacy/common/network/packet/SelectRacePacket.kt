@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation
 
 data class SelectRacePacket(val raceId: ResourceLocation) : CustomPacketPayload {
     companion object {
-        val TYPE = CustomPacketPayload.Type<SelectRacePacket>(Fallacy.id("select_race_packet"))
+        val TYPE = CustomPacketPayload.Type<SelectRacePacket>(Fallacy.withID("select_race_packet"))
 
         val STREAM_CODEC: StreamCodec<ByteBuf, SelectRacePacket> =
             StreamCodec.composite(ResourceLocation.STREAM_CODEC, SelectRacePacket::raceId, ::SelectRacePacket)

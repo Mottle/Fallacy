@@ -8,7 +8,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload
 
 data class BodyHeatSyncPacket(val value: Float) : CustomPacketPayload {
     companion object {
-        val TYPE = CustomPacketPayload.Type<BodyHeatSyncPacket>(Fallacy.id("body_heat_sync"))
+        val TYPE = CustomPacketPayload.Type<BodyHeatSyncPacket>(Fallacy.withID("body_heat_sync"))
 
         val STREAM_CODEC: StreamCodec<ByteBuf, BodyHeatSyncPacket> =
             StreamCodec.composite(ByteBufCodecs.FLOAT, BodyHeatSyncPacket::value, ::BodyHeatSyncPacket)
