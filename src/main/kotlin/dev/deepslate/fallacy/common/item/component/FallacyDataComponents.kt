@@ -3,6 +3,7 @@ package dev.deepslate.fallacy.common.item.component
 import com.mojang.serialization.Codec
 import dev.deepslate.fallacy.Fallacy
 import net.minecraft.core.component.DataComponentType
+import net.minecraft.core.registries.Registries
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.util.Unit
@@ -11,7 +12,7 @@ import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredRegister
 
 object FallacyDataComponents {
-    private val registry = DeferredRegister.createDataComponents(Fallacy.MOD_ID)
+    private val registry = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, Fallacy.MOD_ID)
 
     val OUTDATED: DeferredHolder<DataComponentType<*>, DataComponentType<Unit>> =
         registry.registerComponentType("outdated") { builder ->
