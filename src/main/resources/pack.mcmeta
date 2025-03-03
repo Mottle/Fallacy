@@ -45,25 +45,25 @@
             "path": "recipe/[a-z]+_shield"
         }, {
             "namespace": "minecraft",
-            "path": "furnace"
+            "path": "recipe/furnace"
         }, {
             "namespace": "minecraft",
-            "path": "smoker"
+            "path": "recipe/smoker"
         }, {
             "namespace": "minecraft",
-            "path": "blast_furnace"
+            "path": "recipe/blast_furnace"
         }, {
             "namespace": "minecraft",
-            "path": "smithing_table"
+            "path": "recipe/smithing_table"
         }, {
             "namespace": "minecraft",
-            "path": "composter"
+            "path": "recipe/composter"
         }, {
             "namespace": "minecraft",
-            "path": "anvil"
+            "path": "recipe/anvil"
         }, {
             "namespace": "minecraft",
-            "path": "enchanting_table"
+            "path": "recipe/enchanting_table"
         }]
     }
 }

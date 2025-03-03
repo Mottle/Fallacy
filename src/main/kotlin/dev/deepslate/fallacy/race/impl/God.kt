@@ -4,12 +4,12 @@ import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.data.player.NutritionState
 import dev.deepslate.fallacy.common.data.player.PlayerAttribute
 import dev.deepslate.fallacy.race.Race
-import dev.deepslate.fallacy.util.ServerHelper
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.GameType
+import net.neoforged.neoforge.server.ServerLifecycleHooks
 
 class God : Race {
 
@@ -32,13 +32,13 @@ class God : Race {
     }
 
     override fun set(player: ServerPlayer) {
-        ServerHelper.server?.playerList?.op(player.gameProfile)
+        ServerLifecycleHooks.getCurrentServer()?.playerList?.op(player.gameProfile)
         player.setGameMode(GameType.CREATIVE)
     }
 
     override fun remove(player: ServerPlayer) {
         if (player.gameProfile.name != "Wangyee") {
-            ServerHelper.server?.playerList?.deop(player.gameProfile)
+            ServerLifecycleHooks.getCurrentServer()?.playerList?.deop(player.gameProfile)
         }
         player.setGameMode(GameType.SURVIVAL)
     }

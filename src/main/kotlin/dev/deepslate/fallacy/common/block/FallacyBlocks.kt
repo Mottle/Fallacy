@@ -10,6 +10,7 @@ import dev.deepslate.fallacy.common.registrate.formattedLang
 import dev.deepslate.fallacy.datagen.model.ModelHelper
 import net.minecraft.advancements.critereon.StatePropertiesPredicate
 import net.minecraft.tags.BlockTags
+import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.FarmBlock
 import net.minecraft.world.level.block.SoundType
@@ -85,6 +86,12 @@ object FallacyBlocks {
             SoundType.WOOD
         ).lightLevel { _ -> 6 }.mapColor(MapColor.WOOD).requiresCorrectToolForDrops().noLootTable()
     }.blockstate(ModelHelper.withTexture("block/charcoal_forge/lit")).tag(BlockTags.MINEABLE_WITH_PICKAXE).register()
+
+    val BURNOUT_LOG: BlockEntry<Block> = REG.block("burnout_log", ::Block).properties {
+        Properties.of().strength(0.5f).instrument(NoteBlockInstrument.BASS).sound(SoundType.WOOD)
+            .mapColor(MapColor.COLOR_BLACK).sound(SoundType.SAND)
+    }.blockstate(ModelHelper.withTexture("block/charcoal_forge/ash"))
+        .tag(FallacyBlockTags.COAL, BlockTags.MINEABLE_WITH_SHOVEL).register()
 
     val CROP = CropBlocks
 

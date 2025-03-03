@@ -3,6 +3,7 @@ package dev.deepslate.fallacy.common.block
 import com.mojang.serialization.MapCodec
 import dev.deepslate.fallacy.common.block.entity.BurningLogEntity
 import dev.deepslate.fallacy.common.block.entity.FallacyBlockEntities
+import dev.deepslate.fallacy.util.TickHelper
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.core.registries.Registries
@@ -36,6 +37,7 @@ class BurningLog(properties: Properties) : BaseEntityBlock(properties) {
 
     override fun getRenderShape(state: BlockState): RenderShape = RenderShape.MODEL
 
+    //client
     @OnlyIn(value = Dist.CLIENT)
     override fun animateTick(state: BlockState, level: Level, pos: BlockPos, random: RandomSource) {
         if (!level.getBlockState(pos.above(2)).canBeReplaced()) return
@@ -43,6 +45,7 @@ class BurningLog(properties: Properties) : BaseEntityBlock(properties) {
         cookEffect(state, level, pos, random)
     }
 
+    //client
     @OnlyIn(value = Dist.CLIENT)
     private fun cookEffect(state: BlockState, level: Level, pos: BlockPos, random: RandomSource) {
         val x = pos.x + random.nextDouble()
@@ -69,6 +72,7 @@ class BurningLog(properties: Properties) : BaseEntityBlock(properties) {
     }
 
     override fun stepOn(level: Level, pos: BlockPos, state: BlockState, entity: Entity) {
+        if (TickHelper.checkServerTickRate(2)) return
         if (entity !is LivingEntity) return
 
         val frostWalker =

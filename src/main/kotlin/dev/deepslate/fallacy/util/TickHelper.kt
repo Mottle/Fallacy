@@ -4,6 +4,7 @@ import dev.deepslate.fallacy.Fallacy
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.client.event.ClientTickEvent
+import net.neoforged.neoforge.server.ServerLifecycleHooks
 
 object TickHelper {
     private var clientTickCounter = 0
@@ -20,7 +21,7 @@ object TickHelper {
         get() = clientTickCounter
 
     val currentServerTick
-        get() = ServerHelper.server?.tickCount ?: -1
+        get() = ServerLifecycleHooks.getCurrentServer()?.tickCount ?: -1
 
     fun checkServerTickRate(rate: Int): Boolean = currentServerTick % rate == 0
 

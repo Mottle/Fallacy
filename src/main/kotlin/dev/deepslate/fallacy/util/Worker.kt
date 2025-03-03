@@ -62,15 +62,22 @@ object Worker {
     object Handler {
         @SubscribeEvent(priority = EventPriority.LOWEST)
         fun onServerClosing(event: ServerStoppingEvent) {
+            logger.info("Shutting down IO thread pool.")
             IO_POOL.shutdown()
 
-            try {
-                IO_POOL.awaitTermination(5, TimeUnit.SECONDS)
+            val stopped = try {
+                IO_POOL.awaitTermination(3, TimeUnit.SECONDS)
             } catch (e: InterruptedException) {
                 Fallacy.LOGGER.error(e)
-            } finally {
+                false
+            }
+
+            if (!stopped) {
+                logger.warn("IO thread pool did not terminate in time. Shutting down forcefully.")
                 IO_POOL.shutdownNow()
             }
+
+            logger.info("IO thread pool shutdown complete.")
         }
 
         @SubscribeEvent(priority = EventPriority.HIGHEST)

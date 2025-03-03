@@ -1,5 +1,6 @@
 package dev.deepslate.fallacy.client.fog
 
+import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.weather.Weather
 import dev.deepslate.fallacy.weather.Weathers
 import dev.deepslate.fallacy.weather.impl.ClientWeatherEngine
@@ -53,6 +54,7 @@ class FogAdjuster {
         if (blockAtCamera.block.defaultMapColor() == MapColor.WATER) return false
 
         val weather = ClientWeatherEngine.weatherHere?.weather ?: return false
+
         return weather == Weathers.SANDSTORM.get() || weather == Weathers.SNOWSTORM.get() || lerpTicksCurrent < lerpTicksMax
     }
 
@@ -66,13 +68,14 @@ class FogAdjuster {
 
         vanilla.rgb = Triple(event.red, event.green, event.blue)
 
-        if (isFogOverriding()) {
+        if (isFogOverriding() && active != DEFAULT) {
             val level = Minecraft.getInstance().level ?: return
             val brightness =
                 Mth.clamp(Mth.cos(level.getTimeOfDay(1f) * (Math.PI.toFloat() * 2f)) * 2.0f + 0.5f, 0.0f, 1.0f)
             event.red = active.rgb.first * brightness
             event.green = active.rgb.second * brightness
             event.blue = active.rgb.third * brightness
+            Fallacy.LOGGER.info("red: ${event.red}, green: ${event.green}, blue: ${event.blue}")
         }
     }
 
@@ -92,14 +95,16 @@ class FogAdjuster {
             vanilla.fogEnd = event.farPlaneDistance
         }
 
-        if (isFogOverriding()) {
+        if (isFogOverriding() && active != DEFAULT) {
             if (event.mode == FogRenderer.FogMode.FOG_SKY) {
                 event.nearPlaneDistance = active.skyStart
                 event.farPlaneDistance = active.skyEnd
+//                Fallacy.LOGGER.info("skyStart: ${active.skyStart}, skyEnd: ${active.skyEnd}")
                 event.setCanceled(true)
             } else {
                 event.nearPlaneDistance = active.fogStart
                 event.farPlaneDistance = active.fogEnd
+//                Fallacy.LOGGER.info("fogStart: ${active.fogStart}, fogEnd: ${active.fogEnd}")
                 event.setCanceled(true)
             }
         }

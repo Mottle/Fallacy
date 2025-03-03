@@ -12,16 +12,16 @@ open class TickDurationBlockEntity(type: BlockEntityType<*>, pos: BlockPos, stat
 
     constructor(pos: BlockPos, state: BlockState) : this(FallacyBlockEntities.TICK_COUNTER.get(), pos, state)
 
-    protected var internalLastUpdatedTick = -1
+    protected var internalLastUpdatedTick = -1L
 
-    var lastUpdatedTick: Int
+    var lastUpdatedTick: Long
         get() = internalLastUpdatedTick
         set(value) {
             internalLastUpdatedTick = value
             setChanged()
         }
 
-    val durationTicks: Int
+    val durationTicks: Long
         get() = Calendar.time - lastUpdatedTick
 
     fun reset() {
@@ -30,12 +30,12 @@ open class TickDurationBlockEntity(type: BlockEntityType<*>, pos: BlockPos, stat
     }
 
     override fun loadAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
-        internalLastUpdatedTick = tag.getInt("last_updated_tick")
+        internalLastUpdatedTick = tag.getLong("last_updated_tick")
         super.loadAdditional(tag, registries)
     }
 
     override fun saveAdditional(tag: CompoundTag, registries: HolderLookup.Provider) {
-        tag.putInt("last_updated_tick", internalLastUpdatedTick)
+        tag.putLong("last_updated_tick", internalLastUpdatedTick)
         super.saveAdditional(tag, registries)
     }
 }

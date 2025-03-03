@@ -7,7 +7,6 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 
@@ -21,15 +20,18 @@ class BurningLogEntity(type: BlockEntityType<*>, pos: BlockPos, state: BlockStat
 
         fun serverTick(level: Level, pos: BlockPos, state: BlockState, entity: BurningLogEntity) {
             if (!TickHelper.checkServerTickRate(TICK_INTERVAL)) return
-            if (checkAroundState(level, pos)) {
+            if (!checkAroundState(level, pos)) {
                 entity.reset()
+                entity.markForSync()
                 return
             }
 
             if (entity.durationTicks >= MAX_BURNING_TICKS && level.isAreaLoaded(pos, 0)) {
-                level.setBlockAndUpdate(pos, Blocks.COAL_BLOCK.defaultBlockState())
+                level.setBlockAndUpdate(pos, FallacyBlocks.BURNOUT_LOG.get().defaultBlockState())
             }
         }
+
+//        private val shuffledCheck = Direction.entries.toTypedArray().shuffle()
 
         fun checkAroundState(level: Level, pos: BlockPos): Boolean {
             val directions = Direction.entries.map(pos::relative)

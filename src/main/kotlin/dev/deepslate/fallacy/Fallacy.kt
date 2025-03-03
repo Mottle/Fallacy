@@ -54,8 +54,8 @@ class Fallacy(val modBus: IEventBus, val modContainer: ModContainer) {
         Weathers.init(modBus)
 
         FallacyItems
-        FallacyBlockEntities
         FallacyBlocks
+        FallacyBlockEntities
 
         playRule()
     }

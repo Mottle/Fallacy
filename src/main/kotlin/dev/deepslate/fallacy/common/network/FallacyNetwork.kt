@@ -1,5 +1,6 @@
 package dev.deepslate.fallacy.common.network
 
+import dev.deepslate.fallacy.Calendar
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.data.player.FoodHistory
 import dev.deepslate.fallacy.common.data.player.NutritionState
@@ -82,6 +83,12 @@ object FallacyNetwork {
             BodyHeatSyncPacket.TYPE,
             BodyHeatSyncPacket.STREAM_CODEC,
             BodyHeatHandler::handleSync
+        )
+
+        registrar.playToClient(
+            CalendarSyncPacket.TYPE,
+            CalendarSyncPacket.STREAM_CODEC,
+            Calendar.ClientHandler::handleTimeSync
         )
     }
 }
