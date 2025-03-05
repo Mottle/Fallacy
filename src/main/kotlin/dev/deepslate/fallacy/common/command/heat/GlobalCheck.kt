@@ -18,7 +18,7 @@ class GlobalCheck : GameCommand {
 
     override val suggestions: Map<String, SuggestionProvider<CommandSourceStack>> = emptyMap()
 
-    override val permissionRequired: String? = null
+    override val permissionRequired: String? = "fallacy.heat.global_check"
 
     private var running: Boolean = false
 

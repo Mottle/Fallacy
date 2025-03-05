@@ -1,6 +1,5 @@
 package dev.deepslate.fallacy.client.fog
 
-import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.weather.Weather
 import dev.deepslate.fallacy.weather.Weathers
 import dev.deepslate.fallacy.weather.impl.ClientWeatherEngine
@@ -75,7 +74,7 @@ class FogAdjuster {
             event.red = active.rgb.first * brightness
             event.green = active.rgb.second * brightness
             event.blue = active.rgb.third * brightness
-            Fallacy.LOGGER.info("red: ${event.red}, green: ${event.green}, blue: ${event.blue}")
+//            Fallacy.LOGGER.info("red: ${event.red}, green: ${event.green}, blue: ${event.blue}")
         }
     }
 

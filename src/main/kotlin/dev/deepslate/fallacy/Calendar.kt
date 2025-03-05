@@ -45,7 +45,9 @@ sealed class Calendar {
         count = modifier(count)
     }
 
-    open fun tick() { count++ }
+    open fun tick() {
+        count++
+    }
 
     @OnlyIn(Dist.DEDICATED_SERVER)
     class ServerCalendar : Calendar() {

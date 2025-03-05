@@ -17,7 +17,7 @@ class RaceSet : GameCommand {
 
     override val source: String = "fallacy race set %s<player name> %r<race id>"
 
-    override val permissionRequired: String? = null
+    override val permissionRequired: String? = "fallacy.race.set"
 
     override val suggestions: Map<String, SuggestionProvider<CommandSourceStack>> = mapOf(
         "player name" to SimpleSuggestionProvider.SERVER_PLAYER_NAME,

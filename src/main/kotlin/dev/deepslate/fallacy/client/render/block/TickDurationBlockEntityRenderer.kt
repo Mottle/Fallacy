@@ -7,9 +7,6 @@ import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
-import net.minecraft.world.item.ItemDisplayContext
-import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
 
 class TickDurationBlockEntityRenderer<T : TickDurationBlockEntity>(val context: BlockEntityRendererProvider.Context) :
     BlockEntityRenderer<T> {
@@ -25,7 +22,7 @@ class TickDurationBlockEntityRenderer<T : TickDurationBlockEntity>(val context: 
 
         poseStack.run {
             pushPose()
-            translate(0.5, 1.5,  0.5) // 调整高度
+            translate(0.5, 1.5, 0.5) // 调整高度
             mulPose(Minecraft.getInstance().entityRenderDispatcher.cameraOrientation())
 //            scale(-0.02f, -0.02f, 0.02f) // 调整大小
             scale(0.025f, -0.025f, 0.025f)

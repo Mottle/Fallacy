@@ -14,7 +14,7 @@ class WeatherClean : GameCommand {
 
     override val suggestions: Map<String, SuggestionProvider<CommandSourceStack>> = mapOf()
 
-    override val permissionRequired: String? = null
+    override val permissionRequired: String? = "fallacy.weather.clean"
 
     override fun execute(context: CommandContext<CommandSourceStack>): Int {
         val engine = context.source.level.weatherEngine as? ServerWeatherEngine ?: return 0
