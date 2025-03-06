@@ -15,7 +15,7 @@ import net.minecraft.network.chat.Component
 class RaceGet : GameCommand {
     override val source: String = "fallacy race get %s<player name>"
 
-    override val permissionRequired: String? = "fallacy.race.get"
+    override val permissionRequired: String? = "fallacy.command.race.get"
 
     override val suggestions: Map<String, SuggestionProvider<CommandSourceStack>> = mapOf(
         "player name" to SimpleSuggestionProvider.SERVER_PLAYER_NAME

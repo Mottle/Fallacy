@@ -12,7 +12,7 @@ class ChunkState : GameCommand {
 
     override val suggestions: Map<String, SuggestionProvider<CommandSourceStack>> = emptyMap()
 
-    override val permissionRequired: String? = "fallacy.heat.chunk_state"
+    override val permissionRequired: String? = "fallacy.command.heat.chunk_state"
 
     override fun execute(context: CommandContext<CommandSourceStack>): Int {
         if (context.source.player == null) return 0

@@ -13,7 +13,7 @@ class EngineState : GameCommand {
 
     override val suggestions: Map<String, SuggestionProvider<CommandSourceStack>> = emptyMap()
 
-    override val permissionRequired: String? = "fallacy.heat.engine_state"
+    override val permissionRequired: String? = "fallacy.command.heat.engine_state"
 
     override fun execute(context: CommandContext<CommandSourceStack>): Int {
         val level = context.source.level

@@ -30,5 +30,6 @@ object FallacyCommands {
         add(Here())
         add(QueryState())
         add(Query())
+//        add(Fake())
     }
 }

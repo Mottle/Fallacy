@@ -23,7 +23,7 @@ class WeatherSet : GameCommand {
     override val suggestions: Map<String, SuggestionProvider<CommandSourceStack>>
         get() = mapOf("weather" to SimpleSuggestionProvider.WEATHER, "range" to SimpleSuggestionProvider.WEATHER_RANGE)
 
-    override val permissionRequired: String? = "fallacy.weather.set"
+    override val permissionRequired: String? = "fallacy.command.weather.set"
 
     override fun execute(context: CommandContext<CommandSourceStack>): Int {
         val weatherId = ResourceLocationArgument.getId(context, "weather")

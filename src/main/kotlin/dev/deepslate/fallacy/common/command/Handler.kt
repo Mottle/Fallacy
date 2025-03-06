@@ -1,6 +1,7 @@
 package dev.deepslate.fallacy.common.command
 
 import dev.deepslate.fallacy.Fallacy
+import dev.deepslate.fallacy.permission.PermissionManager
 import dev.deepslate.fallacy.util.command.CommandConverter
 import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
@@ -15,7 +16,11 @@ object Handler {
         val converter = CommandConverter()
 
         FallacyCommands.commands.forEach { cmd ->
-            val raw = converter.convert(cmd)
+            val raw = converter.convert(cmd).requires { ctx ->
+                if (!ctx.isPlayer) return@requires true
+                if (cmd.permissionRequired == null) return@requires true
+                return@requires PermissionManager.query(ctx.player!!, cmd.permissionRequired!!).asBoolean()
+            }
             dispatcher.register(raw)
         }
     }

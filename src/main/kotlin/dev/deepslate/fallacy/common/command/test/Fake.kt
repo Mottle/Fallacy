@@ -18,7 +18,7 @@ class Fake : GameCommand {
 
     override val suggestions: Map<String, SuggestionProvider<CommandSourceStack>> = mapOf()
 
-    override val permissionRequired: String? = null
+    override val permissionRequired: String? = "fallacy.command.test.fake"
 
     override fun execute(context: CommandContext<CommandSourceStack>): Int {
         val player = context.source.player ?: return 0

@@ -14,7 +14,7 @@ class QueryState : GameCommand {
 
     override val suggestions: Map<String, SuggestionProvider<CommandSourceStack>> = emptyMap()
 
-    override val permissionRequired: String? = "fallacy.heat.query_state"
+    override val permissionRequired: String? = "fallacy.command.heat.query_state"
 
     override fun execute(context: CommandContext<CommandSourceStack>): Int {
         val x = IntegerArgumentType.getInteger(context, "x")
