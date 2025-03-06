@@ -3,10 +3,8 @@ package dev.deepslate.fallacy.util.command
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import dev.deepslate.fallacy.util.command.lexer.CommandLexer
-import net.luckperms.api.LuckPermsProvider
-import net.luckperms.api.node.types.PermissionNode
 import net.minecraft.commands.CommandSourceStack
-import net.minecraft.server.level.ServerPlayer
+import net.minecraft.network.chat.Component
 
 class CommandConverter {
 
@@ -18,13 +16,14 @@ class CommandConverter {
         val tokens = lexer.scan(command.source)
 
         val execution = execution@{ context: CommandContext<CommandSourceStack> ->
-            if (context.source.player != null && command.permissionRequired != null) {
-                val player = context.source.player!!
-                val luckPerms = LuckPermsProvider.get()
-                val user = luckPerms.getPlayerAdapter<ServerPlayer>(ServerPlayer::class.java).getUser(player)
-                val permission = PermissionNode.builder(command.permissionRequired!!).build()
 
-                if (!user.distinctNodes.contains(permission)) return@execution 0
+            if (context.source.player != null) {
+                val player = context.source.player!!
+
+                if (!command.checkPermission(player)) {
+                    context.source.sendFailure(Component.literal("u dont have permission to use this command"))
+                    return@execution 0
+                }
             }
             return@execution command.execute(context)
         }

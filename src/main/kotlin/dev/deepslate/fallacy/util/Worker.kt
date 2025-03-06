@@ -68,7 +68,7 @@ object Worker {
             val stopped = try {
                 IO_POOL.awaitTermination(3, TimeUnit.SECONDS)
             } catch (e: InterruptedException) {
-                Fallacy.LOGGER.error(e)
+                logger.error(e)
                 false
             }
 

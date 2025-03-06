@@ -1,21 +1,23 @@
 package dev.deepslate.fallacy.client.hud
 
-import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.client.hud.impl.*
 import net.minecraft.client.DeltaTracker
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.LayeredDraw
 import net.minecraft.world.entity.player.Player
+import org.apache.logging.log4j.LogManager
 
 
-class LayerRender : LayeredDraw.Layer {
+class LayerRenderer : LayeredDraw.Layer {
 
     companion object {
         private val BARS = listOf(
             HealthHud(), BoneHud(), HungerHud(), AbsorptionHud(), HydrationHud(), AirHud(), VehicleHud(),
             ArmorHud()
         )
+
+        private val logger = LogManager.getLogger("fallacy-layerRenderer")
     }
 
     override fun render(
@@ -44,7 +46,7 @@ class LayerRender : LayeredDraw.Layer {
                     getOffset(guiGraphics, bar.isRightHandSide)
                 )
             } catch (e: Exception) {
-                Fallacy.LOGGER.error(e)
+                logger.error(e)
                 bar.isErrored = true
             }
         }

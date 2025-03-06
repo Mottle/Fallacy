@@ -13,7 +13,7 @@ object ModEventHandler {
     @SubscribeEvent
     fun setLayers(event: RegisterGuiLayersEvent) {
         val rid = Fallacy.withID("layers")
-        event.registerBelow(VanillaGuiLayers.SELECTED_ITEM_NAME, rid, LayerRender())
+        event.registerBelow(VanillaGuiLayers.SELECTED_ITEM_NAME, rid, LayerRenderer())
         Fallacy.LOGGER.info("Registering Vanilla gui layers.")
     }
 }
