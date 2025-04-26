@@ -13,7 +13,6 @@ import net.neoforged.neoforge.registries.DeferredRegister
 import net.neoforged.neoforge.registries.NewRegistryEvent
 import net.neoforged.neoforge.registries.RegistryBuilder
 
-@EventBusSubscriber(modid = Fallacy.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 object Races {
     val KEY: ResourceKey<Registry<Race>> = ResourceKey.createRegistryKey<Race>(Fallacy.withID("race"))
 
@@ -21,9 +20,12 @@ object Races {
 
     private val registry = DeferredRegister.create(REGISTRY, Fallacy.MOD_ID)
 
-    @SubscribeEvent
-    fun registerRegistries(event: NewRegistryEvent) {
-        event.register(REGISTRY)
+    @EventBusSubscriber(modid = Fallacy.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+    object Handler {
+        @SubscribeEvent
+        fun registerRegistries(event: NewRegistryEvent) {
+            event.register(REGISTRY)
+        }
     }
 
     fun init(bus: IEventBus) {

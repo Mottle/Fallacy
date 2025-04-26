@@ -4,6 +4,7 @@ import dev.deepslate.fallacy.behavior.Behaviors
 import dev.deepslate.fallacy.common.FallacyTabs
 import dev.deepslate.fallacy.common.block.FallacyBlocks
 import dev.deepslate.fallacy.common.block.entity.FallacyBlockEntities
+import dev.deepslate.fallacy.common.block.multiblock.Multiblocks
 import dev.deepslate.fallacy.common.data.FallacyAttachments
 import dev.deepslate.fallacy.common.data.FallacyAttributes
 import dev.deepslate.fallacy.common.effect.FallacyEffects
@@ -52,6 +53,7 @@ class Fallacy(val modBus: IEventBus, val modContainer: ModContainer) {
         FallacyDataComponents.init(modBus)
         FallacyArmorMaterials.init(modBus)
         Weathers.init(modBus)
+        Multiblocks.init(modBus)
 
         FallacyItems
         FallacyBlocks
