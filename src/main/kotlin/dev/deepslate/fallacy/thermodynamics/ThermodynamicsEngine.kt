@@ -3,10 +3,7 @@ package dev.deepslate.fallacy.thermodynamics
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.block.BlockWithThermalConductivity
 import dev.deepslate.fallacy.inject.FallacyThermodynamicsExtension
-import dev.deepslate.fallacy.util.TickHelper
-import dev.deepslate.fallacy.util.getEpitaxialHeat
-import dev.deepslate.fallacy.util.getThermalConductivity
-import dev.deepslate.fallacy.util.hasHeat
+import dev.deepslate.fallacy.util.*
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
@@ -46,10 +43,15 @@ abstract class ThermodynamicsEngine {
 
         fun fromFreezingPoint(heat: Int): Int = heat + FREEZING_POINT
 
-        fun isHeatSource(state: BlockState): Boolean = state.hasHeat() || VanillaHeat.hasHeat(state)
+        fun isHeatSource(state: BlockState): Boolean = state.isHeatSource() || VanillaHeat.hasHeat(state)
 
         fun getEpitaxialHeat(state: BlockState, level: Level, pos: BlockPos): Int {
-            if (state.hasHeat()) return state.getEpitaxialHeat(level, pos)
+            if (state.isHeatSource()) return state.getEpitaxialHeat(level, pos)
+            return VanillaHeat.getHeat(state)
+        }
+
+        fun getIntrinsicHeat(state: BlockState, level: Level, pos: BlockPos): Int {
+            if (state.isHeatSource()) return state.getIntrinsicHeat(level, pos)
             return VanillaHeat.getHeat(state)
         }
 

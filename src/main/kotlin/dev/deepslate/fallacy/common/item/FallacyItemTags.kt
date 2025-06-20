@@ -22,4 +22,7 @@ object FallacyItemTags {
     val COAL: TagKey<Item> = create("coal")
 
     val FIRE_STARTER: TagKey<Item> = create("fire_starter")
+
+    //可熔炼
+    val SMELTABLE: TagKey<Item> = create("smeltable")
 }

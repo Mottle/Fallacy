@@ -44,4 +44,6 @@ object FallacyItems {
     val TOOL = ToolItems
 
     val MATERIAL = MaterialItems
+
+    val SMELTING = SmeltingItems
 }

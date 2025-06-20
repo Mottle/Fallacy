@@ -3,8 +3,8 @@ package dev.deepslate.fallacy.common.block
 import com.tterrag.registrate.util.entry.BlockEntry
 import dev.deepslate.fallacy.common.block.blocks.CropBlocks
 import dev.deepslate.fallacy.common.block.blocks.GeologyBlocks
+import dev.deepslate.fallacy.common.block.blocks.SmeltingBlocks
 import dev.deepslate.fallacy.common.item.FallacyItems
-import dev.deepslate.fallacy.common.item.items.RaceItems
 import dev.deepslate.fallacy.common.registrate.REG
 import dev.deepslate.fallacy.common.registrate.formattedLang
 import dev.deepslate.fallacy.datagen.model.ModelHelper
@@ -85,17 +85,17 @@ object FallacyBlocks {
         Properties.of().strength(2f).instrument(NoteBlockInstrument.BASS).sound(
             SoundType.WOOD
         ).lightLevel { _ -> 6 }.mapColor(MapColor.WOOD).requiresCorrectToolForDrops().noLootTable()
-    }.blockstate(ModelHelper.withTexture("block/charcoal_forge/lit")).tag(BlockTags.MINEABLE_WITH_PICKAXE).register()
+    }.blockstate(ModelHelper.withTexture("charcoal_forge/lit")).tag(BlockTags.MINEABLE_WITH_PICKAXE).register()
 
     val BURNOUT_LOG: BlockEntry<Block> = REG.block("burnout_log", ::Block).properties {
         Properties.of().strength(0.5f).instrument(NoteBlockInstrument.BASS).sound(SoundType.WOOD)
             .mapColor(MapColor.COLOR_BLACK).sound(SoundType.SAND)
-    }.blockstate(ModelHelper.withTexture("block/charcoal_forge/ash"))
+    }.blockstate(ModelHelper.withTexture("charcoal_forge/ash"))
         .tag(FallacyBlockTags.COAL, BlockTags.MINEABLE_WITH_SHOVEL).register()
 
     val CROP = CropBlocks
 
-    val RACE = RaceItems
-
     val GEOLOGY = GeologyBlocks
+
+    val SMELTING = SmeltingBlocks
 }
