@@ -39,7 +39,7 @@ import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.sqrt
 
-class Skeleton : Race, Respawnable {
+class Skeleton : Race(), Respawnable {
 
     companion object {
         val ID = Fallacy.withID("skeleton")
@@ -214,12 +214,12 @@ class Skeleton : Race, Respawnable {
 
     }
 
-    override fun set(player: ServerPlayer) {
+    override fun apply(player: ServerPlayer) {
         Behavior.addAll(player, TAGS)
         syncBone(player)
     }
 
-    override fun remove(player: ServerPlayer) {
+    override fun deapply(player: ServerPlayer) {
         Behavior.removeAll(player, TAGS)
     }
 

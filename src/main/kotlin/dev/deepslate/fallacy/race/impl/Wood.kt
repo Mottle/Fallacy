@@ -13,7 +13,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import kotlin.math.pow
 
-class Wood : Race, Respawnable {
+class Wood : Race(), Respawnable {
 
     companion object {
         val ID = Fallacy.withID("wood")
@@ -59,11 +59,11 @@ class Wood : Race, Respawnable {
         AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
     )
 
-    override fun set(player: ServerPlayer) {
+    override fun apply(player: ServerPlayer) {
         player.getAttribute(Attributes.ATTACK_SPEED)!!.addPermanentModifier(attackSpeedModifier)
     }
 
-    override fun remove(player: ServerPlayer) {
+    override fun deapply(player: ServerPlayer) {
         player.getAttribute(Attributes.ATTACK_SPEED)!!.removeModifier(attackSpeedModifier)
     }
 

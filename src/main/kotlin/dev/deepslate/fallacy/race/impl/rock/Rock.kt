@@ -31,7 +31,7 @@ import net.minecraft.world.item.enchantment.Enchantment
 import net.minecraft.world.item.enchantment.Enchantments
 import kotlin.math.pow
 
-class Rock : Race, Respawnable {
+class Rock : Race(), Respawnable {
     companion object {
         val ID = Fallacy.Companion.withID("rock")
 
@@ -196,12 +196,12 @@ class Rock : Race, Respawnable {
         AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
     )
 
-    override fun set(player: ServerPlayer) {
+    override fun apply(player: ServerPlayer) {
         setAllArmor(player)
         player.getAttribute(Attributes.ATTACK_SPEED)!!.addPermanentModifier(attackSpeedModifier)
     }
 
-    override fun remove(player: ServerPlayer) {
+    override fun deapply(player: ServerPlayer) {
         player.getAttribute(Attributes.ATTACK_SPEED)!!.removeModifier(attackSpeedModifier)
         removeAllArmor(player)
     }
@@ -210,7 +210,7 @@ class Rock : Race, Respawnable {
         player.getAttribute(Attributes.ATTACK_SPEED)!!.addPermanentModifier(attackSpeedModifier)
     }
 
-    override fun onClone(
+    override fun onPreRespawn(
         player: ServerPlayer,
         origin: ServerPlayer
     ) {

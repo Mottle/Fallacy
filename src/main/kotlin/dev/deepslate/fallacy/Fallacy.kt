@@ -38,7 +38,7 @@ class Fallacy(val modBus: IEventBus, val modContainer: ModContainer) {
     }
 
     init {
-        modBus.addListener(::commonSetup)
+//        modBus.addListener(::commonSetup)
         Registration.init()
         RegionTypes.init(modBus)
         FallacyAttachments.register(modBus)

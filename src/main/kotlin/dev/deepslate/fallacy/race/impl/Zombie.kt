@@ -6,12 +6,10 @@ import dev.deepslate.fallacy.behavior.Behaviors
 import dev.deepslate.fallacy.common.data.player.NutritionState
 import dev.deepslate.fallacy.common.data.player.PlayerAttribute
 import dev.deepslate.fallacy.race.Race
-import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 
-class Zombie : Race {
+class Zombie : Race() {
 
     companion object {
         val ID = Fallacy.withID("zombie")
@@ -28,18 +26,11 @@ class Zombie : Race {
 
     override val nutrition: NutritionState = NutritionState.noNeed()
 
-    override fun tick(
-        level: ServerLevel,
-        player: ServerPlayer,
-        position: BlockPos
-    ) {
-    }
-
-    override fun set(player: ServerPlayer) {
+    override fun apply(player: ServerPlayer) {
         Behavior.addAll(player, TAGS)
     }
 
-    override fun remove(player: ServerPlayer) {
+    override fun deapply(player: ServerPlayer) {
         Behavior.removeAll(player, TAGS)
     }
 }

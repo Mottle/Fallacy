@@ -16,18 +16,18 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.player.Player
 import net.neoforged.neoforge.network.PacketDistributor
 
-interface Race {
-    val namespacedId: ResourceLocation
+abstract class Race {
+    abstract val namespacedId: ResourceLocation
 
-    val attribute: PlayerAttribute
+    abstract val attribute: PlayerAttribute
 
-    val nutrition: NutritionState
+    abstract val nutrition: NutritionState
 
-    fun tick(level: ServerLevel, player: ServerPlayer, position: BlockPos)
+    open fun tick(level: ServerLevel, player: ServerPlayer, position: BlockPos) {}
 
-    fun set(player: ServerPlayer)
+    open fun apply(player: ServerPlayer) {}
 
-    fun remove(player: ServerPlayer)
+    open fun deapply(player: ServerPlayer) {}
 
     fun isSame(race: Race) = this.namespacedId == race.namespacedId
 
@@ -62,7 +62,7 @@ interface Race {
             val oldRace = get(player)
             val diet = player.getCapability(FallacyCapabilities.DIET)!!
 
-            oldRace.remove(player)
+            oldRace.deapply(player)
             player.setData(FallacyAttachments.RACE_ID, race.namespacedId)
             race.attribute.set(player)
             diet.nutrition = race.nutrition
@@ -71,7 +71,7 @@ interface Race {
                 diet.synchronize()
             }
 
-            race.set(player)
+            race.apply(player)
             sync(player)
         }
     }

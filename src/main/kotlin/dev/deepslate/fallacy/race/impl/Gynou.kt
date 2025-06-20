@@ -6,13 +6,11 @@ import dev.deepslate.fallacy.common.data.player.PlayerAttribute
 import dev.deepslate.fallacy.common.item.component.FallacyDataComponents
 import dev.deepslate.fallacy.race.Race
 import dev.deepslate.fallacy.race.Respawnable
-import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.Unit
 import net.minecraft.world.damagesource.DamageTypes
@@ -26,7 +24,7 @@ import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent
 
-class Gynou : Race, Respawnable {
+class Gynou : Race(), Respawnable {
 
     companion object {
         val ID = Fallacy.withID("gynou")
@@ -61,14 +59,7 @@ class Gynou : Race, Respawnable {
 
     override val nutrition: NutritionState = NutritionState()
 
-    override fun tick(
-        level: ServerLevel,
-        player: ServerPlayer,
-        position: BlockPos
-    ) {
-    }
-
-    override fun set(player: ServerPlayer) {
+    override fun apply(player: ServerPlayer) {
         setWings(player)
     }
 
@@ -76,7 +67,7 @@ class Gynou : Race, Respawnable {
         setWings(player)
     }
 
-    override fun remove(player: ServerPlayer) {
+    override fun deapply(player: ServerPlayer) {
         player.setItemSlot(EquipmentSlot.CHEST, Items.AIR.defaultInstance)
     }
 

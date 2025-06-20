@@ -51,4 +51,6 @@ object Races {
     val ORC: DeferredHolder<Race, Orc> = registry.register(Orc.ID.path, ::Orc)
 
     val SKELETON: DeferredHolder<Race, Skeleton> = registry.register(Skeleton.ID.path, ::Skeleton)
+
+    val SPIDER: DeferredHolder<Race, Spider> = registry.register(Spider.ID.path, ::Spider)
 }
