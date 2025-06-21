@@ -1,9 +1,10 @@
 package dev.deepslate.fallacy.race.impl
 
 import dev.deepslate.fallacy.Fallacy
-import dev.deepslate.fallacy.common.data.player.NutritionState
 import dev.deepslate.fallacy.common.data.player.PlayerAttribute
 import dev.deepslate.fallacy.race.Race
+import dev.deepslate.fallacy.race.resources.AttributeResource
+import dev.deepslate.fallacy.race.resources.NutritionResource
 import net.minecraft.resources.ResourceLocation
 
 class Unknown : Race() {
@@ -17,7 +18,12 @@ class Unknown : Race() {
 
     override val namespacedId: ResourceLocation = ID
 
-    override val attribute: PlayerAttribute = PlayerAttribute()
+//    override val attribute: PlayerAttribute = PlayerAttribute()
+//
+//    override val nutrition: NutritionState = NutritionState()
 
-    override val nutrition: NutritionState = NutritionState()
+    override val resources: Map<String, Resource> = mapOf(
+        AttributeResource.KEY to AttributeResource(PlayerAttribute()),
+        NutritionResource.KEY to NutritionResource.of()
+    )
 }

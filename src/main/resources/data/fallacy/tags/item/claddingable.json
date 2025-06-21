@@ -6,6 +6,7 @@
         "minecraft:emerald",
         "minecraft:quartz",
         "minecraft:coal",
-        "minecraft:obsidian"
+        "minecraft:obsidian",
+        "minecraft:netherite_ingot"
     ]
 }

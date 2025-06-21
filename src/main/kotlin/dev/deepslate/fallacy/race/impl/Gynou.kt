@@ -1,11 +1,12 @@
 package dev.deepslate.fallacy.race.impl
 
 import dev.deepslate.fallacy.Fallacy
-import dev.deepslate.fallacy.common.data.player.NutritionState
 import dev.deepslate.fallacy.common.data.player.PlayerAttribute
 import dev.deepslate.fallacy.common.item.component.FallacyDataComponents
 import dev.deepslate.fallacy.race.Race
 import dev.deepslate.fallacy.race.Respawnable
+import dev.deepslate.fallacy.race.resources.AttributeResource
+import dev.deepslate.fallacy.race.resources.NutritionResource
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.Registries
@@ -46,18 +47,34 @@ class Gynou : Race(), Respawnable {
 
     override val namespacedId: ResourceLocation = ID
 
-    override val attribute: PlayerAttribute = PlayerAttribute(
-        health = 20.0,
-        attackDamage = 2.5,
-        attackSpeed = 5.0,
-        armor = -2.0,
-        strength = 0.75,
-        jumpStrength = 0.42 * 2.5,
-        safeFallDistance = 3.0 * 2.5,
-        fallDamageMultiplier = 0.5
-    )
+//    override val attribute: PlayerAttribute = PlayerAttribute(
+//        health = 20.0,
+//        attackDamage = 2.5,
+//        attackSpeed = 5.0,
+//        armor = -2.0,
+//        strength = 0.75,
+//        jumpStrength = 0.42 * 2.5,
+//        safeFallDistance = 3.0 * 2.5,
+//        fallDamageMultiplier = 0.5
+//    )
 
-    override val nutrition: NutritionState = NutritionState()
+//    override val nutrition: NutritionState = NutritionState()
+
+    override val resources: Map<String, Resource> = mapOf(
+        AttributeResource.KEY to AttributeResource(
+            PlayerAttribute(
+                health = 20.0,
+                attackDamage = 2.5,
+                attackSpeed = 5.0,
+                armor = -2.0,
+                strength = 0.75,
+                jumpStrength = 0.42 * 2.5,
+                safeFallDistance = 3.0 * 2.5,
+                fallDamageMultiplier = 0.5
+            )
+        ),
+        NutritionResource.KEY to NutritionResource.of()
+    )
 
     override fun apply(player: ServerPlayer) {
         setWings(player)

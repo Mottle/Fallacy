@@ -13,6 +13,8 @@ import dev.deepslate.fallacy.common.network.packet.BoneSyncPacket
 import dev.deepslate.fallacy.race.Race
 import dev.deepslate.fallacy.race.Races
 import dev.deepslate.fallacy.race.Respawnable
+import dev.deepslate.fallacy.race.resources.AttributeResource
+import dev.deepslate.fallacy.race.resources.NutritionResource
 import dev.deepslate.fallacy.util.EntityHelper
 import dev.deepslate.fallacy.util.TickHelper
 import net.minecraft.core.BlockPos
@@ -132,7 +134,7 @@ class Skeleton : Race(), Respawnable {
         private fun check(entity: LivingEntity, item: ItemStack): Boolean {
             if (!item.`is`(Items.BONE)) return false
             if (entity !is Player) return false
-            if (!Race.get(entity).isSame(Races.SKELETON)) return false
+            if (!Race.get(entity).`is`(Races.SKELETON)) return false
             return true
         }
 
@@ -183,10 +185,23 @@ class Skeleton : Race(), Respawnable {
 
     override val namespacedId: ResourceLocation = ID
 
-    override val attribute: PlayerAttribute =
-        PlayerAttribute(armor = -5.0, attackDamage = 6.0, strength = 1.0, magicResistance = 40.0, health = 20.0)
+//    override val attribute: PlayerAttribute =
+//        PlayerAttribute(armor = -5.0, attackDamage = 6.0, strength = 1.0, magicResistance = 40.0, health = 20.0)
+//
+//    override val nutrition: NutritionState = NutritionState.noNeed()
 
-    override val nutrition: NutritionState = NutritionState.noNeed()
+    override val resources: Map<String, Resource> = mapOf(
+        AttributeResource.KEY to AttributeResource(
+            PlayerAttribute(
+                armor = -5.0,
+                attackDamage = 6.0,
+                strength = 1.0,
+                magicResistance = 40.0,
+                health = 20.0
+            )
+        ),
+        NutritionResource.KEY to NutritionResource(NutritionState.noNeed())
+    )
 
     fun syncBone(serverPlayer: ServerPlayer) {
         val bone = serverPlayer.getData(FallacyAttachments.BONE)

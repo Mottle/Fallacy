@@ -13,6 +13,8 @@ import dev.deepslate.fallacy.race.impl.rock.Helper.forceBind
 import dev.deepslate.fallacy.race.impl.rock.cladding.CladdingAttributeModifier
 import dev.deepslate.fallacy.race.impl.rock.cladding.CladdingContainer
 import dev.deepslate.fallacy.race.impl.rock.cladding.CladdingEnchantmentAdder
+import dev.deepslate.fallacy.race.resources.AttributeResource
+import dev.deepslate.fallacy.race.resources.NutritionResource
 import dev.deepslate.fallacy.util.TickHelper
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
@@ -73,7 +75,7 @@ class Rock : Race(), Respawnable {
             ),
             getKey(Items.NETHERITE_INGOT) to CladdingContainer(
                 1500, listOf(
-                    CladdingAttributeModifier(Attributes.ARMOR, 1.0)
+                    CladdingAttributeModifier(Attributes.ARMOR, 1.5)
                 )
             )
         )
@@ -83,25 +85,48 @@ class Rock : Race(), Respawnable {
 
     override val namespacedId: ResourceLocation = ID
 
-    override val attribute: PlayerAttribute = PlayerAttribute(
-        armor = -20.0,
-        health = 60.0,
-        attackDamage = 8.0,
-        attackKnockBack = 1.0,
-        magicResistance = 50.0,
-        moveSpeed = 9.0 / 100.0,
-        strength = 8.0,
-        gravity = 0.08 * 1.5,
-        jumpStrength = 0.42 * 1.195, // Magic number
-        fallDamageMultiplier = 1.5,
-        scale = 2.0.pow(1.0 / 3.0),
-        entityInteractionRange = 3.0 * 2.0.pow(1.0 / 3.0),
-        blockInteractionRange = 4.5 * 2.0.pow(1.0 / 3.0),
-        knockBackResistance = 0.2,
-        hunger = 60.0
-    )
+//    override val attribute: PlayerAttribute = PlayerAttribute(
+//        armor = -20.0,
+//        health = 60.0,
+//        attackDamage = 8.0,
+//        attackKnockBack = 1.0,
+//        magicResistance = 50.0,
+//        moveSpeed = 9.0 / 100.0,
+//        strength = 8.0,
+//        gravity = 0.08 * 1.5,
+//        jumpStrength = 0.42 * 1.195, // Magic number
+//        fallDamageMultiplier = 1.5,
+//        scale = 2.0.pow(1.0 / 3.0),
+//        entityInteractionRange = 3.0 * 2.0.pow(1.0 / 3.0),
+//        blockInteractionRange = 4.5 * 2.0.pow(1.0 / 3.0),
+//        knockBackResistance = 0.2,
+//        hunger = 60.0
+//    )
 
-    override val nutrition: NutritionState = NutritionState.Companion.noNeed()
+//    override val nutrition: NutritionState = NutritionState.Companion.noNeed()
+
+    override val resources: Map<String, Resource> = mapOf(
+        AttributeResource.KEY to AttributeResource(
+            PlayerAttribute(
+                armor = -20.0,
+                health = 60.0,
+                attackDamage = 8.0,
+                attackKnockBack = 1.0,
+                magicResistance = 50.0,
+                moveSpeed = 9.0 / 100.0,
+                strength = 8.0,
+                gravity = 0.08 * 1.5,
+                jumpStrength = 0.42 * 1.195, // Magic number
+                fallDamageMultiplier = 1.5,
+                scale = 2.0.pow(1.0 / 3.0),
+                entityInteractionRange = 3.0 * 2.0.pow(1.0 / 3.0),
+                blockInteractionRange = 4.5 * 2.0.pow(1.0 / 3.0),
+                knockBackResistance = 0.2,
+                hunger = 60.0
+            )
+        ),
+        NutritionResource.KEY to NutritionResource(NutritionState.noNeed())
+    )
 
     override fun tick(
         level: ServerLevel,

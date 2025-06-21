@@ -6,6 +6,7 @@ import net.minecraft.core.Holder
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.ai.attributes.Attribute
 import net.minecraft.world.entity.ai.attributes.Attributes
+import net.minecraft.world.entity.player.Player
 
 data class PlayerAttribute(
     val armor: Double = 0.0,//护甲值[0, 30] -> [0. 1024]
@@ -42,7 +43,7 @@ data class PlayerAttribute(
     val magicResistance: Double = 0.0,
     val magicStrength: Double = 0.0,
 ) {
-    fun set(player: ServerPlayer, refresh: Boolean = true) {
+    fun set(player: Player, refresh: Boolean = true) {
         set(player, Attributes.ARMOR, armor)
         set(player, Attributes.ARMOR_TOUGHNESS, toughness)
         set(player, Attributes.ATTACK_DAMAGE, attackDamage)
@@ -83,7 +84,7 @@ data class PlayerAttribute(
         }
     }
 
-    private fun set(player: ServerPlayer, holder: Holder<Attribute>, value: Double) {
+    private fun set(player: Player, holder: Holder<Attribute>, value: Double) {
         val instance = player.getAttribute(holder)
         if (instance == null) {
             Fallacy.LOGGER.warn("Attribute ${holder.value().descriptionId} is not found on player ${player.name}.")
