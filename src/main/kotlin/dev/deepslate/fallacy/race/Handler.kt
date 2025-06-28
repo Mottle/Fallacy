@@ -74,6 +74,6 @@ object Handler {
         val original = event.original as ServerPlayer
         val race = Race.get(player)
         if (race !is Respawnable) return
-        race.onPreRespawn(player, original)
+        race.onClone(player, original)
     }
 }

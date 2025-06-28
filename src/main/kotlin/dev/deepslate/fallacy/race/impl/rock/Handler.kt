@@ -6,16 +6,19 @@ import dev.deepslate.fallacy.common.item.component.CladdingData
 import dev.deepslate.fallacy.common.item.component.FallacyDataComponents
 import dev.deepslate.fallacy.common.network.packet.CladdingPacket
 import dev.deepslate.fallacy.race.Race
+import dev.deepslate.fallacy.race.Races
 import dev.deepslate.fallacy.race.impl.rock.Helper.applyCladding
 import dev.deepslate.fallacy.race.impl.rock.Helper.forceBind
 import dev.deepslate.fallacy.race.impl.rock.Rock.Companion.SKIN_REGENERATION_TICKS
-import dev.deepslate.fallacy.race.impl.rock.Rock.Companion.claddingEffectMap
+import dev.deepslate.fallacy.race.impl.rock.cladding.CladdingEffects
+import net.minecraft.core.Holder
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.tags.DamageTypeTags
+import net.minecraft.world.damagesource.DamageType
 import net.minecraft.world.damagesource.DamageTypes
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.item.ItemStack
@@ -45,7 +48,7 @@ object Handler {
 
     private fun doCladding(armor: ItemStack, carried: ItemStack) {
         val id = BuiltInRegistries.ITEM.getKey(carried.item)
-        val duration = claddingEffectMap[id]!!.duration
+        val duration = CladdingEffects[carried]!!.duration
         val claddings = armor.get(FallacyDataComponents.CLADDINGS)!!
         armor.set(FallacyDataComponents.CLADDINGS, claddings + CladdingData.Cladding(id, duration))
         carried.count--
@@ -74,27 +77,42 @@ object Handler {
         if (oldCladding.claddingCount != newCladdings.claddingCount) applyCladding(player, skin)
     }
 
+    //会伤害cladding的伤害类型
+    private val damageSet = mutableSetOf<Holder.Reference<DamageType>>()
+
     @SubscribeEvent
     fun onDamage(event: LivingDamageEvent.Pre) {
         val damage = event.source
         val player = event.entity as? ServerPlayer ?: return
         if (!player.isAlive) return
-        if (Race.Companion.get(player) !is Rock) return
+        if (!Race.Companion.get(player).`is`(Races.ROCK)) return
 
         if (damage.`is`(DamageTypeTags.BYPASSES_ARMOR)) return
-        val lookup = player.registryAccess().lookup(Registries.DAMAGE_TYPE).get()
 
-        val mobAttack = lookup.get(DamageTypes.MOB_ATTACK).get()
-        val playerAttack = lookup.get(DamageTypes.PLAYER_ATTACK).get()
-        val playerExplosion = lookup.get(DamageTypes.PLAYER_EXPLOSION).get()
-        val sonicBoom = lookup.get(DamageTypes.SONIC_BOOM).get()
-        val firework = lookup.get(DamageTypes.FIREWORKS).get()
-        val fireball = lookup.get(DamageTypes.FIREBALL).get()
-        val explosion = lookup.get(DamageTypes.EXPLOSION).get()
-        val arrow = lookup.get(DamageTypes.ARROW).get()
-        val set = setOf(mobAttack, playerAttack, playerExplosion, sonicBoom, firework, fireball, explosion, arrow)
+        if (damageSet.isEmpty()) {
+            val lookup = player.registryAccess().lookup(Registries.DAMAGE_TYPE).get()
 
-        if (!set.contains(damage.typeHolder())) return
+            val mobAttack = lookup.get(DamageTypes.MOB_ATTACK).get()
+            val playerAttack = lookup.get(DamageTypes.PLAYER_ATTACK).get()
+            val playerExplosion = lookup.get(DamageTypes.PLAYER_EXPLOSION).get()
+            val sonicBoom = lookup.get(DamageTypes.SONIC_BOOM).get()
+            val firework = lookup.get(DamageTypes.FIREWORKS).get()
+            val fireball = lookup.get(DamageTypes.FIREBALL).get()
+            val explosion = lookup.get(DamageTypes.EXPLOSION).get()
+            val arrow = lookup.get(DamageTypes.ARROW).get()
+            with(damageSet) {
+                add(mobAttack)
+                add(playerAttack)
+                add(playerExplosion)
+                add(sonicBoom)
+                add(firework)
+                add(fireball)
+                add(explosion)
+                add(arrow)
+            }
+        }
+
+        if (!damageSet.contains(damage.typeHolder())) return
 
         val amount = event.originalDamage
         val armorExtraDamage = (amount / 8).pow(2)

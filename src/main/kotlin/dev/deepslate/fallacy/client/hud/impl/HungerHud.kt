@@ -104,10 +104,11 @@ class HungerHud : HudLayerImpl("hunger") {
             val finalSat = clamp(
                 foodSetting.nutrition + saturation,
                 0f,
-                (hungerWidth + hunger).toFloat()
+//                (hungerWidth + hunger).toFloat()
+                maxSaturation
             )
 
-            val width = (WIDTH * finalSat / maxSaturation).toInt()
+            val width = (WIDTH * finalSat / maxSaturation * (maxSaturation / maxHunger)).toInt()
             val barFrom = xStart + if (isRightHandSide) WIDTH - width else 0
 
             saturationColor.pushGLWithAlpha(alpha)

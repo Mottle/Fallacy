@@ -10,15 +10,11 @@ import dev.deepslate.fallacy.race.Race
 import dev.deepslate.fallacy.race.Respawnable
 import dev.deepslate.fallacy.race.impl.rock.Helper.applyCladding
 import dev.deepslate.fallacy.race.impl.rock.Helper.forceBind
-import dev.deepslate.fallacy.race.impl.rock.cladding.CladdingAttributeModifier
-import dev.deepslate.fallacy.race.impl.rock.cladding.CladdingContainer
-import dev.deepslate.fallacy.race.impl.rock.cladding.CladdingEnchantmentAdder
 import dev.deepslate.fallacy.race.resources.AttributeResource
 import dev.deepslate.fallacy.race.resources.NutritionResource
 import dev.deepslate.fallacy.util.TickHelper
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
-import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
@@ -26,11 +22,8 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.ai.attributes.Attributes
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
 import net.minecraft.world.item.enchantment.Enchantment
-import net.minecraft.world.item.enchantment.Enchantments
 import kotlin.math.pow
 
 class Rock : Race(), Respawnable {
@@ -40,47 +33,6 @@ class Rock : Race(), Respawnable {
         const val CLADDING_LIMIT = 8
 
         val SKIN_REGENERATION_TICKS = TickHelper.second(10)
-
-        val claddingEffectMap: Map<ResourceLocation, CladdingContainer> = mapOf(
-            getKey(Items.IRON_INGOT) to CladdingContainer(
-                125,
-                listOf(CladdingAttributeModifier(Attributes.ARMOR, 0.2))
-            ),
-            getKey(Items.COPPER_INGOT) to CladdingContainer(
-                100,
-                listOf(
-                    CladdingAttributeModifier(Attributes.ARMOR, 0.2),
-                    CladdingAttributeModifier(Attributes.MOVEMENT_SPEED, -0.0015)
-                )
-            ),
-            getKey(Items.GOLD_INGOT) to CladdingContainer(
-                80, listOf(
-                    CladdingAttributeModifier(Attributes.MOVEMENT_SPEED, 0.001875),
-                    CladdingAttributeModifier(Attributes.MAX_HEALTH, -1.5)
-                )
-            ),
-            getKey(Items.DIAMOND) to CladdingContainer(
-                600, listOf(
-                    CladdingAttributeModifier(Attributes.ARMOR, 0.8),
-                )
-            ),
-            getKey(Items.OBSIDIAN) to CladdingContainer(
-                1200, listOf(
-                    CladdingEnchantmentAdder(Enchantments.FIRE_PROTECTION, 1),
-                    CladdingEnchantmentAdder(Enchantments.BLAST_PROTECTION, 1),
-                    CladdingAttributeModifier(Attributes.ARMOR, 0.5),
-                    CladdingAttributeModifier(Attributes.MOVEMENT_SPEED, -0.002)
-                ),
-                3
-            ),
-            getKey(Items.NETHERITE_INGOT) to CladdingContainer(
-                1500, listOf(
-                    CladdingAttributeModifier(Attributes.ARMOR, 1.5)
-                )
-            )
-        )
-
-        fun getKey(item: Item): ResourceLocation = BuiltInRegistries.ITEM.getKey(item)
     }
 
     override val namespacedId: ResourceLocation = ID
@@ -235,7 +187,7 @@ class Rock : Race(), Respawnable {
         player.getAttribute(Attributes.ATTACK_SPEED)!!.addPermanentModifier(attackSpeedModifier)
     }
 
-    override fun onPreRespawn(
+    override fun onClone(
         player: ServerPlayer,
         origin: ServerPlayer
     ) {

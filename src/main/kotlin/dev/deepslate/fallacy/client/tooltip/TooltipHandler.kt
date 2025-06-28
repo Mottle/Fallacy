@@ -1,4 +1,4 @@
-package dev.deepslate.fallacy.client
+package dev.deepslate.fallacy.client.tooltip
 
 import com.mojang.datafixers.util.Either
 import dev.deepslate.fallacy.Fallacy
@@ -19,7 +19,7 @@ import net.neoforged.bus.api.SubscribeEvent
 import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.client.event.RenderTooltipEvent
 
-@EventBusSubscriber(modid = Fallacy.MOD_ID, value = [Dist.CLIENT])
+@EventBusSubscriber(modid = Fallacy.Companion.MOD_ID, value = [Dist.CLIENT])
 object TooltipHandler {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     fun onDeprecatedTooltip(event: RenderTooltipEvent.GatherComponents) {
@@ -74,7 +74,7 @@ object TooltipHandler {
         if (eatTimes != 0) {
             event.tooltipElements.add(
                 Either.left(
-                    Component.translatable("item.tooltips.food_eat_times", FoodHistory.MAX_SIZE, eatTimes)
+                    Component.translatable("item.tooltips.food_eat_times", FoodHistory.Companion.MAX_SIZE, eatTimes)
                         .withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_PURPLE)
                 )
             )

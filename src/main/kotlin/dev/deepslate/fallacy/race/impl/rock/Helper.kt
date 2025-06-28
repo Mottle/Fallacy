@@ -4,7 +4,7 @@ import dev.deepslate.fallacy.common.item.FallacyItemTags
 import dev.deepslate.fallacy.common.item.FallacyItems
 import dev.deepslate.fallacy.common.item.component.FallacyDataComponents
 import dev.deepslate.fallacy.race.impl.rock.Rock.Companion.CLADDING_LIMIT
-import dev.deepslate.fallacy.race.impl.rock.Rock.Companion.claddingEffectMap
+import dev.deepslate.fallacy.race.impl.rock.cladding.CladdingEffects
 import net.minecraft.core.Holder
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.component.DataComponents
@@ -41,7 +41,7 @@ object Helper {
                 || `is`(FallacyItems.RACE.ROCK_SKIN_BROKEN_BOOTS)
     }
 
-    fun getMaxCladdingCount(id: ResourceLocation) = claddingEffectMap[id]?.maxCount ?: Int.MAX_VALUE
+    fun getMaxCladdingCount(id: ResourceLocation) = CladdingEffects[id]?.maxCount ?: Int.MAX_VALUE
 
     fun checkCladding(armor: ItemStack, carried: ItemStack): Boolean {
         if (!armor.has(FallacyDataComponents.CLADDINGS)) return false
@@ -86,8 +86,8 @@ object Helper {
         val lookup = player.registryAccess().lookup(Registries.ENCHANTMENT).get()
 
         val claddings = stack.get(FallacyDataComponents.CLADDINGS) ?: return
-        val modifiers = claddings.getModifiers(claddingEffectMap, slot)
-        val enchantments = claddings.getEnchantments(claddingEffectMap, lookup)
+        val modifiers = claddings.getModifiers(CladdingEffects.claddingEffectMap, slot)
+        val enchantments = claddings.getEnchantments(CladdingEffects.claddingEffectMap, lookup)
 
         applyModifiers(stack, modifiers, slot)
         applyEnchantments(stack, enchantments)

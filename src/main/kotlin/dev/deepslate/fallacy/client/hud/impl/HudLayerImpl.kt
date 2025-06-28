@@ -1,6 +1,7 @@
 package dev.deepslate.fallacy.client.hud.impl
 
 import dev.deepslate.fallacy.Fallacy
+import dev.deepslate.fallacy.client.hud.HudLayer
 import dev.deepslate.fallacy.util.RGB
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
@@ -8,7 +9,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Player
 import kotlin.math.floor
 
-abstract class HudLayerImpl(override val name: String) : dev.deepslate.fallacy.client.hud.HudLayer {
+abstract class HudLayerImpl(override val name: String) : HudLayer {
     companion object {
         const val WIDTH = 77
 
@@ -18,7 +19,7 @@ abstract class HudLayerImpl(override val name: String) : dev.deepslate.fallacy.c
 
         const val BAR_V = 11
 
-        val ICON_BAR = ResourceLocation.fromNamespaceAndPath(Fallacy.MOD_ID, "textures/gui/bar.png")
+        val ICON_BAR: ResourceLocation = ResourceLocation.fromNamespaceAndPath(Fallacy.MOD_ID, "textures/gui/bar.png")
     }
 
     override var isErrored: Boolean = false
