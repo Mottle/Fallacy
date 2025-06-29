@@ -12,6 +12,9 @@ object CladdingEffects {
     private fun getKey(item: Item): ResourceLocation = BuiltInRegistries.ITEM.getKey(item)
 
     val claddingEffectMap: Map<ResourceLocation, CladdingContainer> = mapOf(
+        getKey(Items.GLASS) to CladdingContainer(
+            1, listOf()
+        ),
         getKey(Items.IRON_INGOT) to CladdingContainer(
             125,
             listOf(CladdingAttributeModifier(Attributes.ARMOR, 0.2))
