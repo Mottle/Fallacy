@@ -22,11 +22,11 @@ object Drink {
     private const val INTERVAL_TICKS = 10
 
     private fun checkIntervalAndUpdateLastDrinkTick(level: Level, player: Player): Boolean {
-        val lastDrinkTick = player.getData(FallacyAttachments.LAST_DRINK_TICK)
+        val lastDrinkTick = player.getData(FallacyAttachments.LAST_DRINK_TICK_STAMP)
         val tick = if (level.isClientSide) TickHelper.currentClientTick else level.server!!.tickCount
 
         if (tick - lastDrinkTick >= INTERVAL_TICKS) {
-            player.setData(FallacyAttachments.LAST_DRINK_TICK, tick)
+            player.setData(FallacyAttachments.LAST_DRINK_TICK_STAMP, tick)
             return true
         }
 

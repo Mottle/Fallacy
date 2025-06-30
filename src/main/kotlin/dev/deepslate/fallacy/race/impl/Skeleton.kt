@@ -1,8 +1,8 @@
 package dev.deepslate.fallacy.race.impl
 
 import dev.deepslate.fallacy.Fallacy
-import dev.deepslate.fallacy.behavior.Behavior
-import dev.deepslate.fallacy.behavior.Behaviors
+import dev.deepslate.fallacy.trait.Trait
+import dev.deepslate.fallacy.trait.Traits
 import dev.deepslate.fallacy.common.capability.FallacyCapabilities
 import dev.deepslate.fallacy.common.capability.Synchronous
 import dev.deepslate.fallacy.common.capability.skeleton.ISkeleton
@@ -47,8 +47,8 @@ class Skeleton : Race(), Respawnable {
         val ID = Fallacy.withID("skeleton")
 
         val TAGS = listOf(
-            Behaviors.UNDEAD, Behaviors.WEAKNESS_2_IN_SUNLIGHT,
-            Behaviors.BURNING_IN_SUNLIGHT
+            Traits.UNDEAD, Traits.WEAKNESS_2_IN_SUNLIGHT,
+            Traits.BURNING_IN_SUNLIGHT
         )
 
         internal fun internalKill(player: Player, source: DamageSource?) {
@@ -230,12 +230,12 @@ class Skeleton : Race(), Respawnable {
     }
 
     override fun apply(player: ServerPlayer) {
-        Behavior.addAll(player, TAGS)
+        Trait.addAll(player, TAGS)
         syncBone(player)
     }
 
     override fun deapply(player: ServerPlayer) {
-        Behavior.removeAll(player, TAGS)
+        Trait.removeAll(player, TAGS)
     }
 
     override fun onRespawn(

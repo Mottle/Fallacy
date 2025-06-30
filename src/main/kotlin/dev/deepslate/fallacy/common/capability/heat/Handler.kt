@@ -1,4 +1,4 @@
-package dev.deepslate.fallacy.bodyheat
+package dev.deepslate.fallacy.common.capability.heat
 
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.capability.FallacyCapabilities
@@ -10,7 +10,7 @@ import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.neoforge.event.entity.player.PlayerEvent
 import net.neoforged.neoforge.network.handling.IPayloadContext
 
-@EventBusSubscriber(modid = Fallacy.MOD_ID)
+@EventBusSubscriber(modid = Fallacy.Companion.MOD_ID)
 object Handler {
     @SubscribeEvent
     fun onPlayerLogin(event: PlayerEvent.PlayerLoggedInEvent) {

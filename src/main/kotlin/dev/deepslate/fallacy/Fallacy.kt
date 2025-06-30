@@ -1,11 +1,12 @@
 package dev.deepslate.fallacy
 
-import dev.deepslate.fallacy.behavior.Behaviors
+import dev.deepslate.fallacy.trait.Traits
 import dev.deepslate.fallacy.common.FallacyFluids
 import dev.deepslate.fallacy.common.FallacyTabs
 import dev.deepslate.fallacy.common.block.FallacyBlocks
 import dev.deepslate.fallacy.common.block.entity.FallacyBlockEntities
 import dev.deepslate.fallacy.common.block.multiblock.Multiblocks
+import dev.deepslate.fallacy.common.data.AttributeFixer
 import dev.deepslate.fallacy.common.data.FallacyAttachments
 import dev.deepslate.fallacy.common.data.FallacyAttributes
 import dev.deepslate.fallacy.common.effect.FallacyEffects
@@ -15,7 +16,6 @@ import dev.deepslate.fallacy.common.item.component.FallacyDataComponents
 import dev.deepslate.fallacy.common.loot.FallacyLootModifiers
 import dev.deepslate.fallacy.common.registrate.Registration
 import dev.deepslate.fallacy.race.Races
-import dev.deepslate.fallacy.rule.RangedAttributeRule
 import dev.deepslate.fallacy.rule.item.VanillaExtendedFoodPropertiesRule
 import dev.deepslate.fallacy.rule.item.VanillaItemDeprecationRule
 import dev.deepslate.fallacy.util.region.RegionTypes
@@ -47,7 +47,7 @@ class Fallacy(val modBus: IEventBus, val modContainer: ModContainer) {
         FallacyTabs.init(modBus)
         FallacyAttributes.init(modBus)
         FallacyEffects.init(modBus)
-        Behaviors.init(modBus)
+        Traits.init(modBus)
         Races.init(modBus)
         FallacyDataComponents.init(modBus)
         FallacyArmorMaterials.init(modBus)
@@ -63,7 +63,7 @@ class Fallacy(val modBus: IEventBus, val modContainer: ModContainer) {
     }
 
     private fun playRule() {
-        RangedAttributeRule.rule()
+        AttributeFixer.fix()
         VanillaExtendedFoodPropertiesRule.rule()
         VanillaItemDeprecationRule.rule()
         LOGGER.info("Rules load over.")

@@ -1,7 +1,7 @@
 package dev.deepslate.fallacy.rule.item
 
-import dev.deepslate.fallacy.behavior.Behavior
-import dev.deepslate.fallacy.behavior.Behaviors
+import dev.deepslate.fallacy.trait.Trait
+import dev.deepslate.fallacy.trait.Traits
 import net.minecraft.core.Holder
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
@@ -24,7 +24,7 @@ object SmiteEnchantmentRule {
     private val smiteModifier = object : DamageModifier {
         override fun check(holder: Holder<Enchantment>, enchantmentLevel: Int, target: Entity): Boolean {
             if (target !is ServerPlayer) return false
-            return holder.key == Enchantments.SMITE && Behavior.has(target, Behaviors.UNDEAD)
+            return holder.key == Enchantments.SMITE && Trait.has(target, Traits.UNDEAD)
         }
 
         override fun modify(amount: MutableFloat, holder: Holder<Enchantment>, enchantmentLevel: Int, target: Entity) {

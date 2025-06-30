@@ -1,6 +1,6 @@
-package dev.deepslate.fallacy.behavior.impl
+package dev.deepslate.fallacy.trait.impl
 
-import dev.deepslate.fallacy.behavior.TickableBehavior
+import dev.deepslate.fallacy.trait.TickTrait
 import dev.deepslate.fallacy.util.announce.Autoload
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
@@ -10,9 +10,8 @@ import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.EquipmentSlot
 
 @Autoload
-class Weakness2InSunlight : TickableBehavior {
-
-    private fun createWeakness2() = MobEffectInstance(MobEffects.WEAKNESS, 20 * 5, 1)
+class WeaknessInSunlight : TickTrait {
+    private fun createWeakness2() = MobEffectInstance(MobEffects.WEAKNESS, 20 * 5, 0)
 
     override val interval: Int
         get() = 4 * 20

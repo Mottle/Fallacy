@@ -1,8 +1,8 @@
 package dev.deepslate.fallacy.race.impl
 
 import dev.deepslate.fallacy.Fallacy
-import dev.deepslate.fallacy.behavior.Behavior
-import dev.deepslate.fallacy.behavior.Behaviors
+import dev.deepslate.fallacy.trait.Trait
+import dev.deepslate.fallacy.trait.Traits
 import dev.deepslate.fallacy.common.data.player.NutritionState
 import dev.deepslate.fallacy.common.data.player.PlayerAttribute
 import dev.deepslate.fallacy.race.Race
@@ -16,8 +16,8 @@ class Zombie : Race() {
     companion object {
         val ID = Fallacy.withID("zombie")
         val TAGS = listOf(
-            Behaviors.UNDEAD, Behaviors.WEAKNESS_IN_SUNLIGHT, Behaviors.WEAKNESS_IN_DAY,
-            Behaviors.BURNING_IN_SUNLIGHT
+            Traits.UNDEAD, Traits.WEAKNESS_IN_SUNLIGHT, Traits.WEAKNESS_IN_DAY,
+            Traits.BURNING_IN_SUNLIGHT
         )
     }
 
@@ -36,10 +36,10 @@ class Zombie : Race() {
     )
 
     override fun apply(player: ServerPlayer) {
-        Behavior.addAll(player, TAGS)
+        Trait.addAll(player, TAGS)
     }
 
     override fun deapply(player: ServerPlayer) {
-        Behavior.removeAll(player, TAGS)
+        Trait.removeAll(player, TAGS)
     }
 }

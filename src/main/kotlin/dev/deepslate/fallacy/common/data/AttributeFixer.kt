@@ -1,10 +1,10 @@
-package dev.deepslate.fallacy.rule
+package dev.deepslate.fallacy.common.data
 
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.attributes.RangedAttribute
 
-object RangedAttributeRule {
-    fun rule() {
+object AttributeFixer {
+    fun fix() {
         with(Attributes.ARMOR.value() as RangedAttribute) {
             minValue = -1024.0
             maxValue = 1024.0

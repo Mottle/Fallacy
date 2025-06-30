@@ -1,7 +1,7 @@
 package dev.deepslate.fallacy.mixin;
 
-import dev.deepslate.fallacy.behavior.Behavior;
-import dev.deepslate.fallacy.behavior.Behaviors;
+import dev.deepslate.fallacy.trait.Trait;
+import dev.deepslate.fallacy.trait.Traits;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -64,7 +64,7 @@ public abstract class NearestAttackableTargetGoalMixin<T extends LivingEntity> e
     @Unique
     private Boolean fallacy$shouldAttackUndead(Player player) {
         if (!fallacy$checkMobType()) return true;
-        return !Behavior.Companion.has((ServerPlayer) player, Behaviors.INSTANCE.getUNDEAD());
+        return !Trait.Companion.has((ServerPlayer) player, Traits.INSTANCE.getUNDEAD());
     }
 
     @Unique

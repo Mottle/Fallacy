@@ -1,6 +1,6 @@
-package dev.deepslate.fallacy.behavior.impl
+package dev.deepslate.fallacy.trait.impl
 
-import dev.deepslate.fallacy.behavior.TickableBehavior
+import dev.deepslate.fallacy.trait.TickTrait
 import dev.deepslate.fallacy.util.EntityHelper
 import dev.deepslate.fallacy.util.announce.Autoload
 import net.minecraft.core.BlockPos
@@ -11,7 +11,7 @@ import net.minecraft.world.item.ItemStack
 import kotlin.math.max
 
 @Autoload
-class BurningInSunlight : TickableBehavior {
+class BurningInSunlight : TickTrait {
     override val interval: Int = 20 * 2
 
     override fun tick(

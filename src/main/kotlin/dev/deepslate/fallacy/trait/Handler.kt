@@ -1,4 +1,4 @@
-package dev.deepslate.fallacy.behavior
+package dev.deepslate.fallacy.trait
 
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.util.TickHelper
@@ -17,10 +17,10 @@ object Handler {
 
         val player = event.entity as ServerPlayer
         val level = player.level() as ServerLevel
-        val container = Behavior.get(player)
+        val container = Trait.get(player)
 
         for (behavior in container) {
-            if (behavior !is TickableBehavior) continue
+            if (behavior !is TickTrait) continue
             if (!TickHelper.checkServerTickRate(behavior.interval)) continue
 
             behavior.tick(level, player, player.blockPosition())

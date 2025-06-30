@@ -86,10 +86,10 @@ object Handler {
         if (!event.isWasDeath) {
             val player = event.entity
             val oldThirst = origin.getData(FallacyAttachments.THIRST)
-            val oldDrinkTicks = origin.getData(FallacyAttachments.LAST_DRINK_TICK)
+            val oldDrinkTicks = origin.getData(FallacyAttachments.LAST_DRINK_TICK_STAMP)
 
             player.setData(FallacyAttachments.THIRST, oldThirst)
-            player.setData(FallacyAttachments.LAST_DRINK_TICK, oldDrinkTicks)
+            player.setData(FallacyAttachments.LAST_DRINK_TICK_STAMP, oldDrinkTicks)
         }
     }
 
