@@ -1,4 +1,4 @@
-package dev.deepslate.fallacy.common.command.test
+package dev.deepslate.fallacy.command.test
 
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.context.CommandContext

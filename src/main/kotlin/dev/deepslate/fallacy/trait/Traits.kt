@@ -32,7 +32,7 @@ object Traits {
 
     val WEAKNESS_IN_DAY: DeferredHolder<Trait, WeaknessInDay> = registry.register("weakness_in_day", ::WeaknessInDay)
 
-    @EventBusSubscriber(modid = Fallacy.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+        @EventBusSubscriber(modid = Fallacy.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
     object Handler {
         @SubscribeEvent
         fun registerRegistries(event: NewRegistryEvent) {

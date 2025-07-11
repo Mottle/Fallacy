@@ -1,7 +1,6 @@
-package dev.deepslate.fallacy.hydration
+package dev.deepslate.fallacy.common.capability.thirst
 
 import dev.deepslate.fallacy.common.capability.FallacyCapabilities
-import dev.deepslate.fallacy.common.capability.thirst.IThirst
 import dev.deepslate.fallacy.common.data.FallacyAttachments
 import dev.deepslate.fallacy.util.TickHelper
 import net.minecraft.core.BlockPos

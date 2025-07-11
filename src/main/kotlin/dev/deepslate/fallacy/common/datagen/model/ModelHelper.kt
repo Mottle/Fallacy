@@ -1,4 +1,4 @@
-package dev.deepslate.fallacy.datagen.model
+package dev.deepslate.fallacy.common.datagen.model
 
 import com.tterrag.registrate.providers.DataGenContext
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider

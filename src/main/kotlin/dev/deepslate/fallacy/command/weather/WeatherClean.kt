@@ -1,4 +1,4 @@
-package dev.deepslate.fallacy.common.command.weather
+package dev.deepslate.fallacy.command.weather
 
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.context.CommandContext

@@ -1,10 +1,15 @@
-package dev.deepslate.fallacy.common.command
+package dev.deepslate.fallacy.command
 
-import dev.deepslate.fallacy.common.command.heat.*
-import dev.deepslate.fallacy.common.command.race.RaceGet
-import dev.deepslate.fallacy.common.command.race.RaceSet
-import dev.deepslate.fallacy.common.command.weather.WeatherClean
-import dev.deepslate.fallacy.common.command.weather.WeatherSet
+import dev.deepslate.fallacy.command.heat.ChunkState
+import dev.deepslate.fallacy.command.heat.EngineState
+import dev.deepslate.fallacy.command.heat.GlobalCheck
+import dev.deepslate.fallacy.command.heat.Here
+import dev.deepslate.fallacy.command.heat.Query
+import dev.deepslate.fallacy.command.heat.QueryState
+import dev.deepslate.fallacy.command.race.RaceGet
+import dev.deepslate.fallacy.command.race.RaceSet
+import dev.deepslate.fallacy.command.weather.WeatherClean
+import dev.deepslate.fallacy.command.weather.WeatherSet
 import dev.deepslate.fallacy.util.command.GameCommand
 
 object FallacyCommands {

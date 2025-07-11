@@ -1,4 +1,4 @@
-package dev.deepslate.fallacy.datagen.recipe
+package dev.deepslate.fallacy.common.datagen.recipe
 
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.util.CriterionHelper

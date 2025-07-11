@@ -1,4 +1,4 @@
-package dev.deepslate.fallacy.common.command
+package dev.deepslate.fallacy.command
 
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.permission.PermissionManager

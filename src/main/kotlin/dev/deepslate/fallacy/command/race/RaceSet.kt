@@ -1,4 +1,4 @@
-package dev.deepslate.fallacy.common.command.race
+package dev.deepslate.fallacy.command.race
 
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.arguments.StringArgumentType

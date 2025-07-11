@@ -20,6 +20,7 @@ import net.minecraft.world.phys.BlockHitResult
 import net.neoforged.neoforge.capabilities.Capabilities
 import kotlin.jvm.optionals.getOrNull
 
+//坩埚，用于融化金属
 class CrucibleBlock(properties: Properties) : BaseEntityBlock(properties) {
 
     companion object {

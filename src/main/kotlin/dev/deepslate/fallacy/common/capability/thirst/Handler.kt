@@ -1,4 +1,4 @@
-package dev.deepslate.fallacy.hydration
+package dev.deepslate.fallacy.common.capability.thirst
 
 import dev.deepslate.fallacy.Fallacy
 import dev.deepslate.fallacy.common.capability.FallacyCapabilities

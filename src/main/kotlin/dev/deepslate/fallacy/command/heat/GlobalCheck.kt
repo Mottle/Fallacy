@@ -1,4 +1,4 @@
-package dev.deepslate.fallacy.common.command.heat
+package dev.deepslate.fallacy.command.heat
 
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.arguments.IntegerArgumentType
